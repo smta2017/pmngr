@@ -3,7 +3,7 @@
    This is a starter template page. Use this page to start your new project from
    scratch. This page gets rid of all links and provides the needed markup only.
    -->
-<html lang="en">
+<html lang="en" dir="@lang('app.htmldirection')">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -47,7 +47,7 @@
     <link href="{{ asset('css/animate.css') }}" rel="stylesheet"> @stack('head-script')
 
     <!-- This is a Custom CSS -->
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="/css/@lang('app.cssfile')" rel="stylesheet">
     <!-- color CSS you can use different color css from css/colors folder -->
     <!-- We have chosen the skin-blue (default.css) for this starter
        page. However, you can choose any other skin from folder css / colors .
