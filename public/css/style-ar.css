@@ -13,7 +13,7 @@
 .preloader .cssload-speeding-wheel {
     position: absolute;
     top: calc(50% - 3.5px);
-    left: calc(50% - 3.5px)
+    right: calc(50% - 3.5px)
 }
 
 * {
@@ -85,7 +85,7 @@ h5 {
 }
 
 blockquote {
-    border-left: 5px solid #ff6849!important;
+    border-right: 5px solid #ff6849!important;
     border: 1px solid rgba(120, 130, 140, .13)
 }
 
@@ -125,11 +125,11 @@ hr {
 }
 
 .b-l {
-    border-left: 1px solid rgba(120, 130, 140, .13)
+    border-right: 1px solid rgba(120, 130, 140, .13)
 }
 
 .b-r {
-    border-right: 1px solid rgba(120, 130, 140, .13)
+    border-left: 1px solid rgba(120, 130, 140, .13)
 }
 
 .b-all {
@@ -238,51 +238,51 @@ hr {
 }
 
 .m-l-5 {
-    margin-left: 5px!important
-}
-
-.m-l-10 {
-    margin-left: 10px!important
-}
-
-.m-l-15 {
-    margin-left: 15px!important
-}
-
-.m-l-20 {
-    margin-left: 20px!important
-}
-
-.m-l-30 {
-    margin-left: 30px!important
-}
-
-.m-l-40 {
-    margin-left: 40px!important
-}
-
-.m-r-5 {
     margin-right: 5px!important
 }
 
-.m-r-10 {
+.m-l-10 {
     margin-right: 10px!important
 }
 
-.m-r-15 {
+.m-l-15 {
     margin-right: 15px!important
 }
 
-.m-r-20 {
+.m-l-20 {
     margin-right: 20px!important
 }
 
-.m-r-30 {
+.m-l-30 {
     margin-right: 30px!important
 }
 
-.m-r-40 {
+.m-l-40 {
     margin-right: 40px!important
+}
+
+.m-r-5 {
+    margin-left: 5px!important
+}
+
+.m-r-10 {
+    margin-left: 10px!important
+}
+
+.m-r-15 {
+    margin-left: 15px!important
+}
+
+.m-r-20 {
+    margin-left: 20px!important
+}
+
+.m-r-30 {
+    margin-left: 30px!important
+}
+
+.m-r-40 {
+    margin-left: 40px!important
 }
 
 .m-t-5 {
@@ -362,8 +362,8 @@ hr {
 }
 
 .pull-in {
-    margin-left: -15px;
-    margin-right: -15px
+    margin-right: -15px;
+    margin-left: -15px
 }
 
 .b-0 {
@@ -474,7 +474,7 @@ hr {
 .notify .heartbit {
     position: absolute;
     top: -20px;
-    right: -16px;
+    left: -16px;
     height: 25px;
     width: 25px;
     z-index: 10;
@@ -497,7 +497,7 @@ hr {
     border-radius: 30px;
     background-color: #fb9678;
     position: absolute;
-    right: -6px;
+    left: -6px;
     top: -10px
 }
 
@@ -788,8 +788,8 @@ label {
 }
 
 .form-horizontal .form-group {
-    margin-left: -7.5px;
     margin-right: -7.5px;
+    margin-left: -7.5px;
     margin-bottom: 25px
 }
 
@@ -936,8 +936,8 @@ pre {
 }
 
 .row {
-    margin-right: -7.5px;
-    margin-left: -7.5px
+    margin-left: -7.5px;
+    margin-right: -7.5px
 }
 
 .btn-group-vertical>.btn:first-child:not(:last-child),
@@ -974,13 +974,13 @@ pre {
 }
 
 .pagination-split li {
-    margin-left: 5px;
+    margin-right: 5px;
     display: inline-block;
-    float: left
+    float: right
 }
 
 .pagination-split li:first-child {
-    margin-left: 0
+    margin-right: 0
 }
 
 .pagination-split li a {
@@ -1035,10 +1035,10 @@ pre {
 .footer {
     bottom: 0;
     color: #58666e;
-    left: 0;
+    right: 0;
     padding: 20px 30px;
     position: absolute;
-    right: 0;
+    left: 0;
     background: #fff
 }
 
@@ -1047,8 +1047,8 @@ pre {
     overflow: hidden;
     padding: 15px 15px 10px;
     margin-bottom: 25px;
-    margin-left: -25.5px;
-    margin-right: -25.5px
+    margin-right: -25.5px;
+    margin-left: -25.5px
 }
 
 .bg-title h4 {
@@ -1060,7 +1060,7 @@ pre {
 .bg-title .breadcrumb {
     background: 0 0;
     margin-bottom: 0;
-    float: right;
+    float: left;
     padding: 0;
     margin-top: 8px
 }
@@ -1091,7 +1091,7 @@ pre {
 
 .top-left-part {
     width: 220px;
-    float: left;
+    float: right;
     background: #fff
 }
 
@@ -1117,17 +1117,17 @@ pre {
 }
 
 .navbar-top-links {
-    margin-right: 0
+    margin-left: 0
 }
 
 .navbar-top-links .badge {
     position: absolute;
-    right: 6px;
+    left: 6px;
     top: 15px
 }
 
 .navbar-top-links>li {
-    float: left
+    float: right
 }
 
 .navbar-top-links>li>a {
@@ -1156,7 +1156,7 @@ pre {
 }
 
 .navbar-top-links .dropdown-menu li:last-child {
-    margin-right: 0
+    margin-left: 0
 }
 
 .navbar-top-links .dropdown-menu li a div {
@@ -1171,20 +1171,20 @@ pre {
 }
 
 .navbar-top-links .dropdown-messages {
-    margin-left: 5px
+    margin-right: 5px
 }
 
 .navbar-top-links .dropdown-tasks {
-    margin-left: -59px
+    margin-right: -59px
 }
 
 .navbar-top-links .dropdown-alerts {
-    margin-left: -123px
+    margin-right: -123px
 }
 
 .navbar-top-links .dropdown-user {
-    right: 0;
-    left: auto
+    left: 0;
+    right: auto
 }
 
 .navbar-header .navbar-toggle {
@@ -1212,7 +1212,7 @@ pre {
 .app-search a {
     position: absolute;
     top: 20px;
-    right: 10px;
+    left: 10px;
     color: #4c5667
 }
 
@@ -1268,7 +1268,7 @@ pre {
 }
 
 .profile-pic img {
-    margin-right: 10px
+    margin-left: 10px
 }
 
 .drop-title {
@@ -1664,11 +1664,11 @@ pre {
 }
 
 .chat li.left .chat-body {
-    margin-left: 60px
+    margin-right: 60px
 }
 
 .chat li.right .chat-body {
-    margin-right: 60px
+    margin-left: 60px
 }
 
 .chat li .chat-body p {
@@ -1677,7 +1677,7 @@ pre {
 
 .chat .glyphicon,
 .panel .slidedown .glyphicon {
-    margin-right: 5px
+    margin-left: 5px
 }
 
 .chat-panel .panel-body {
@@ -1709,19 +1709,19 @@ table.dataTable thead .sorting_desc_disabled {
 
 table.dataTable thead .sorting_asc:after {
     content: "\f0de";
-    float: right;
+    float: left;
     font-family: fontawesome
 }
 
 table.dataTable thead .sorting_desc:after {
     content: "\f0dd";
-    float: right;
+    float: left;
     font-family: fontawesome
 }
 
 table.dataTable thead .sorting:after {
     content: "\f0dc";
-    float: right;
+    float: left;
     font-family: fontawesome;
     color: rgba(50, 50, 50, .5)
 }
@@ -1802,11 +1802,11 @@ table.dataTable thead .sorting:after {
 
 .panel .panel-heading a i {
     font-size: 12px;
-    margin-left: 8px
+    margin-right: 8px
 }
 
 .panel .panel-action {
-    float: right
+    float: left
 }
 
 .panel .panel-action a {
@@ -2271,11 +2271,11 @@ table.dataTable thead .sorting:after {
 }
 
 .panel-opcl {
-    float: right
+    float: left
 }
 
 .panel-opcl i {
-    margin-left: 8px;
+    margin-right: 8px;
     font-size: 10px;
     cursor: pointer
 }
@@ -2304,7 +2304,7 @@ table.dataTable thead .sorting:after {
     width: 20px;
     height: 20px;
     margin-top: -10px;
-    margin-left: -10px;
+    margin-right: -10px;
     opacity: 0;
     background: rgba(0, 0, 0, .08);
     -webkit-transition: all .5s ease-out;
@@ -2396,7 +2396,7 @@ table.dataTable thead .sorting:after {
 .waves-input-wrapper .waves-button-input {
     position: relative;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: 1
 }
 
@@ -2446,8 +2446,8 @@ table.dataTable thead .sorting:after {
     content: "";
     display: inline-block;
     height: 17px;
-    left: 0;
-    margin-left: -20px;
+    right: 0;
+    margin-right: -20px;
     position: absolute;
     transition: .3s ease-in-out;
     width: 17px;
@@ -2459,8 +2459,8 @@ table.dataTable thead .sorting:after {
     display: inline-block;
     font-size: 11px;
     height: 16px;
-    left: 0;
-    margin-left: -20px;
+    right: 0;
+    margin-right: -20px;
     padding-left: 3px;
     padding-top: 1px;
     position: absolute;
@@ -2598,8 +2598,8 @@ table.dataTable thead .sorting:after {
     content: "";
     display: inline-block;
     height: 17px;
-    left: 0;
-    margin-left: -20px;
+    right: 0;
+    margin-right: -20px;
     position: absolute;
     transition: border .5s ease-in-out;
     width: 17px;
@@ -2618,8 +2618,8 @@ table.dataTable thead .sorting:after {
     content: " ";
     display: inline-block;
     height: 7px;
-    left: 5px;
-    margin-left: -20px;
+    right: 5px;
+    margin-right: -20px;
     position: absolute;
     top: 5px;
     transform: scale(0, 0);
@@ -2760,7 +2760,7 @@ table.dataTable thead .sorting:after {
     opacity: 0;
     padding: 0;
     position: absolute;
-    right: 0;
+    left: 0;
     top: 0
 }
 
@@ -2828,7 +2828,7 @@ table.dataTable thead .sorting:after {
 .settings_box {
     position: absolute;
     top: 75px;
-    right: 0;
+    left: 0;
     z-index: 100
 }
 
@@ -2894,7 +2894,7 @@ table.dataTable thead .sorting:after {
 .theme_color li {
     list-style: none;
     width: 30%;
-    float: left;
+    float: right;
     margin: 0 1.5%
 }
 
@@ -2958,7 +2958,7 @@ ul.common li a:hover {
 
 .message-center .user-img {
     width: 40px;
-    float: left;
+    float: right;
     position: relative;
     margin: 0 10px 15px 0
 }
@@ -2972,7 +2972,7 @@ ul.common li a:hover {
     border-radius: 50%;
     display: inline-block;
     height: 10px;
-    left: 30px;
+    right: 30px;
     position: absolute;
     top: 1px;
     width: 10px
@@ -3016,7 +3016,7 @@ ul.common li a:hover {
 }
 
 .mail-contnet a.action {
-    margin-left: 10px;
+    margin-right: 10px;
     font-size: 12px;
     visibility: hidden
 }
@@ -3116,7 +3116,7 @@ ul.common li a:hover {
 }
 
 .row-in-br {
-    border-right: 1px solid rgba(120, 130, 140, .13)
+    border-left: 1px solid rgba(120, 130, 140, .13)
 }
 
 .col-in {
@@ -3145,15 +3145,15 @@ ul.common li a:hover {
 
 .steamline {
     position: relative;
-    border-left: 1px solid rgba(120, 130, 140, .13);
-    margin-left: 20px
+    border-right: 1px solid rgba(120, 130, 140, .13);
+    margin-right: 20px
 }
 
 .steamline .sl-left {
-    float: left;
-    margin-left: -20px;
+    float: right;
+    margin-right: -20px;
     z-index: 1;
-    margin-right: 15px
+    margin-left: 15px
 }
 
 .steamline .sl-left img {
@@ -3194,8 +3194,8 @@ ul.common li a:hover {
     bottom: 0;
     content: '';
     height: 14px;
-    left: 0;
-    margin-left: -8px;
+    right: 0;
+    margin-right: -8px;
     position: absolute;
     top: 5px;
     width: 14px
@@ -3208,7 +3208,7 @@ ul.common li a:hover {
 
 .item-info {
     margin-bottom: 15px;
-    margin-left: 15px
+    margin-right: 15px
 }
 
 .item-info p {
@@ -3227,8 +3227,8 @@ ul.common li a:hover {
     opacity: .9;
     position: absolute;
     top: 0;
-    left: 0;
     right: 0;
+    left: 0;
     height: 100%;
     text-align: center
 }
@@ -3283,11 +3283,11 @@ ul.common li a:hover {
 }
 
 .carousel.vertical .item {
-    left: 0
+    right: 0
 }
 
 .twi-user img {
-    margin-right: 20px;
+    margin-left: 20px;
     width: 50px
 }
 
@@ -3321,7 +3321,7 @@ ul.common li a:hover {
 
 .chat-list .chat-image {
     display: inline-block;
-    float: left;
+    float: right;
     text-align: center;
     width: 50px
 }
@@ -3362,19 +3362,19 @@ ul.common li a:hover {
 
 .chat-list .chat-body {
     display: inline-block;
-    float: left;
+    float: right;
     font-size: 12px;
-    margin-left: 12px;
+    margin-right: 12px;
     width: 65%
 }
 
 .chat-list .odd .chat-image {
-    float: right!important
+    float: left!important
 }
 
 .chat-list .odd .chat-body {
-    float: right!important;
-    margin-right: 12px;
+    float: left!important;
+    margin-left: 12px;
     text-align: right;
     color: #fff
 }
@@ -3418,7 +3418,7 @@ ul.common li a:hover {
 
 .weather-box .weather-top .today_crnt canvas {
     display: inline-block;
-    margin-right: 10px;
+    margin-left: 10px;
     vertical-align: middle
 }
 
@@ -3478,7 +3478,7 @@ ul.common li a:hover {
 .myadmin-alert .img {
     border-radius: 3px;
     height: 40px;
-    left: 12px;
+    right: 12px;
     position: absolute;
     top: 12px;
     width: 40px
@@ -3503,7 +3503,7 @@ ul.common li a:hover {
     font-weight: 500;
     padding: 4px;
     position: absolute;
-    right: 3px;
+    left: 3px;
     text-decoration: none;
     top: 0
 }
@@ -3554,39 +3554,39 @@ ul.common li a:hover {
 }
 
 .myadmin-alert-top {
-    left: 0;
     right: 0;
+    left: 0;
     top: 0
 }
 
 .myadmin-alert-bottom {
     bottom: 0;
-    left: 0;
-    right: 0
+    right: 0;
+    left: 0
 }
 
 .myadmin-alert-top-left {
-    left: 20px;
+    right: 20px;
     top: 80px
 }
 
 .myadmin-alert-top-right {
-    right: 20px;
+    left: 20px;
     top: 80px
 }
 
 .myadmin-alert-bottom-left {
     bottom: 20px;
-    left: 20px
+    right: 20px
 }
 
 .myadmin-alert-bottom-right {
     bottom: 20px;
-    right: 20px
+    left: 20px
 }
 
 .myadmin-alert-fullsize {
-    left: 50%;
+    right: 50%;
     margin: -20px;
     top: 50%
 }
@@ -3694,7 +3694,7 @@ ul.common li a:hover {
 
 .vtabs .tabs-vertical {
     width: 150px;
-    border-right: 1px solid rgba(120, 130, 140, .13);
+    border-left: 1px solid rgba(120, 130, 140, .13);
     display: table-cell;
     vertical-align: top
 }
@@ -3715,8 +3715,8 @@ ul.common li a:hover {
 .tabs-vertical li.active a:hover {
     background: #ff6849;
     border: 0;
-    border-right: 2px solid #ff6849;
-    margin-right: -1px;
+    border-left: 2px solid #ff6849;
+    margin-left: -1px;
     color: #fff
 }
 
@@ -3725,8 +3725,8 @@ ul.common li a:hover {
 .customvtab .tabs-vertical li.active a:hover {
     background: #fff;
     border: 0;
-    border-right: 2px solid #ff6849;
-    margin-right: -1px;
+    border-left: 2px solid #ff6849;
+    margin-left: -1px;
     color: #2b2b2b
 }
 
@@ -3754,7 +3754,7 @@ ul.common li a:hover {
 .panel-group .panel .panel-heading a[data-toggle=collapse]:before {
     content: '\e648';
     display: block;
-    float: right;
+    float: left;
     font-family: themify;
     font-size: 14px;
     text-align: right;
@@ -3768,7 +3768,7 @@ ul.common li a:hover {
 .panel-group .panel .panel-heading .accordion-toggle:before {
     content: '\e648';
     display: block;
-    float: right;
+    float: left;
     font-family: themify;
     font-size: 14px;
     text-align: right;
@@ -3891,7 +3891,7 @@ ul.common li a:hover {
     position: relative;
     display: inline-block;
     margin-bottom: 0;
-    margin-right: 20px
+    margin-left: 20px
 }
 
 .progress-vertical .progress-bar {
@@ -3905,7 +3905,7 @@ ul.common li a:hover {
     width: 4px;
     display: inline-block;
     margin-bottom: 0;
-    margin-right: 20px
+    margin-left: 20px
 }
 
 .progress-vertical-bottom .progress-bar {
@@ -3960,9 +3960,9 @@ ul.common li a:hover {
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
+    right: 50%;
     width: 3px;
-    margin-left: -1.5px;
+    margin-right: -1.5px;
     background-color: #eee
 }
 
@@ -3982,7 +3982,7 @@ ul.common li a:hover {
 }
 
 .timeline>li>.timeline-panel {
-    float: left;
+    float: right;
     position: relative;
     width: 46%;
     padding: 20px;
@@ -3997,11 +3997,11 @@ ul.common li a:hover {
     display: inline-block;
     position: absolute;
     top: 26px;
-    right: -8px;
+    left: -8px;
     border-top: 8px solid transparent;
-    border-right: 0 solid rgba(120, 130, 140, .13);
+    border-left: 0 solid rgba(120, 130, 140, .13);
     border-bottom: 8px solid transparent;
-    border-left: 8px solid rgba(120, 130, 140, .13)
+    border-right: 8px solid rgba(120, 130, 140, .13)
 }
 
 .timeline>li>.timeline-panel:after {
@@ -4009,21 +4009,21 @@ ul.common li a:hover {
     display: inline-block;
     position: absolute;
     top: 27px;
-    right: -7px;
+    left: -7px;
     border-top: 7px solid transparent;
-    border-right: 0 solid #fff;
+    border-left: 0 solid #fff;
     border-bottom: 7px solid transparent;
-    border-left: 7px solid #fff
+    border-right: 7px solid #fff
 }
 
 .timeline>li>.timeline-badge {
     z-index: 100;
     position: absolute;
     top: 16px;
-    left: 50%;
+    right: 50%;
     width: 50px;
     height: 50px;
-    margin-left: -25px;
+    margin-right: -25px;
     border-radius: 50%;
     text-align: center;
     font-size: 1.4em;
@@ -4034,21 +4034,21 @@ ul.common li a:hover {
 }
 
 .timeline>li.timeline-inverted>.timeline-panel {
-    float: right
+    float: left
 }
 
 .timeline>li.timeline-inverted>.timeline-panel:before {
-    right: auto;
-    left: -8px;
-    border-right-width: 8px;
-    border-left-width: 0
+    left: auto;
+    right: -8px;
+    border-left-width: 8px;
+    border-right-width: 0
 }
 
 .timeline>li.timeline-inverted>.timeline-panel:after {
-    right: auto;
-    left: -7px;
-    border-right-width: 7px;
-    border-left-width: 0
+    left: auto;
+    right: -7px;
+    border-left-width: 7px;
+    border-right-width: 0
 }
 
 .timeline-badge.primary {
@@ -4099,7 +4099,7 @@ ul.common li a:hover {
 .chart canvas {
     position: absolute;
     top: 0;
-    left: 0
+    right: 0
 }
 
 .chart.chart-widget-pie {
@@ -4108,19 +4108,19 @@ ul.common li a:hover {
 }
 
 .pie-chart>span {
-    left: 0;
+    right: 0;
     margin-top: -2px;
     position: absolute;
-    right: 0;
+    left: 0;
     text-align: center;
     top: 50%;
     transform: translateY(-50%)
 }
 
 .chart>span>img {
-    left: 0;
-    position: absolute;
     right: 0;
+    position: absolute;
+    left: 0;
     text-align: center;
     top: 50%;
     width: 60%;
@@ -4140,7 +4140,7 @@ ul.common li a:hover {
 
 .percent:after {
     content: '%';
-    margin-left: .1em;
+    margin-right: .1em;
     font-size: .8em
 }
 
@@ -4244,9 +4244,9 @@ table.focus-on tbody tr.focused th {
 }
 
 .form-control-line {
-    border-left: 0 none;
-    border-radius: 0;
     border-right: 0 none;
+    border-radius: 0;
+    border-left: 0 none;
     border-top: 0 none;
     box-shadow: none;
     padding-left: 0
@@ -4434,8 +4434,8 @@ table.focus-on tbody tr.focused th {
 }
 
 .gmaps-overlay_arrow {
-    left: 50%;
-    margin-left: -16px;
+    right: 50%;
+    margin-right: -16px;
     width: 0;
     height: 0;
     position: absolute
@@ -4443,15 +4443,15 @@ table.focus-on tbody tr.focused th {
 
 .gmaps-overlay_arrow.above {
     bottom: -15px;
-    border-left: 16px solid transparent;
     border-right: 16px solid transparent;
+    border-left: 16px solid transparent;
     border-top: 16px solid #ab8ce4
 }
 
 .gmaps-overlay_arrow.below {
     top: -15px;
-    border-left: 16px solid transparent;
     border-right: 16px solid transparent;
+    border-left: 16px solid transparent;
     border-bottom: 16px solid #ab8ce4
 }
 
@@ -4475,8 +4475,8 @@ table.focus-on tbody tr.focused th {
 
 .error-box .footer {
     width: 100%;
-    left: 0;
-    right: 0
+    right: 0;
+    left: 0
 }
 
 .error-body {
@@ -4503,8 +4503,8 @@ table.focus-on tbody tr.focused th {
 
 .login-box .footer {
     width: 100%;
-    left: 0;
-    right: 0
+    right: 0;
+    left: 0
 }
 
 .login-box .social {
@@ -4556,7 +4556,7 @@ table.focus-on tbody tr.focused th {
     position: absolute;
     font-size: 15px;
     top: -10px;
-    margin-left: -10px
+    margin-right: -10px
 }
 
 .price-table-content .price-row {
@@ -4579,8 +4579,8 @@ table.focus-on tbody tr.focused th {
     margin: 0 auto;
     display: inline-block;
     width: 100px;
-    left: 0;
-    right: 0
+    right: 0;
+    left: 0
 }
 
 .mails a {
@@ -4621,26 +4621,26 @@ table.focus-on tbody tr.focused th {
 .mail-list .list-group-item {
     background-color: transparent;
     border: 0;
-    border-left: 3px solid #fff;
+    border-right: 3px solid #fff;
     border-radius: 0
 }
 
 .mail-list .list-group-item:hover {
     background: #f7fafc;
-    border-left: 3px solid #f7fafc
+    border-right: 3px solid #f7fafc
 }
 
 .mail-list .list-group-item:focus {
-    border-left: 3px solid #f7fafc
+    border-right: 3px solid #f7fafc
 }
 
 .mail-list .list-group-item.active:focus {
     background: #f7fafc;
-    border-left: 3px solid #fb9678
+    border-right: 3px solid #fb9678
 }
 
 .mail-list .list-group-item.active {
-    border-left: 3px solid #fb9678;
+    border-right: 3px solid #fb9678;
     border-radius: 0;
     color: #2b2b2b!important
 }
@@ -4669,7 +4669,7 @@ table.focus-on tbody tr.focused th {
 }
 
 .calendar {
-    float: left;
+    float: right;
     margin-bottom: 0
 }
 
@@ -4771,7 +4771,7 @@ table.focus-on tbody tr.focused th {
 }
 
 .calendar-event a {
-    float: right;
+    float: left;
     opacity: .6;
     font-size: 10px;
     margin: 4px 0 0 10px;
@@ -4804,7 +4804,7 @@ table.focus-on tbody tr.focused th {
 
 .right-sidebar {
     position: fixed;
-    right: -240px;
+    left: -240px;
     width: 240px;
     display: none;
     z-index: 1000;
@@ -4825,7 +4825,7 @@ table.focus-on tbody tr.focused th {
 }
 
 .right-sidebar .rpanel-title span {
-    float: right;
+    float: left;
     cursor: pointer;
     font-size: 11px
 }
@@ -4849,20 +4849,20 @@ table.focus-on tbody tr.focused th {
 }
 
 .shw-rside {
-    right: 0;
+    left: 0;
     width: 240px;
     display: block
 }
 
 .chatonline img {
-    margin-right: 10px;
-    float: left;
+    margin-left: 10px;
+    float: right;
     width: 30px
 }
 
 .chatonline li a {
     padding: 15px 0;
-    float: left;
+    float: right;
     width: 100%
 }
 
@@ -4905,7 +4905,7 @@ ul#themecolors li:first-child {
     height: 50px;
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     color: #fff;
     text-align: center
 }
@@ -5009,7 +5009,7 @@ ul#themecolors li:first-child {
 
 .stat-item+.stat-item {
     padding-left: 15px;
-    border-left: 1px solid #eee
+    border-right: 1px solid #eee
 }
 
 .country-state {
@@ -5134,7 +5134,7 @@ ul#themecolors li:first-child {
 .feeds li>div {
     width: 40px;
     height: 40px;
-    margin-right: 5px;
+    margin-left: 5px;
     display: inline-block;
     text-align: center;
     vertical-align: middle;
@@ -5146,7 +5146,7 @@ ul#themecolors li:first-child {
 }
 
 .feeds li span {
-    float: right;
+    float: left;
     width: auto;
     font-size: 12px
 }
@@ -5202,7 +5202,7 @@ ul#themecolors li:first-child {
     width: 100%;
     height: 0;
     top: 0;
-    left: 0
+    right: 0
 }
 
 .btn-1b:active,
@@ -5267,7 +5267,7 @@ ul#themecolors li:first-child {
     width: 0;
     height: 100%;
     top: 0;
-    left: 0
+    right: 0
 }
 
 .btn-1c:active,
@@ -5288,7 +5288,7 @@ ul#themecolors li:first-child {
     width: 0;
     height: 103%;
     top: 50%;
-    left: 50%;
+    right: 50%;
     opacity: 0;
     -webkit-transform: translateX(-50%) translateY(-50%);
     -moz-transform: translateX(-50%) translateY(-50%);
@@ -5309,7 +5309,7 @@ ul#themecolors li:first-child {
     width: 100%;
     height: 0;
     top: 50%;
-    left: 50%;
+    right: 50%;
     background: #fff;
     opacity: 0;
     -webkit-transform: translateX(-50%) translateY(-50%) rotate(45deg);
@@ -5336,7 +5336,7 @@ ul#themecolors li:first-child {
     width: 101%;
     height: 0;
     top: 50%;
-    left: 50%;
+    right: 50%;
     background: #fff;
     opacity: 0;
     -webkit-transform: translateX(-50%) translateY(-50%);
@@ -5379,13 +5379,13 @@ ul.list-icons li {
 
 ul.list-icons li i {
     font-size: 12px;
-    margin-right: 5px
+    margin-left: 5px
 }
 
 .demo-popover .popover,
 .demo-tooltip .tooltip {
     position: relative;
-    margin-right: 25px;
+    margin-left: 25px;
     opacity: 1;
     display: inline-block
 }
@@ -5412,7 +5412,7 @@ ul.list-icons li i {
 
 .tooltip-primary+.tooltip.right .tooltip-arrow,
 .tooltip-primary.tooltip.right .tooltip-arrow {
-    border-right-color: #ab8ce4
+    border-left-color: #ab8ce4
 }
 
 .tooltip-primary+.tooltip.bottom .tooltip-arrow,
@@ -5422,7 +5422,7 @@ ul.list-icons li i {
 
 .tooltip-primary+.tooltip.left .tooltip-arrow,
 .tooltip-primary.tooltip.left .tooltip-arrow {
-    border-left-color: #ab8ce4
+    border-right-color: #ab8ce4
 }
 
 .tooltip-success+.tooltip .tooltip-inner,
@@ -5438,7 +5438,7 @@ ul.list-icons li i {
 
 .tooltip-success+.tooltip.right .tooltip-arrow,
 .tooltip-success.tooltip.right .tooltip-arrow {
-    border-right-color: #00c292
+    border-left-color: #00c292
 }
 
 .tooltip-success+.tooltip.bottom .tooltip-arrow,
@@ -5448,7 +5448,7 @@ ul.list-icons li i {
 
 .tooltip-success+.tooltip.left .tooltip-arrow,
 .tooltip-success.tooltip.left .tooltip-arrow {
-    border-left-color: #00c292
+    border-right-color: #00c292
 }
 
 .tooltip-warning+.tooltip .tooltip-inner,
@@ -5464,7 +5464,7 @@ ul.list-icons li i {
 
 .tooltip-warning+.tooltip.right .tooltip-arrow,
 .tooltip-warning.tooltip.right .tooltip-arrow {
-    border-right-color: #fec107
+    border-left-color: #fec107
 }
 
 .tooltip-warning+.tooltip.bottom .tooltip-arrow,
@@ -5474,7 +5474,7 @@ ul.list-icons li i {
 
 .tooltip-warning+.tooltip.left .tooltip-arrow,
 .tooltip-warning.tooltip.left .tooltip-arrow {
-    border-left-color: #fec107
+    border-right-color: #fec107
 }
 
 .tooltip-info+.tooltip .tooltip-inner,
@@ -5490,7 +5490,7 @@ ul.list-icons li i {
 
 .tooltip-info+.tooltip.right .tooltip-arrow,
 .tooltip-info.tooltip.right .tooltip-arrow {
-    border-right-color: #03a9f3
+    border-left-color: #03a9f3
 }
 
 .tooltip-info+tooltip.bottom .tooltip-arrow,
@@ -5500,7 +5500,7 @@ ul.list-icons li i {
 
 .tooltip-info+.tooltip.left .tooltip-arrow,
 .tooltip-info.tooltip.left .tooltip-arrow {
-    border-left-color: #03a9f3
+    border-right-color: #03a9f3
 }
 
 .tooltip-danger+.tooltip .tooltip-inner,
@@ -5516,7 +5516,7 @@ ul.list-icons li i {
 
 .tooltip-danger+.tooltip.right .tooltip-arrow,
 .tooltip-danger.tooltip.right .tooltip-arrow {
-    border-right-color: #fb9678
+    border-left-color: #fb9678
 }
 
 .tooltip-danger+.tooltip.bottom .tooltip-arrow,
@@ -5526,7 +5526,7 @@ ul.list-icons li i {
 
 .tooltip-danger+.tooltip.left .tooltip-arrow,
 .tooltip-danger.tooltip.left .tooltip-arrow {
-    border-left-color: #fb9678
+    border-right-color: #fb9678
 }
 
 .flotTip {
@@ -5611,7 +5611,7 @@ ul.list-icons li i {
 .btn-file>input {
     position: absolute;
     top: 0;
-    right: 0;
+    left: 0;
     margin: 0;
     opacity: 0;
     filter: alpha(opacity=0);
@@ -5716,7 +5716,7 @@ ul.list-icons li i {
 .asColorPicker-trigger {
     position: absolute;
     top: 0;
-    right: -35px;
+    left: -35px;
     height: 38px;
     width: 37px;
     border: 0
@@ -5728,7 +5728,7 @@ ul.list-icons li i {
 
 .asColorPicker-clear {
     top: 7px;
-    right: 16px
+    left: 16px
 }
 
 .datepicker table tr td.today,
@@ -5786,9 +5786,9 @@ ul.list-icons li i {
 }
 
 .user-profile .user-pro-body .dropdown-menu {
-    right: 0;
-    width: 180px;
     left: 0;
+    width: 180px;
+    right: 0;
     margin: 0 auto
 }
 
@@ -5811,7 +5811,7 @@ ul.list-icons li i {
     display: inline-block;
     vertical-align: middle;
     padding-top: 9px;
-    margin-right: 8px;
+    margin-left: 8px;
     text-align: center
 }
 
@@ -5885,7 +5885,7 @@ ul.list-icons li i {
 
 .sidebar #side-menu .user-pro .arrow {
     top: 23px;
-    right: 20px
+    left: 20px
 }
 
 .sidebar #side-menu .user-pro>a {
@@ -5894,11 +5894,11 @@ ul.list-icons li i {
 
 .sidebar #side-menu .user-pro .img-circle {
     width: 30px;
-    margin-right: 10px
+    margin-left: 10px
 }
 
 .sidebar #side-menu .user-pro .nav-second-level li i {
-    margin-right: 5px
+    margin-left: 5px
 }
 
 .sidebar .sidebar-search {
@@ -5911,7 +5911,7 @@ ul.list-icons li i {
 
 #side-menu li a {
     color: #54667a;
-    border-left: 3px solid #4f5467
+    border-right: 3px solid #4f5467
 }
 
 #side-menu>li>a {
@@ -5924,7 +5924,7 @@ ul.list-icons li i {
 }
 
 #side-menu>li>a.active {
-    border-left: 3px solid #ff6849;
+    border-right: 3px solid #ff6849;
     color: #fff;
     background: rgba(0, 0, 0, 0)
 }
@@ -5940,12 +5940,12 @@ ul.list-icons li i {
 
 .sidebar .arrow {
     position: absolute;
-    right: 15px;
+    left: 15px;
     top: 18px
 }
 
 .sidebar .nav-second-level .arrow {
-    right: 15px;
+    left: 15px;
     top: 12px
 }
 
@@ -6025,7 +6025,7 @@ ul.list-icons li i {
 
 .fa-ul {
     padding-left: 0;
-    margin-left: 2.14285714em;
+    margin-right: 2.14285714em;
     list-style-type: none
 }
 
@@ -6035,14 +6035,14 @@ ul.list-icons li i {
 
 .fa-li {
     position: absolute;
-    left: -2.14285714em;
+    right: -2.14285714em;
     width: 2.14285714em;
     top: .14285714em;
     text-align: center
 }
 
 .fa-li.fa-lg {
-    left: -1.85714286em
+    right: -1.85714286em
 }
 
 .fa-border {
@@ -6052,35 +6052,35 @@ ul.list-icons li i {
 }
 
 .fa-pull-left {
-    float: left
+    float: right
 }
 
 .fa-pull-right {
-    float: right
-}
-
-.fa.fa-pull-left {
-    margin-right: .3em
-}
-
-.fa.fa-pull-right {
-    margin-left: .3em
-}
-
-.pull-right {
-    float: right
-}
-
-.pull-left {
     float: left
 }
 
-.fa.pull-left {
+.fa.fa-pull-left {
+    margin-left: .3em
+}
+
+.fa.fa-pull-right {
     margin-right: .3em
 }
 
-.fa.pull-right {
+.pull-right {
+    float: left
+}
+
+.pull-left {
+    float: right
+}
+
+.fa.pull-left {
     margin-left: .3em
+}
+
+.fa.pull-right {
+    margin-right: .3em
 }
 
 .fa-spin {
@@ -6170,7 +6170,7 @@ ul.list-icons li i {
 .fa-stack-1x,
 .fa-stack-2x {
     position: absolute;
-    left: 0;
+    right: 0;
     width: 100%;
     text-align: center
 }
@@ -16265,8 +16265,8 @@ ul.list-icons li i {
 .tabs-style-iconbox nav ul li.tab-current a::after {
     position: absolute;
     top: 100%;
-    left: 50%;
-    margin-left: -10px;
+    right: 50%;
+    margin-right: -10px;
     width: 0;
     height: 0;
     border: solid transparent;
@@ -16280,7 +16280,7 @@ ul.list-icons li i {
 .tabs-style-iconbox nav ul li:first-child::before {
     position: absolute;
     top: 20%;
-    right: 0;
+    left: 0;
     z-index: -1;
     width: 1px;
     height: 60%;
@@ -16288,8 +16288,8 @@ ul.list-icons li i {
 }
 
 .tabs-style-iconbox nav ul li:first-child::before {
-    right: auto;
-    left: 0
+    left: auto;
+    right: 0
 }
 
 .tabs-style-iconbox .sticon::before {
@@ -16303,20 +16303,20 @@ ul.list-icons li i {
 
 .tabs-style-underline nav a {
     padding: 20px 0;
-    border-left: 1px solid rgba(120, 130, 140, .13);
+    border-right: 1px solid rgba(120, 130, 140, .13);
     -webkit-transition: color .2s;
     transition: color .2s;
     color: #2b2b2b
 }
 
 .tabs-style-underline nav li:last-child a {
-    border-right: 1px solid rgba(120, 130, 140, .13)
+    border-left: 1px solid rgba(120, 130, 140, .13)
 }
 
 .tabs-style-underline nav li a::after {
     position: absolute;
     bottom: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 6px;
     background: #fb9678;
@@ -16353,7 +16353,7 @@ ul.list-icons li i {
 .tabs-style-linetriangle nav li.tab-current a:before {
     position: absolute;
     top: 100%;
-    left: 50%;
+    right: 50%;
     width: 0;
     height: 0;
     border: solid transparent;
@@ -16362,7 +16362,7 @@ ul.list-icons li i {
 }
 
 .tabs-style-linetriangle nav li.tab-current a:after {
-    margin-left: -10px;
+    margin-right: -10px;
     border-width: 10px;
     border-top-color: #fff
 }
@@ -16372,7 +16372,7 @@ ul.list-icons li i {
 }
 
 .tabs-style-linetriangle nav li.tab-current a:before {
-    margin-left: -11px;
+    margin-right: -11px;
     border-width: 11px;
     border-top-color: rgba(0, 0, 0, .2)
 }
@@ -16405,8 +16405,8 @@ ul.list-icons li i {
 .tabs-style-iconfall nav li::before {
     position: absolute;
     bottom: 1em;
-    left: 50%;
-    margin-left: -20px;
+    right: 50%;
+    margin-right: -20px;
     width: 40px;
     height: 4px;
     background: #fb9678;
@@ -16457,7 +16457,7 @@ ul.list-icons li i {
 .tabs-style-linemove nav li:last-child::before {
     position: absolute;
     bottom: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 4px;
     background: #fb9678;
@@ -16544,7 +16544,7 @@ ul.list-icons li i {
 .tabs-style-circle nav li::before {
     position: absolute;
     top: 50%;
-    left: 50%;
+    right: 50%;
     margin: -60px 0 0 -60px;
     width: 120px;
     height: 120px;
@@ -16624,7 +16624,7 @@ ul.list-icons li i {
 }
 
 .tabs-style-shape nav ul li:first-child {
-    margin-left: 0
+    margin-right: 0
 }
 
 .tabs-style-shape nav ul li.tab-current {
@@ -16641,7 +16641,7 @@ ul.list-icons li i {
 
 .tabs-style-shape nav li a svg {
     position: absolute;
-    left: 100%;
+    right: 100%;
     margin: 0;
     width: 3em;
     height: 100%;
@@ -16660,8 +16660,8 @@ ul.list-icons li i {
 
 .tabs-style-shape nav li a svg:nth-child(2),
 .tabs-style-shape nav li:last-child a svg {
-    right: 100%;
-    left: auto;
+    left: 100%;
+    right: auto;
     -webkit-transform: scale3d(-1, 1, 1);
     transform: scale3d(-1, 1, 1)
 }
@@ -16766,7 +16766,7 @@ ul.list-icons li i {
 .tabs-style-linebox nav a::after {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: -1;
     width: 100%;
     height: 100%;
@@ -16828,7 +16828,7 @@ ul.list-icons li i {
 .tabs-style-flip nav a::after {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     z-index: -1;
     width: 100%;
     height: 100%;
@@ -16866,7 +16866,7 @@ ul.list-icons li i {
 
 .tabs-style-circlefill nav ul li {
     overflow: hidden;
-    border-right: 1px solid #fb9678
+    border-left: 1px solid #fb9678
 }
 
 .tabs-style-circlefill nav li a {
@@ -16876,7 +16876,7 @@ ul.list-icons li i {
 }
 
 .tabs-style-circlefill nav li:first-child {
-    border-left: none
+    border-right: none
 }
 
 .tabs-style-circlefill nav li:last-child {
@@ -16886,7 +16886,7 @@ ul.list-icons li i {
 .tabs-style-circlefill nav li::before {
     position: absolute;
     top: 50%;
-    left: 50%;
+    right: 50%;
     margin: -40px 0 0 -40px;
     width: 80px;
     height: 80px;
@@ -16966,7 +16966,7 @@ ul.list-icons li i {
         display: none
     }
     .sttabs nav a:before {
-        margin-right: 0
+        margin-left: 0
     }
 }
 
@@ -16990,7 +16990,7 @@ ul.list-icons li i {
     width: 360px;
     height: 20px;
     bottom: 100%;
-    left: 50%;
+    right: 50%;
     pointer-events: none;
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%)
@@ -17004,7 +17004,7 @@ ul.list-icons li i {
     position: absolute;
     z-index: 9999;
     width: 360px;
-    left: 50%;
+    right: 50%;
     margin: 0 0 20px -180px;
     bottom: 100%;
     text-align: left;
@@ -17052,7 +17052,7 @@ ul.list-icons li i {
 
 .tooltip-effect-5 .tooltip-content {
     width: 180px;
-    margin-left: -90px;
+    margin-right: -90px;
     -webkit-transform-origin: 50% calc(106%);
     transform-origin: 50% calc(106%);
     -webkit-transform: rotate3d(0, 0, 1, 15deg);
@@ -17078,7 +17078,7 @@ ul.list-icons li i {
 .tooltip-content::after {
     content: '';
     top: 100%;
-    left: 50%;
+    right: 50%;
     border: solid transparent;
     height: 0;
     width: 0;
@@ -17086,15 +17086,15 @@ ul.list-icons li i {
     pointer-events: none;
     border-color: #2a3035 transparent transparent;
     border-width: 10px;
-    margin-left: -10px
+    margin-right: -10px
 }
 
 .tooltip-content img {
     position: relative;
     height: 140px;
     display: block;
-    float: left;
-    margin-right: 1em
+    float: right;
+    margin-left: 1em
 }
 
 .tooltip-text {
@@ -17120,8 +17120,8 @@ a.mytooltip {
     width: 80px;
     height: 80px;
     padding-top: 25px;
-    left: 50%;
-    margin-left: -40px;
+    right: 50%;
+    margin-right: -40px;
     bottom: 100%;
     border-radius: 50%;
     text-align: center;
@@ -17219,7 +17219,7 @@ a.mytooltip {
     content: '';
     position: absolute;
     top: 100%;
-    left: 50%;
+    right: 50%;
     margin: -7px 0 0 -15px;
     width: 30px;
     height: 20px;
@@ -17234,8 +17234,8 @@ a.mytooltip {
     z-index: 9999;
     width: 200px;
     bottom: 100%;
-    left: 50%;
-    margin-left: -100px;
+    right: 50%;
+    margin-right: -100px;
     padding: 50px 30px;
     text-align: center;
     color: #fff;
@@ -17266,8 +17266,8 @@ a.mytooltip {
     position: absolute;
     width: 16px;
     height: 16px;
-    left: 50%;
-    margin-left: -8px;
+    right: 50%;
+    margin-right: -8px;
     top: 100%;
     background: #00AEEF;
     -webkit-transform: translate3d(0, -60%, 0) rotate3d(0, 0, 1, 45deg);
@@ -17295,8 +17295,8 @@ a.mytooltip {
     position: absolute;
     z-index: 99;
     width: 360px;
-    left: 50%;
-    margin-left: -180px;
+    right: 50%;
+    margin-right: -180px;
     bottom: -5px;
     text-align: left;
     background: #03a9f3;
@@ -17339,7 +17339,7 @@ a.mytooltip {
     position: absolute;
     z-index: 9999;
     width: 300px;
-    left: 50%;
+    right: 50%;
     bottom: 100%;
     font-size: 20px;
     line-height: 1.4;
@@ -17402,7 +17402,7 @@ a.mytooltip {
 .tooltip-content5::after {
     content: '';
     bottom: -20px;
-    left: 50%;
+    right: 50%;
     border: solid transparent;
     height: 0;
     width: 0;
@@ -17410,7 +17410,7 @@ a.mytooltip {
     pointer-events: none;
     border-color: #fb9678 transparent transparent;
     border-width: 10px;
-    margin-left: -10px
+    margin-right: -10px
 }
 
 @media (max-width:1350px) {
@@ -17452,8 +17452,8 @@ a.mytooltip {
 }
 
 .megamenu {
-    left: 0;
     right: 0;
+    left: 0;
     width: 100%
 }
 
@@ -17559,7 +17559,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 .left-aside {
     position: absolute;
     background: #fff;
-    border-right: 1px solid rgba(120, 130, 140, .13);
+    border-left: 1px solid rgba(120, 130, 140, .13);
     padding: 20px;
     width: 250px;
     height: 100%
@@ -17567,7 +17567,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 
 .right-aside {
     padding: 20px;
-    margin-left: 250px
+    margin-right: 250px
 }
 
 .right-aside .contact-list td {
@@ -17610,7 +17610,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 }
 
 .list-style-none li a span {
-    float: right
+    float: left
 }
 
 .chat-main-box {
@@ -17624,14 +17624,14 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
     width: 250px;
     z-index: 9;
     top: 0;
-    border-right: 1px solid rgba(120, 130, 140, .13)
+    border-left: 1px solid rgba(120, 130, 140, .13)
 }
 
 .chat-main-box .chat-left-aside .open-panel {
     display: none;
     cursor: pointer;
     position: absolute;
-    left: -webkit-calc(99%);
+    right: -webkit-calc(99%);
     top: 50%;
     z-index: 100;
     background-color: #fff;
@@ -17665,7 +17665,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 }
 
 .chat-main-box .chat-right-aside {
-    margin-left: 250px
+    margin-right: 250px
 }
 
 .chat-main-box .chat-right-aside .chat-list {
@@ -17696,13 +17696,13 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 
 .chat-main-box .chat-right-aside .send-chat-box .custom-send {
     position: absolute;
-    right: 20px;
+    left: 20px;
     bottom: 10px
 }
 
 .chat-main-box .chat-right-aside .send-chat-box .custom-send .cst-icon {
     color: #686868;
-    margin-right: 10px
+    margin-left: 10px
 }
 
 .el-element-overlay .white-box {
@@ -17770,8 +17770,8 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
     margin: auto;
     position: absolute;
     top: 50%;
-    left: 0;
     right: 0;
+    left: 0;
     transform: translateY(-50%) translateZ(0);
     -webkit-transform: translateY(-50%) translateZ(0);
     -ms-transform: translateY(-50%) translateZ(0)
@@ -17800,7 +17800,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
     position: absolute;
     overflow: hidden;
     top: 0;
-    left: 0;
+    right: 0;
     opacity: 0;
     background-color: rgba(0, 0, 0, .7);
     -webkit-transition: all .4s ease-in-out;
@@ -17835,7 +17835,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 
 .login-sidebar {
     position: absolute;
-    right: 0;
+    left: 0;
     margin-top: 0;
     height: 100%
 }
@@ -18260,11 +18260,11 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
 }
 
 .floating-labels .bar:before {
-    left: 50%
+    right: 50%
 }
 
 .floating-labels .bar:after {
-    right: 50%
+    left: 50%
 }
 
 .floating-labels .form-control:focus~.bar:after,
@@ -18277,7 +18277,7 @@ table.dataTable.order-column.stripe tbody tr.odd>.sorting_1 {
     height: 60%;
     width: 100px;
     top: 25%;
-    left: 0;
+    right: 0;
     pointer-events: none;
     opacity: .5
 }
@@ -18389,7 +18389,7 @@ table.dataTable thead .sorting_desc::after {
     position: absolute;
     text-transform: uppercase;
     top: 0;
-    right: 0;
+    left: 0;
     border-radius: 2px;
     padding: 5px;
     font-size: 80%
@@ -18400,7 +18400,7 @@ table.dataTable thead .sorting_desc::after {
     width: 26%;
     display: block;
     margin-top: -15px;
-    margin-left: 37%;
+    margin-right: 37%;
     border: 1px solid rgba(120, 130, 140, .13);
     text-transform: uppercase
 }
@@ -18408,7 +18408,7 @@ table.dataTable thead .sorting_desc::after {
 .pro-box .pro-label-img {
     position: absolute;
     top: 30px;
-    right: 30px
+    left: 30px
 }
 
 .pro-box.pro-horizontal pro-content {
@@ -18420,7 +18420,7 @@ table.dataTable thead .sorting_desc::after {
     height: 138px;
     max-height: 142px;
     border-bottom: 1px solid rgba(120, 130, 140, .13);
-    border-right: 1px solid rgba(120, 130, 140, .13)
+    border-left: 1px solid rgba(120, 130, 140, .13)
 }
 
 .pro-content .pro-list-info {
@@ -18460,7 +18460,7 @@ ul.pro-info li span.label {
     padding: 8px;
     border-radius: 50%;
     margin-top: -4px;
-    margin-right: 15px;
+    margin-left: 15px;
     font-size: 12px
 }
 
@@ -18480,7 +18480,7 @@ ul.pro-info li span img {
 .pro-agent .agent-name,
 .pro-agent-col-3 .agent-img,
 .pro-agent-col-3 .agent-name {
-    float: left
+    float: right
 }
 
 .pro-agent .agent-img {
@@ -18591,7 +18591,7 @@ ul.pro-amenities li span i {
 .icolors>li {
     padding: 0;
     margin: 2px;
-    float: left;
+    float: right;
     display: inline-block;
     height: 30px;
     width: 30px;
@@ -18606,7 +18606,7 @@ ul.pro-amenities li span i {
 }
 
 .icolors>li:first-child {
-    margin-left: 0
+    margin-right: 0
 }
 
 .icolors>li.orange {
@@ -18638,7 +18638,7 @@ ul.pro-amenities li span i {
 }
 
 .icheck-list {
-    float: left;
+    float: right;
     padding-right: 50px;
     padding-top: 10px
 }
@@ -18706,7 +18706,7 @@ ul.pro-amenities li span i {
     background: #fb9678;
     color: #fff;
     border-radius: 50%;
-    float: left;
+    float: right;
     display: inline-block;
     margin: auto;
     padding-top: 2px;
@@ -18786,7 +18786,7 @@ ul.pro-amenities li span i {
     color: #686868;
     border: 1px solid #686868;
     border-radius: 50%;
-    float: left;
+    float: right;
     display: inline-block;
     margin: auto;
     padding-top: 1px;
@@ -18836,7 +18836,7 @@ ul.pro-amenities li span i {
     font-size: 200px;
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     line-height: 120px;
     color: #e4e7ea;
     z-index: 1
@@ -18878,7 +18878,7 @@ ul.pro-amenities li span i {
     font-size: 120px;
     position: absolute;
     bottom: 0;
-    right: 0;
+    left: 0;
     line-height: 75px;
     color: #e4e7ea;
     z-index: 1
@@ -18942,11 +18942,11 @@ ul.pro-amenities li span i {
 }
 
 .line-steps .step-title:after {
-    left: 50%
+    right: 50%
 }
 
 .line-steps .step-title:before {
-    right: 50%
+    left: 50%
 }
 
 .line-steps .finish .step-title:after,
@@ -19043,32 +19043,32 @@ ul.pro-amenities li span i {
     clear: left;
     position: absolute;
     top: 12px;
-    left: -2px;
+    right: -2px;
     color: #fff
 }
 
 .ribbon-bookmark:before {
     position: absolute;
     top: 0;
-    left: 100%;
+    right: 100%;
     display: block;
     width: 0;
     height: 0;
     content: '';
     border: 15px solid #2b2b2b;
-    border-right: 10px solid transparent
+    border-left: 10px solid transparent
 }
 
 .ribbon-right {
-    left: auto;
-    right: -2px
+    right: auto;
+    left: -2px
 }
 
 .ribbon-bookmark.ribbon-right:before {
-    right: 100%;
-    left: auto;
-    border-right: 15px solid #2b2b2b;
-    border-left: 10px solid transparent
+    left: 100%;
+    right: auto;
+    border-left: 15px solid #2b2b2b;
+    border-right: 10px solid transparent
 }
 
 .ribbon-vertical-l,
@@ -19079,28 +19079,28 @@ ul.pro-amenities li span i {
     width: 30px;
     line-height: 70px;
     text-align: center;
-    left: 12px;
+    right: 12px;
     top: -2px
 }
 
 .ribbon-vertical-r {
-    left: auto;
-    right: 12px
+    right: auto;
+    left: 12px
 }
 
 .ribbon-bookmark.ribbon-vertical-l:before,
 .ribbon-bookmark.ribbon-vertical-r:before {
     top: 100%;
-    left: 0;
+    right: 0;
     margin-top: -14px;
-    border-right: 15px solid #2b2b2b;
+    border-left: 15px solid #2b2b2b;
     border-bottom: 10px solid transparent
 }
 
 .ribbon-badge {
     top: 15px;
     overflow: hidden;
-    left: -90px;
+    right: -90px;
     width: 100%;
     text-align: center;
     -webkit-transform: rotate(-45deg);
@@ -19110,8 +19110,8 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-badge.ribbon-right {
-    left: auto;
-    right: -90px;
+    right: auto;
+    left: -90px;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     -o-transform: rotate(45deg);
@@ -19136,7 +19136,7 @@ ul.pro-amenities li span i {
 
 .ribbon-corner {
     top: 0;
-    left: 0;
+    right: 0;
     background-color: transparent!important;
     padding: 6px 0 0 10px
 }
@@ -19148,25 +19148,25 @@ ul.pro-amenities li span i {
 .ribbon-corner:before {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 0;
     height: 0;
     content: '';
     border: 30px solid transparent;
     border-top-color: #ff6849;
-    border-left-color: #ff6849
+    border-right-color: #ff6849
 }
 
 .ribbon-corner.ribbon-right:before {
-    right: 0;
-    left: auto;
-    border-right-color: #526069;
-    border-left-color: transparent
+    left: 0;
+    right: auto;
+    border-left-color: #526069;
+    border-right-color: transparent
 }
 
 .ribbon-corner.ribbon-right {
-    right: 0;
-    left: auto;
+    left: 0;
+    right: auto;
     padding: 6px 10px 0 0
 }
 
@@ -19188,13 +19188,13 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-custom:before {
-    border-right-color: #ff6849;
-    border-left-color: transparent
+    border-left-color: #ff6849;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-custom:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-custom:before {
-    border-right-color: #ff6849;
+    border-left-color: #ff6849;
     border-bottom-color: transparent
 }
 
@@ -19207,24 +19207,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-primary:before {
-    border-right-color: #ab8ce4;
-    border-left-color: transparent
+    border-left-color: #ab8ce4;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-primary:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-primary:before {
-    border-right-color: #ab8ce4;
+    border-left-color: #ab8ce4;
     border-bottom-color: transparent
 }
 
 .ribbon-primary.ribbon-corner:before {
     border-top-color: #ab8ce4;
-    border-left-color: #ab8ce4
+    border-right-color: #ab8ce4
 }
 
 .ribbon-primary.ribbon-corner.ribbon-right:before {
-    border-right-color: #ab8ce4;
-    border-left-color: transparent
+    border-left-color: #ab8ce4;
+    border-right-color: transparent
 }
 
 .ribbon-primary.ribbon-corner.ribbon-bottom:before {
@@ -19241,24 +19241,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-success:before {
-    border-right-color: #00c292;
-    border-left-color: transparent
+    border-left-color: #00c292;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-success:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-success:before {
-    border-right-color: #00c292;
+    border-left-color: #00c292;
     border-bottom-color: transparent
 }
 
 .ribbon-success.ribbon-corner:before {
     border-top-color: #00c292;
-    border-left-color: #00c292
+    border-right-color: #00c292
 }
 
 .ribbon-success.ribbon-corner.ribbon-right:before {
-    border-right-color: #00c292;
-    border-left-color: transparent
+    border-left-color: #00c292;
+    border-right-color: transparent
 }
 
 .ribbon-success.ribbon-corner.ribbon-bottom:before {
@@ -19275,24 +19275,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-info:before {
-    border-right-color: #03a9f3;
-    border-left-color: transparent
+    border-left-color: #03a9f3;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-info:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-info:before {
-    border-right-color: #03a9f3;
+    border-left-color: #03a9f3;
     border-bottom-color: transparent
 }
 
 .ribbon-info.ribbon-corner:before {
     border-top-color: #03a9f3;
-    border-left-color: #03a9f3
+    border-right-color: #03a9f3
 }
 
 .ribbon-info.ribbon-corner.ribbon-right:before {
-    border-right-color: #03a9f3;
-    border-left-color: transparent
+    border-left-color: #03a9f3;
+    border-right-color: transparent
 }
 
 .ribbon-info.ribbon-corner.ribbon-bottom:before {
@@ -19309,24 +19309,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-warning:before {
-    border-right-color: #fec107;
-    border-left-color: transparent
+    border-left-color: #fec107;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-warning:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-warning:before {
-    border-right-color: #fec107;
+    border-left-color: #fec107;
     border-bottom-color: transparent
 }
 
 .ribbon-warning.ribbon-corner:before {
     border-top-color: #fec107;
-    border-left-color: #fec107
+    border-right-color: #fec107
 }
 
 .ribbon-warning.ribbon-corner.ribbon-right:before {
-    border-right-color: #fec107;
-    border-left-color: transparent
+    border-left-color: #fec107;
+    border-right-color: transparent
 }
 
 .ribbon-warning.ribbon-corner.ribbon-bottom:before {
@@ -19343,24 +19343,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-danger:before {
-    border-right-color: #fb9678;
-    border-left-color: transparent
+    border-left-color: #fb9678;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-danger:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-danger:before {
-    border-right-color: #fb9678;
+    border-left-color: #fb9678;
     border-bottom-color: transparent
 }
 
 .ribbon-danger.ribbon-corner:before {
     border-top-color: #fb9678;
-    border-left-color: #fb9678
+    border-right-color: #fb9678
 }
 
 .ribbon-danger.ribbon-corner.ribbon-right:before {
-    border-right-color: #fb9678;
-    border-left-color: transparent
+    border-left-color: #fb9678;
+    border-right-color: transparent
 }
 
 .ribbon-danger.ribbon-corner.ribbon-bottom:before {
@@ -19377,24 +19377,24 @@ ul.pro-amenities li span i {
 }
 
 .ribbon-bookmark.ribbon-right.ribbon-default:before {
-    border-right-color: #2b2b2b;
-    border-left-color: transparent
+    border-left-color: #2b2b2b;
+    border-right-color: transparent
 }
 
 .ribbon-bookmark.ribbon-vertical-l.ribbon-default:before,
 .ribbon-bookmark.ribbon-vertical-r.ribbon-default:before {
-    border-right-color: #2b2b2b;
+    border-left-color: #2b2b2b;
     border-bottom-color: transparent
 }
 
 .ribbon-default.ribbon-corner:before {
     border-top-color: #2b2b2b;
-    border-left-color: #2b2b2b
+    border-right-color: #2b2b2b
 }
 
 .ribbon-default.ribbon-corner.ribbon-right:before {
-    border-right-color: #2b2b2b;
-    border-left-color: transparent
+    border-left-color: #2b2b2b;
+    border-right-color: transparent
 }
 
 .ribbon-default.ribbon-corner.ribbon-bottom:before {
@@ -19516,7 +19516,7 @@ ul.pro-amenities li span i {
 @media (min-width:768px) {
     #page-wrapper {
         position: inherit;
-        margin: 0 0 0 220px
+        margin: 0 220px 0 0
     }
     .navbar-default {
         position: relative;
@@ -19545,19 +19545,19 @@ ul.pro-amenities li span i {
         width: 220px
     }
     .fix-sidebar .navbar-left {
-        margin-left: 220px
+        margin-right: 220px
     }
     .footer {
-        left: 220px
+        right: 220px
     }
     .content-wrapper #page-wrapper {
-        margin-left: 60px
+        margin-right: 60px
     }
     .content-wrapper .navbar-left {
-        margin-left: 0
+        margin-right: 0
     }
     .content-wrapper .footer {
-        left: 60px
+        right: 60px
     }
     .content-wrapper .user-profile .user-pro-body .u-dropdown {
         display: none
@@ -19571,7 +19571,7 @@ ul.pro-amenities li span i {
     .content-wrapper .sidebar .hide-menu {
         display: none;
         width: 180px;
-        left: 60px
+        right: 60px
     }
     .content-wrapper .sidebar .sidebar-nav {
         position: absolute;
@@ -19605,7 +19605,7 @@ ul.pro-amenities li span i {
     }
     .content-wrapper .sidebar .nav-second-level {
         position: absolute;
-        left: 60px;
+        right: 60px;
         background: #f7fafc;
         width: 240px;
         opacity: 1;
@@ -19625,10 +19625,10 @@ ul.pro-amenities li span i {
     .navbar-top-links .dropdown-alerts,
     .navbar-top-links .dropdown-messages,
     .navbar-top-links .dropdown-tasks {
-        margin-left: auto
+        margin-right: auto
     }
     .mail_listing {
-        border-left: 1px solid rgba(120, 130, 140, .13);
+        border-right: 1px solid rgba(120, 130, 140, .13);
         padding-left: 20px
     }
     .inbox-panel {
@@ -19636,11 +19636,11 @@ ul.pro-amenities li span i {
     }
     .top-minus {
         margin-top: -62px;
-        float: right
+        float: left
     }
     .content-wrapper.fix-sidebar .navbar-left,
     .fix-sidebar.content-wrapper .navbar-left {
-        margin-left: 60px!important
+        margin-right: 60px!important
     }
     .content-wrapper.fix-sidebar .sidebar,
     .fix-sidebar.content-wrapper .sidebar {
@@ -19662,7 +19662,7 @@ ul.pro-amenities li span i {
 
 @media (max-width:1024px) {
     .b-r-none {
-        border-right: 0
+        border-left: 0
     }
     .carousel-inner h3 {
         height: 90px;
@@ -19678,13 +19678,13 @@ ul.pro-amenities li span i {
         display: inline-block
     }
     .navbar-top-links .profile-pic img {
-        margin-right: 0
+        margin-left: 0
     }
     .top-left-part {
         width: 60px
     }
     .navbar-top-links li:last-child {
-        margin-right: 0
+        margin-left: 0
     }
     .navbar-top-links .dropdown-alerts,
     .navbar-top-links .dropdown-messages,
@@ -19692,46 +19692,46 @@ ul.pro-amenities li span i {
         width: 260px
     }
     .row-in-br {
-        border-right: 0;
+        border-left: 0;
         border-bottom: 1px solid rgba(120, 130, 140, .13)
     }
     .bg-title .breadcrumb {
-        float: left;
+        float: right;
         margin-top: 0;
         margin-bottom: 10px
     }
     ul.timeline:before {
-        left: 40px
+        right: 40px
     }
     ul.timeline>li>.timeline-panel {
         width: calc(100% - 90px)
     }
     ul.timeline>li>.timeline-badge {
         top: 16px;
-        left: 15px;
-        margin-left: 0
+        right: 15px;
+        margin-right: 0
     }
     ul.timeline>li>.timeline-panel {
-        float: right
+        float: left
     }
     ul.timeline>li>.timeline-panel:before {
-        right: auto;
-        left: -15px;
-        border-right-width: 15px;
-        border-left-width: 0
+        left: auto;
+        right: -15px;
+        border-left-width: 15px;
+        border-right-width: 0
     }
     ul.timeline>li>.timeline-panel:after {
-        right: auto;
-        left: -14px;
-        border-right-width: 14px;
-        border-left-width: 0
+        left: auto;
+        right: -14px;
+        border-left-width: 14px;
+        border-right-width: 0
     }
     .wizard-steps>li {
         display: block
     }
     .dropdown .dropdown-tasks,
     .dropdown .mailbox {
-        left: -94px
+        right: -94px
     }
     .fix-header .navbar-static-top {
         position: fixed;
@@ -19759,15 +19759,15 @@ ul.pro-amenities li span i {
         border: 0
     }
     .right-aside {
-        margin-left: 0
+        margin-right: 0
     }
     .chat-main-box .chat-left-aside {
-        left: -250px;
+        right: -250px;
         transition: .5s ease-in;
         background: #fff
     }
     .chat-main-box .chat-left-aside.open-pnl {
-        left: 0
+        right: 0
     }
     .chat-main-box .chat-left-aside .open-panel {
         display: block
@@ -19797,7 +19797,7 @@ ul.pro-amenities li span i {
     }
     .pro-content .pro-list-details {
         height: 100px;
-        border-right: none
+        border-left: none
     }
     .pro-list-info ul.pro-info li {
         padding: 10px 0

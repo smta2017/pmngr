@@ -248,7 +248,9 @@ return array (
   'language' => 'Language',
    // custom attr to direction and style file
    'htmldirection' => 'ltr',
-   'cssfile' => 'style-ar.css',
+   'cssfile' => 'style.css',
+   'bootstrapfile' => 'bootstrap.min.css',
+
      //---------------------------------------
   'team' => 'Team',
   'manage' => 'Manage',

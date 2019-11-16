@@ -33,7 +33,7 @@
 
     <title> Super Admin Panel | {{ __($pageTitle) }}</title>
     <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="/bootstrap/dist/css/@lang('app.bootstrapfile')" rel="stylesheet">
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css'>
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css'>
 

@@ -249,6 +249,7 @@ return array (
     // custom attr to direction and style file
   'htmldirection' => 'rtl',
   'cssfile' => 'style-ar.css',
+  'bootstrapfile' => 'bootstrap-rtl.css',
     //---------------------------------------
   'team' => 'Team',
   'manage' => 'Manage',
