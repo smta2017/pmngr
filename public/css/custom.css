@@ -833,3 +833,10 @@ body {
     float: none;
     width: 100%;
 }
+div.dataTables_wrapper div.dataTables_paginate{
+    text-align: left !important;
+}
+
+div.dataTables_wrapper div.dataTables_filter{
+    text-align: left !important;
+}
