@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ config('app.locale') }}"  dir="@lang('app.htmldirection')">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,11 +27,15 @@
 
     <title>{{ $setting->company_name }}</title>
     <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"> -->
+    <link href="/bootstrap/dist/css/@lang('app.bootstrapfile')" rel="stylesheet">
+
     <!-- animation CSS -->
     <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
     <!-- Custom CSS -->
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> -->
+    <link href="/css/@lang('app.cssfile')" rel="stylesheet">
+
     <!-- color CSS -->
     <link href="{{ asset('css/colors/blue.css') }}" id="theme"  rel="stylesheet">
     <link href="{{ asset('css/custom.css') }}"   rel="stylesheet">

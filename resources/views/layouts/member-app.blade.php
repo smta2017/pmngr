@@ -3,7 +3,7 @@
    This is a starter template page. Use this page to start your new project from
    scratch. This page gets rid of all links and provides the needed markup only.
    -->
-<html lang="en">
+<html lang="en"  dir="@lang('app.htmldirection')">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,7 +33,9 @@
 
     <title>@if($userRole) {{ $userRole->display_name }} @lang("app.panel")  @else @lang("app.employeePanel") @endif | {{ __($pageTitle) }}</title>
     <!-- Bootstrap Core CSS -->
-    <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"> -->
+    <link href="/bootstrap/dist/css/@lang('app.bootstrapfile')" rel="stylesheet">
+
     <!-- This is Sidebar menu CSS -->
     <link href="{{ asset('plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css') }}" rel="stylesheet">
 
@@ -46,7 +48,9 @@
     @stack('head-script')
 
     <!-- This is a Custom CSS -->
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <!-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> -->
+    <link href="/css/@lang('app.cssfile')" rel="stylesheet">
+
     <!-- color CSS you can use different color css from css/colors folder -->
     <!-- We have chosen the skin-blue (default.css) for this starter
        page. However, you can choose any other skin from folder css / colors .
