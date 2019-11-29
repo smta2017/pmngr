@@ -57,7 +57,8 @@
        -->
     <link href="{{ asset('css/colors/default.css') }}" id="theme" rel="stylesheet">
     <link href="{{ asset('plugins/froiden-helper/helper.css') }}"   rel="stylesheet">
-    <link href="{{ asset('css/custom.css') }}"   rel="stylesheet">
+    <!-- <link href="{{ asset('css/custom.css') }}"   rel="stylesheet"> -->
+    <link href="/css/@lang('app.csscustom')" rel="stylesheet">
 
     @if($global->rounded_theme)
         <link href="{{ asset('css/rounded.css') }}" rel="stylesheet">

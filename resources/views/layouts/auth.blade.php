@@ -38,7 +38,9 @@
 
     <!-- color CSS -->
     <link href="{{ asset('css/colors/blue.css') }}" id="theme"  rel="stylesheet">
-    <link href="{{ asset('css/custom.css') }}"   rel="stylesheet">
+    <!-- <link href="{{ asset('css/custom.css') }}"   rel="stylesheet"> -->
+    <link href="/css/@lang('app.csscustom')" rel="stylesheet">
+
 
     @if($setting->rounded_theme)
         <link href="{{ asset('css/rounded.css') }}" rel="stylesheet">

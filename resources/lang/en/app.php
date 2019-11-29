@@ -249,6 +249,7 @@ return array (
    // custom attr to direction and style file
    'htmldirection' => 'ltr',
    'cssfile' => 'style.css',
+   'csscustom' => 'custom.css',
    'bootstrapfile' => 'bootstrap.min.css',
 
      //---------------------------------------
