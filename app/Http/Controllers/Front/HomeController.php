@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App;
 use App\Company;
 use App\CreditNotes;
 use App\Feature;
@@ -60,8 +61,11 @@ class HomeController extends FrontBaseController
         if($slug){
             $this->slugData = FooterMenu::where('slug', $slug)->first();
             return view('front.footer-page', $this->data);
-        }
+        }   
 
+        // change welcom page lang to ar
+        App::setLocale('ar');
+        
         return view('front.home', $this->data);
     }
 

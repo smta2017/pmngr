@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="rtl">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,7 +8,7 @@
 
     <title> {{ __($pageTitle) }} | {{ ucwords($setting->company_name)}}</title>
     <!-- Styles -->
-    <link href="{{ asset('front/css/core.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('front/css/core-ar.min.css') }}" rel="stylesheet">
     <link href="{{ asset('front/css/theme.min.css') }}" rel="stylesheet">
     <link href="{{ asset('front/plugin/froiden-helper/helper.css') }}" rel="stylesheet">
     <link href="{{ asset('front/css/style.css') }}" rel="stylesheet">
@@ -82,17 +82,17 @@
         }
 
         .pricing-section-2 div[class*='col-']:first-child .pricing {
-            border-radius: 6px 0 0 6px;
+            border-radius: 0 6px  6px 0;
         }
 
         .pricing-section-2 .pricing {
             border: 1px solid #ececec;
-            border-radius: 6px 0 0 6px;
+            border-radius: 0 6px  6px 0;
             border-right: none;
         }
 
         .pricing-section-2 div[class*='col-']:first-child .pricing .pricing__head {
-            border-radius: 6px 0 0 0;
+            border-radius:  0 6px 0 0;
         }
 
         .pick-plan .pricing__head {
@@ -133,12 +133,12 @@
         }
 
         .pricing-section-2 div[class*='col-']:last-child .pricing {
-            border-radius: 0 6px 6px 6px;
+            border-radius: 6px 0 6px 6px;
             border-right: 1px solid #ececec;
         }
 
         .pricing-section-2 div[class*='col-']:last-child .pricing {
-            border-radius: 0 6px 6px 0px;
+            border-radius:  6px 0 6px 0px;
         }
 
         .pricing-3 ul li {
