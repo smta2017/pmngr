@@ -102,7 +102,6 @@ return array (
   'invoices' => 
   array (
     'paymentReceived' => 'Payment received for invoice.',
-    'offlinePaymentRequest' => 'Offline Payment Request.',
   ),
   'projectReminder' => 
   array (
@@ -122,13 +121,4 @@ return array (
   array (
     'subject' => 'Comment posted on task',
   ),
-  'removalRequestAdmin' => 
-  array (
-    'subject' => 'Data removal request',
-    'text' => 'Data removal request',
-  ),
-'fileUpload' =>
-    array (
-        'subject' => 'New file uploaded to project : ',
-    ),
 );

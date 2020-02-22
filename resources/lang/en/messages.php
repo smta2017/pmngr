@@ -334,5 +334,4 @@ After that upload the favicons to public/favicon directory.',
   'noLeadAgent' => 'No lead agent found.',
   'gdprUpdated' => 'GDPR setting successfully updated',
   'offlinePackageChangeRequest' => 'New offline package request',
-  'pleaseEnterCreditAmount' => 'Please enter at least one credit amount',
 );

@@ -69,8 +69,6 @@ return array (
     'offline' => 'Offline',
     'online' => 'Online',
     'all' => 'All',
-    'sendCredentials' => 'Send Credentials',
-    'sendCredentialsMessage' => 'Do you want to send credentials via E-mail to client ?',
   ),
   'gdpr' => 
   array (
@@ -121,7 +119,6 @@ return array (
     'title' => 'Select Employee',
     'role' => 'Role',
     'lastDate' => 'Last Date',
-    'employeeId' => 'Employee ID',
   ),
   'projects' => 
   array (
@@ -179,7 +176,6 @@ return array (
     'remindBefore' => 'Remind before',
     'viewPublicGanttChart' => 'Public Gantt Chart',
     'burndownChart' => 'Burndown Chart',
-    'fileName' => 'File name',
   ),
   'tasks' => 
   array (
@@ -256,13 +252,6 @@ return array (
     'appliedCredits' => 'Applied Credits',
     'amountDue' => 'Amount Due',
     'amountPaid' => 'Amount Paid',
-    'review' => 'Review',
-    'OfflinePaymentRequest' => 'Offline Payment Request',
-    'paymentGateway' => 'Payment Gateway',
-    'transactionID' => 'Transaction ID',
-    'remark' => 'Remark',
-    'paymentDetails' => 'Payment Details',
-    'paidOn' => 'Paid On',
   ),
   'issues' => 
   array (
@@ -361,10 +350,6 @@ return array (
     'sendReminderInfo' => 'Remind project members about due date of projects.',
     'google_recaptcha_secret' => 'Google Recpatcha Secret',
     'weekStartFrom' => 'Week start from',
-    'updateEnableDisableTest' => 'Enable/Disable app update setting.',
-    'updateEnableDisable' => 'App Update',
-    'emailVerification' => 'Email Verification',
-    'emailVerificationEnableDisable' => 'Enable/Disable newly registered companies email verification.',
   ),
   'profile' => 
   array (

@@ -353,7 +353,7 @@ return array (
   'decline' => 'Decline',
   'sign' => 'Sign',
   'signed' => 'Signed',
-  'contracts' => 
+  'contracts' =>
   array (
     'description' => 'Description',
   ),
@@ -361,8 +361,9 @@ return array (
   'download' => 'Download',
   'subject' => 'Subject',
   'renew' => 'Renew',
+  'rejected' => 'Rejected',
   'applyToInvoice' => 'Apply To Invoice',
-  'credit-notes' => 
+  'credit-notes' =>
   array (
     'invoiceDate' => 'Invoice Date',
     'invoiceAmount' => 'Invoice Amount',
@@ -377,7 +378,6 @@ return array (
   'paymentReminder' => 'Payment Reminder',
   'leadAgent' => 'Lead Agent',
   'customers' => 'Customers',
-  'rejected' => 'Rejected',
   'purchaseAllow' => 'Purchase Allow',
   'allowed' => 'Allowed',
   'notAllowed' => 'Not Allowed',
@@ -386,9 +386,6 @@ return array (
   'product' => 'Product',
   'offlineRequest' => 'Offline Request',
   'file' => 'File',
-  'updateContactDetails' => 'Update Contact Details',
-  'verify' => 'Verify',
-  'mark' => 'Mark',
-  'copy' => 'Copy',
-  'client_name' => 'Client Name',
+  'offlineRequest' => 'Offline Request',
+  'file' => 'File',
 );
