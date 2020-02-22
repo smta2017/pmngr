@@ -48,7 +48,7 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (!$this->isLegal()) {
-            return redirect('verify-purchase');
+            // return redirect('verify-purchase');
         }
 
         $setting = GlobalSetting::first();
