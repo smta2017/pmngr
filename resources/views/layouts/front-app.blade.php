@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
+    <meta name="description" content="موقع مدير المشاريع ، الحل الأمثل لإدارة مشاريعك وأعمالك ومتابعة موظفيك.">
     <meta name="keywords" content="">
 
     <title> {{ __($pageTitle) }} | {{ ucwords($setting->company_name)}}</title>
