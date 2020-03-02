@@ -26,26 +26,27 @@ trait GlobalCurrencyExchange
         $currencyApiKey = ($setting->currency_converter_key) ? $setting->currency_converter_key : env('CURRENCY_CONVERTER_KEY');
 
         foreach ($currencies as $currency) {
-            if ($currency->is_cryptocurrency == 'no') {
-                // get exchange rate
-                $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='. $setting->currency->currency_code . '_' . $currency->currency_code.'&compact=ultra&apiKey='.$currencyApiKey);
-                $conversionRate = $res->getBody();
-                $conversionRate = json_decode($conversionRate, true);
-                if (!empty($conversionRate)) {
-                    $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
+            if ($currencyApiKey!='00') {
+                if ($currency->is_cryptocurrency == 'no') {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='. $setting->currency->currency_code . '_' . $currency->currency_code.'&compact=ultra&apiKey='.$currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
+                    if (!empty($conversionRate)) {
+                        $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
+                    }
+                } else {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='.$setting->currency->currency_code.'_USD&compact=ultra&apiKey='.$currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
+
+                    $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
+                    $currency->exchange_rate = $usdExchangePrice;
                 }
-            } else {
-                // get exchange rate
-                $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='.$setting->currency->currency_code.'_USD&compact=ultra&apiKey='.$currencyApiKey);
-                $conversionRate = $res->getBody();
-                $conversionRate = json_decode($conversionRate, true);
-
-                $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
-                $currency->exchange_rate = $usdExchangePrice;
             }
-
             $currency->save();
         }
     }
@@ -59,28 +60,29 @@ trait GlobalCurrencyExchange
         $currencyApiKey = ($currencyApiKey) ? $currencyApiKey : env('CURRENCY_CONVERTER_KEY');
 
         foreach ($currencies as $currency) {
+            
+            if ($currencyApiKey!='00') {
+                if ($currency->is_cryptocurrency == 'no') {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='. $setting->currency->currency_code . '_' . $currency->currency_code.'&compact=ultra&apiKey='.$currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
 
-            if ($currency->is_cryptocurrency == 'no') {
-                // get exchange rate
-                $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='. $setting->currency->currency_code . '_' . $currency->currency_code.'&compact=ultra&apiKey='.$currencyApiKey);
-                $conversionRate = $res->getBody();
-                $conversionRate = json_decode($conversionRate, true);
+                    if (!empty($conversionRate)) {
+                        $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
+                    }
+                } else {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='.$setting->currency->currency_code.'_USD&compact=ultra&apiKey='.$currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
 
-                if (!empty($conversionRate)) {
-                    $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
+                    $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
+                    $currency->exchange_rate = $usdExchangePrice;
                 }
-            } else {
-                // get exchange rate
-                $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q='.$setting->currency->currency_code.'_USD&compact=ultra&apiKey='.$currencyApiKey);
-                $conversionRate = $res->getBody();
-                $conversionRate = json_decode($conversionRate, true);
-
-                $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
-                $currency->exchange_rate = $usdExchangePrice;
             }
-
             $currency->save();
         }
     }
