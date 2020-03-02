@@ -45,7 +45,7 @@ class HomeController extends FrontBaseController
     public function index($slug = null)
     {
 
-        $this->pageTitle = 'Home';
+        $this->pageTitle = '';
         $this->packages = Package::where('default', 'no')->get();
 
         $features = Feature::all();
