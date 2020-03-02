@@ -302,7 +302,7 @@
                     <select class="selectpicker language-switcher" data-width="fit">
                         <option value="en" @if($user->locale == "en") selected @endif data-content='<span class="flag-icon flag-icon-us"></span> En'>En</option>
                         @foreach($languageSettings as $language)
-                            <option value="{{ $language->language_code }}" @if($user->locale == $language->language_code) selected @endif  data-content='<span class="flag-icon flag-icon-{{ $language->language_code }}"></span> {{ $language->language_code }}'>{{ $language->language_code }}</option>
+                            <option value="{{ $language->language_code }}" @if($user->locale == $language->language_code) selected @endif  data-content='<span class="flag-icon flag-icon-@if($language->language_code=='ar')sa @else{{ $language->language_code }} @endif"></span> {{ $language->language_code }}'>{{ $language->language_code }}</option>
                         @endforeach
                     </select>
                 </li>
