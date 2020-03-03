@@ -451,13 +451,13 @@
                     </ul>
                 </li>
                 <!-- /.Task dropdown -->
-                @if($company->package->default == 'yes' || $company->package->default == 'trial')
+                <!-- @if($company->package->default == 'yes' || $company->package->default == 'trial')
                     <li class="dropdown">
                         <a class="waves-effect waves-light text-uppercase" href="{{ route('admin.billing') }}">
                             @lang('app.purchasePackage') <i class="fa fa-arrow-right"></i>
                         </a>
                     </li>
-                @endif
+                @endif -->
             </ul>
             <!-- This is the message dropdown -->
             <ul class="nav navbar-top-links navbar-right pull-right">
