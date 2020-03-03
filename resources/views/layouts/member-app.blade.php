@@ -329,7 +329,14 @@
              margin: 0 0 0 0 !important;
         }
     </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
+    gtag('config', 'UA-387908-39');
+    </script>
 </head>
 <body class="fix-sidebar">
 <!-- Preloader -->

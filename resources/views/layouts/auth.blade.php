@@ -70,7 +70,14 @@
     @endif
     <script src="https://www.google.com/recaptcha/api.js"></script>
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
+    gtag('config', 'UA-387908-39');
+    </script>
 </head>
 <body>
 <!-- Preloader -->
