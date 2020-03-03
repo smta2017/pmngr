@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     
     
-    <title> {{ __($pageTitle) }} @if( __($pageTitle)!="") | @endif{{ ucwords($setting->company_name)}}</title>
+    <title>{{ __($pageTitle) }}@if( __($pageTitle)!="") | @endif{{ ucwords($setting->company_name)}}</title>
     <!-- Styles -->
     <link href="{{ asset('front/css/core-ar.min.css') }}" rel="stylesheet">
     <link href="{{ asset('front/css/theme.min.css') }}" rel="stylesheet">
