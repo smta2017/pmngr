@@ -1,16 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-387908-39');
-    </script>
-
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="موقع مدير المشاريع ، الحل الأمثل لإدارة مشاريعك وأعمالك ومتابعة موظفيك.">
@@ -168,6 +158,14 @@
             margin-right: 20px;
         }
     </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-387908-39');
+    </script>
 </head>
 
 <body id="home">
