@@ -61,8 +61,8 @@ class FrontBaseController extends Controller
             $this->locale = Crypt::decrypt(Cookie::get('language'), false);
             App::setLocale($this->locale);
         } else {
-            $this->locale = 'en';
-            App::setLocale('en');
+            $this->locale = 'ar';
+            App::setLocale('ar');
         }
 
         Carbon::setLocale($this->locale);
