@@ -158,11 +158,7 @@
                 </li>
             @endif
 
-            @role('admin')
-            <li><a href="{{ route('admin.billing') }}" class="waves-effect"><i class="icon-book-open"></i> <span class="hide-menu"> @lang('app.menu.billing')</span></a>
-            </li>
-            @endrole
-            <li><a href="{{ route('admin.faqs.index') }}" class="waves-effect"><i class="icon-docs"></i> <span class="hide-menu"> @lang('app.menu.faq')</span></a></li>
+           <li><a href="{{ route('admin.faqs.index') }}" class="waves-effect"><i class="icon-docs"></i> <span class="hide-menu"> @lang('app.menu.faq')</span></a></li>
                 <li><a href="{{ route('admin.settings.index') }}" class="waves-effect"><i class="ti-settings"></i> <span class="hide-menu"> @lang('app.menu.settings')</span></a>
                 </li>
         </ul>
