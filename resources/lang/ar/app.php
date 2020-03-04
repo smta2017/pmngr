@@ -251,6 +251,8 @@ return array (
    'cssfile' => 'style-ar.css',
    'csscustom' => 'custom-rtl.css',
    'bootstrapfile' => 'bootstrap-rtl.css',
+   'frontcore' => 'core-ar.min.css',
+   'fronttheme' => 'theme-ar.css',
 
      //---------------------------------------
   'team' => 'الفريق',

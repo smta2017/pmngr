@@ -63,8 +63,6 @@ class HomeController extends FrontBaseController
             return view('front.footer-page', $this->data);
         }   
 
-        // change welcom page lang to ar
-        App::setLocale('ar');
         
         return view('front.home', $this->data);
     }

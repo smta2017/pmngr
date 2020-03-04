@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="en" dir="@lang('app.htmldirection')">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -8,9 +8,9 @@
     
     
     <title>{{ __($pageTitle) }}@if( __($pageTitle)!="") | @endif{{ ucwords($setting->company_name)}}</title>
-    <!-- Styles -->
-    <link href="{{ asset('front/css/core-ar.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('front/css/theme.min.css') }}" rel="stylesheet">
+    <!-- Styles --> 
+    <link href="/front/css/@lang('app.frontcore')" rel="stylesheet">
+    <link href="/front/css/@lang('app.fronttheme')" rel="stylesheet">
     <link href="{{ asset('front/plugin/froiden-helper/helper.css') }}" rel="stylesheet">
     <link href="{{ asset('front/css/style.css') }}" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">

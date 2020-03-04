@@ -251,6 +251,8 @@ return array (
    'cssfile' => 'style.css',
    'csscustom' => 'custom.css',
    'bootstrapfile' => 'bootstrap.min.css',
+   'frontcore' => 'core.min.css',
+   'fronttheme' => 'theme.min.css',
 
      //---------------------------------------
   'team' => 'Team',
