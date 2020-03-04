@@ -561,9 +561,10 @@ ul.thumbnails.image_picker_selector li{
 
 /*New custom reset css*/
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700');
+@import url('https://fonts.googleapis.com/earlyaccess/droidarabickufi.css');
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Droid Arabic Kufi', sans-serif;
     font-size: 14px;
 }
 
