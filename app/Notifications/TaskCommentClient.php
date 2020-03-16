@@ -104,13 +104,13 @@ class TaskCommentClient extends Notification implements ShouldQueue
         if(count($notifiable->employee) > 0 && (!is_null($notifiable->employee[0]->slack_username) && ($notifiable->employee[0]->slack_username != ''))){
             return (new SlackMessage())
                 ->from(config('app.name'))
-                ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+                ->image($slack->slack_logo_url)
                 ->to('@' . $notifiable->employee[0]->slack_username)
                 ->content(__('email.taskComment.subject').' - '.ucfirst($this->task->heading).' .');
         }
         return (new SlackMessage())
             ->from(config('app.name'))
-            ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+            ->image($slack->slack_logo_url)
             ->content('This is a redirected notification. Add slack username for *'.ucwords($notifiable->name).'*');
     }
 

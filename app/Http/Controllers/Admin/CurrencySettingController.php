@@ -52,31 +52,38 @@ class CurrencySettingController extends AdminBaseController
         $currencyApiKey = GlobalSetting::first()->currency_converter_key;
         $currencyApiKeyVersion = GlobalSetting::first()->currency_key_version;
         $currencyApiKey = ($currencyApiKey) ? $currencyApiKey : env('CURRENCY_CONVERTER_KEY');
-        if ($currencyApiKey!='00') {
-            if ($request->is_cryptocurrency == 'no') {
+
+        if ($request->is_cryptocurrency == 'no') {
+            try {
                 // get exchange rate
                 $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                 $conversionRate = $res->getBody();
                 $conversionRate = json_decode($conversionRate, true);
 
                 if (!empty($conversionRate)) {
                     $currency->exchange_rate = $conversionRate[strtoupper($this->global->currency->currency_code . '_' . $currency->currency_code)];
                 }
-            } else {
-
+            } catch (\Exception $th) {
+                //throw $th;
+            }
+        } else {
+            try {
                 if ($this->global->currency->currency_code != 'USD') {
                     // get exchange rate
                     $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                    $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                     $conversionRate = $res->getBody();
                     $conversionRate = json_decode($conversionRate, true);
 
                     $usdExchangePrice = $conversionRate[strtoupper($this->global->currency->currency_code) . '_USD'];
                     $currency->exchange_rate = ceil(($currency->usd_price / $usdExchangePrice));
                 }
+            } catch (\Throwable $th) {
+                //throw $th;
             }
         }
+
         $currency->save();
 
         try {
@@ -102,30 +109,34 @@ class CurrencySettingController extends AdminBaseController
         $currencyApiKey = GlobalSetting::first()->currency_converter_key;
         $currencyApiKeyVersion = GlobalSetting::first()->currency_key_version;
         $currencyApiKey = ($currencyApiKey) ? $currencyApiKey : env('CURRENCY_CONVERTER_KEY');
-        if ($currencyApiKey!='00') {
+        try {
             if ($request->is_cryptocurrency == 'no') {
-                // get exchange rate
+
                 $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                 $conversionRate = $res->getBody();
                 $conversionRate = json_decode($conversionRate, true);
-    
+
                 if (!empty($conversionRate)) {
                     $currency->exchange_rate = $conversionRate[strtoupper($this->global->currency->currency_code) . '_' . $currency->currency_code];
                 }
+
             } else {
-    
+
                 if ($this->global->currency->currency_code != 'USD') {
                     // get exchange rate
                     $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                    $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                     $conversionRate = $res->getBody();
                     $conversionRate = json_decode($conversionRate, true);
-    
+
                     $usdExchangePrice = $conversionRate[strtoupper($this->global->currency->currency_code) . '_USD'];
                     $currency->exchange_rate = $usdExchangePrice;
                 }
             }
+
+        } catch (\Exception $th) {
+            //throw $th;
         }
 
         $currency->save();
@@ -157,11 +168,15 @@ class CurrencySettingController extends AdminBaseController
         $currencyApiKeyVersion = GlobalSetting::first()->currency_key_version;
         $currencyApiKey = ($currencyApiKey) ? $currencyApiKey : env('CURRENCY_CONVERTER_KEY');
 
-        // get exchange rate
-        $client = new Client();
-        $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
-        $conversionRate = $res->getBody();
-        $conversionRate = json_decode($conversionRate, true);
+        try {
+            // get exchange rate
+            $client = new Client();
+            $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+            $conversionRate = $res->getBody();
+            $conversionRate = json_decode($conversionRate, true);
+        } catch (\Exception $th) {
+            //throw $th;
+        }
         return $conversionRate[strtoupper($this->global->currency->currency_code) . '_' . $currency];
     }
 

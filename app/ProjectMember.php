@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class ProjectMember extends Model
+class ProjectMember extends BaseModel
 {
     use Notifiable;
 

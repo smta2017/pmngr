@@ -49,7 +49,7 @@
             <div class="col-xs-6 col-md-3 ">
                 <div class="input-group">
                     <label>@lang('modules.events.startOn')</label>
-                    <input type="text" name="start_date" id="start_date" value="{{ $event->start_date_time->format('m/d/Y') }}" class="form-control">
+                    <input type="text" name="start_date" id="start_date" value="{{ $event->start_date_time->format($global->date_format) }}" class="form-control">
                 </div>
             </div>
             <div class="col-xs-6 col-md-3">
@@ -63,7 +63,7 @@
             <div class="col-xs-6 col-md-3">
                 <div class="form-group">
                     <label>@lang('modules.events.endOn')</label>
-                    <input type="text" name="end_date" id="end_date" value="{{ $event->end_date_time->format('m/d/Y') }}" class="form-control">
+                    <input type="text" name="end_date" id="end_date" value="{{ $event->end_date_time->format($global->date_format) }}" class="form-control">
                 </div>
             </div>
             <div class="col-xs-6 col-md-3">

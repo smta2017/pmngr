@@ -260,34 +260,7 @@ class AdminTaskboardController extends AdminBaseController
                     $task->save();
 
                     if ($oldTaskColumnId != $task->board_column_id) {
-
-                        if ($oldStatus->slug == 'incomplete'  && $taskBoardColumn->slug == 'completed') {
-                            // notify user
-                            $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->user_id);
-                            $notifyUser->notify(new TaskCompleted($task));
-
-                            if ($task->project_id != null) {
-                                if ($task->project->client_id != null  && $task->project->allow_client_notification == 'enable') {
-                                    //calculate project progress if enabled
-                                    $this->calculateProjectProgress($task->project_id);
-                                    $notifyClient = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                                    $notifyClient->notify(new TaskCompleted($task));
-                                }
-                            }
-                        } else {
-                            //Send notification to user
-                            $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->user_id);
-                            $notifyUser->notify(new TaskUpdated($task));
-
-                            if ($task->project_id != null) {
-                                if ($task->project->client_id != null && $task->project->allow_client_notification == 'enable') {
-                                    //calculate project progress if enabled
-                                    $this->calculateProjectProgress($task->project_id);
-                                    $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                                    $notifyUser->notify(new TaskUpdatedClient($task));
-                                }
-                            }
-                        }
+                        $this->calculateProjectProgress($task->project_id);
                     }
                 }
             }

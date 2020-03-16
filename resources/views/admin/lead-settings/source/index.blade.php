@@ -30,9 +30,7 @@
 
                     @include('sections.lead_setting_menu')
 
-                    <div class="tab-content">
-                        <div id="vhome3" class="tab-pane active">
-
+                    
                             <div class="row">
 
                                 <div class="col-md-12">
@@ -103,9 +101,7 @@
 
                             </div>
 
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
+                        
                 </div>
 
             </div>

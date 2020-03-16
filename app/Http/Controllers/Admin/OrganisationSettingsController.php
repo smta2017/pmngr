@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Company;
 use App\Currency;
-use App\GlobalSetting;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\Settings\UpdateOrganisationSettings;
-use App\Setting;
 use App\Traits\CurrencyExchange;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -32,120 +31,27 @@ class OrganisationSettingsController extends AdminBaseController
     public function index()
     {
         $this->timezones = \DateTimeZone::listIdentifiers(\DateTimeZone::ALL);
-        $setting          = Company::where('id', company()->id)->first();
+        $this->company    = Company::findOrFail(company()->id);
         $this->currencies = Currency::all();
         $this->dateObject = Carbon::now();
-
-        if(!$setting){
-            abort(404);
-        }
 
         return view('admin.settings.edit', $this->data);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateOrganisationSettings $request
+     * @param $id
+     * @return array
+     * @throws \Exception
      */
     public function update(UpdateOrganisationSettings $request, $id)
     {
-        config(['filesystems.default' => 'local']);
 
         $setting = Company::findOrFail($id);
-        $setting->company_name = $request->input('company_name');
-        $setting->company_email = $request->input('company_email');
-        $setting->company_phone = $request->input('company_phone');
-        $setting->website = $request->input('website');
-        $setting->address = $request->input('address');
-        $setting->currency_id = $request->input('currency_id');
-        $setting->timezone = $request->input('timezone');
-        $setting->locale = $request->input('locale');
-        $setting->date_format = $request->input('date_format');
-        $setting->time_format = $request->input('time_format');
-        $setting->week_start = $request->input('week_start');
-        $setting->longitude = $request->input('longitude');
-        $setting->latitude = $request->input('latitude');
+        $setting->update($request->all());
 
         if ($request->hasFile('logo')) {
-            $setting->logo = $request->logo->hashName();
-            $request->logo->store('user-uploads/app-logo');
-        }
-        $setting->last_updated_by = $this->user->id;
-
-        switch ($setting->date_format) {
-            case 'd-m-Y':
-                $setting->date_picker_format = 'dd-mm-yyyy';
-                break;
-            case 'm-d-Y':
-                $setting->date_picker_format = 'mm-dd-yyyy';
-                break;
-            case 'Y-m-d':
-                $setting->date_picker_format = 'yyyy-mm-dd';
-                break;
-            case 'd.m.Y':
-                $setting->date_picker_format = 'dd.mm.yyyy';
-                break;
-            case 'm.d.Y':
-                $setting->date_picker_format = 'mm.dd.yyyy';
-                break;
-            case 'Y.m.d':
-                $setting->date_picker_format = 'yyyy.mm.dd';
-                break;
-            case 'd/m/Y':
-                $setting->date_picker_format = 'dd/mm/yyyy';
-                break;
-            case 'm/d/Y':
-                $setting->date_picker_format = 'mm/dd/yyyy';
-                break;
-            case 'Y/m/d':
-                $setting->date_picker_format = 'yyyy/mm/dd';
-                break;
-            case 'd-M-Y':
-                $setting->date_picker_format = 'dd-M-yyyy';
-                break;
-            case 'd/M/Y':
-                $setting->date_picker_format = 'dd/M/yyyy';
-                break;
-            case 'd.M.Y':
-                $setting->date_picker_format = 'dd.M.yyyy';
-                break;
-            case 'd-M-Y':
-                $setting->date_picker_format = 'dd-M-yyyy';
-                break;
-            case 'd M Y':
-                $setting->date_picker_format = 'dd M yyyy';
-                break;
-            case 'd F, Y':
-                $setting->date_picker_format = 'dd MM, yyyy';
-                break;
-            case 'D/M/Y':
-                $setting->date_picker_format = 'D/M/yyyy';
-                break;
-            case 'D.M.Y':
-                $setting->date_picker_format = 'D.M.yyyy';
-                break;
-            case 'D-M-Y':
-                $setting->date_picker_format = 'D-M-yyyy';
-                break;
-            case 'D M Y':
-                $setting->date_picker_format = 'D M yyyy';
-                break;
-            case 'd D M Y':
-                $setting->date_picker_format = 'dd D M yyyy';
-                break;
-            case 'D d M Y':
-                $setting->date_picker_format = 'D dd M yyyy';
-                break;
-            case 'dS M Y':
-                $setting->date_picker_format = 'dd M yyyy';
-                break;
-
-            default:
-                $setting->date_picker_format = 'mm/dd/yyyy';
-                break;
+            $setting->logo = Files::upload($request->logo, 'app-logo');
         }
 
         $setting->save();
@@ -153,7 +59,6 @@ class OrganisationSettingsController extends AdminBaseController
         try {
             $this->updateExchangeRates();
         } catch (\Throwable $th) {
-            //throw $th;
         }
 
         return Reply::redirect(route('admin.settings.index'));

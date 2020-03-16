@@ -55,7 +55,7 @@
             <div class="col-xs-5 col-md-3">
                 <div class="input-group bootstrap-timepicker timepicker">
                     <label>&nbsp;</label>
-                    <input type="text" name="start_time" id="start_time" value="{{ $event->start_date_time->format('h:i A') }}"
+                    <input type="text" name="start_time" id="start_time" value="{{ $event->start_date_time->format($global->time_format) }}"
                            class="form-control">
                 </div>
             </div>

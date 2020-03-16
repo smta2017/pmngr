@@ -6,7 +6,7 @@ use App\Observers\ContractDiscussionObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContractDiscussion extends Model
+class ContractDiscussion extends BaseModel
 {
     protected static function boot()
     {

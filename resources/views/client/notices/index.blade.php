@@ -8,7 +8,8 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ $pageTitle }}</li>
@@ -36,47 +37,32 @@
     <div class="row">
         <div class="col-md-12" >
             <div class="white-box">
-                <h2>@lang('app.menu.noticeBoard')</h2>
 
-
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            @if($user->can('add_notice'))
-                                <a href="{{ route('member.notices.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.notices.addNotice') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            @endif
-                                <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                        </div>
-                    </div>
-                </div>
-                    <div class="row b-b b-t p-b-20" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
+                @section('filter-section')                    
+                <div class="row" id="ticket-filters">
+                    
                     <form action="" id="filter-form">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <h5 >@lang('app.selectDateRange')</h5>
                             <div class="input-daterange input-group" id="date-range">
                                 <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                                       value=""/>
+                                    value=""/>
                                 <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
                                 <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                                       value=""/>
+                                    value=""/>
                             </div>
                         </div>
-                        <div class="col-md-2">
-
-                        </div>
-                        <div class="col-md-4">
+                        
+                        <div class="col-md-12">
                             <div class="form-group m-t-10">
-                                <label class="control-label col-xs-12">&nbsp;</label>
                                 <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
                                 <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
                             </div>
                         </div>
                     </form>
                 </div>
+                @endsection
+
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="notice-table">
                         <thead>

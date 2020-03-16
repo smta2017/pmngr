@@ -3,12 +3,13 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+        <div class="col-lg-8 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }} </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-4 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.employees.create') }}" class="btn btn-outline btn-success btn-sm pull-right">@lang('modules.employees.addNewEmployee') <i class="fa fa-plus" aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -30,53 +31,31 @@
 
 @section('content')
 
+    <div class="row dashboard-stats">
+        <div class="col-md-12 m-b-30">
+            <div class="white-box">
+                <div class="col-sm-6 text-center">
+                    <h4><span class="text-info">{{ $totalEmployees }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalEmployees')</span></h4>
+                </div>
+                <div class="col-sm-6 text-center b-l">
+                    <h4><span class="text-danger">{{ $freeEmployees }}</span> <span class="font-12 text-muted m-l-5"><a href="{{ route('admin.employees.freeEmployees') }}" > @lang('modules.dashboard.freeEmployees')</a></span></h4>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('modules.dashboard.totalEmployees')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-user text-white"></i></li>
-                    <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $totalEmployees }}</span></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="white-box bg-danger">
-                <h3 class="box-title text-white">@lang('modules.dashboard.freeEmployees')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-user text-white"></i></li>
-                    <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $freeEmployees }}</span></li>
-                </ul>
-            </div>
-        </div>
-
+       
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.employees.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.employees.addNewEmployee') <i class="fa fa-plus" aria-hidden="true"></i></a>
-
-                            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-
-                            <a href="{{ route('admin.employees.freeEmployees') }}" class="btn btn-outline btn-info btn-sm text-capitalize" >@lang('modules.dashboard.freeEmployees')</a>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()"  class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
+                
+                @section('filter-section')
+                <div class="row"  id="ticket-filters">
+                   
                     <form action="" id="filter-form">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('app.status')</label>
                                 <select class="form-control" name="status" id="status" data-style="form-control">
@@ -86,7 +65,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('modules.employees.title')</label>
                                 <select class="form-control select2" name="employee" id="employee" data-style="form-control">
@@ -98,10 +77,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('app.skills')</label>
-                                <select class="select2 m-b-10 select2-multiple " multiple="multiple"
+                                <select class="select2 select2-multiple " multiple="multiple"
                                         data-placeholder="Choose Skills" name="skill[]" id="skill" data-style="form-control">
                                     <option value="all">@lang('modules.client.all')</option>
                                     @forelse($skills as $skill)
@@ -111,7 +90,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('modules.employees.role')</label>
                                 <select class="form-control select2" name="role" id="role" data-style="form-control">
@@ -127,7 +106,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('app.designation')</label>
                                 <select class="form-control select2" name="designation" id="designation" data-style="form-control">
@@ -139,7 +118,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('app.department')</label>
                                 <select class="form-control select2" name="department" id="department" data-style="form-control">
@@ -152,14 +131,14 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group pull-right">
-                                <label class="control-label col-xs-12">&nbsp;</label>
+                            <div class="form-group ">
                                 <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
                                 <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
                             </div>
                         </div>
                     </form>
                 </div>
+                @endsection
 
 
                 <div class="table-responsive">

@@ -8,7 +8,8 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <span class="text-info text-uppercase font-bold">@lang('modules.tickets.ticket') # {{ (is_null($lastTicket)) ? "1" : ($lastTicket->id+1) }}</span>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('admin.tickets.index') }}">{{ __($pageTitle) }}</a></li>
@@ -28,14 +29,103 @@
 
 @endpush
 
+@section('other-section')
+{!! Form::open(['id'=>'storeTicket','class'=>'ajax-form storeTicket','method'=>'POST']) !!}
+<div class="row">
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.tickets.requesterName')</label>
+            <select  name="user_id" id="user_id" class="select2 form-control" data-style="form-control" >
+                <option value="">@lang('app.select') @lang('modules.tickets.requesterName')</option>
+                @foreach($requesters as $requester)
+                    <option value="{{ $requester->id }}">{{ ucwords($requester->name).' ['.$requester->email.']' }}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.tickets.agent')</label>
+            <select  name="agent_id" id="agent_id" class="select2 form-control" data-style="form-control" >
+                <option value="">Agent not assigned</option>
+                @forelse($groups as $group)
+                    @if(count($group->enabled_agents) > 0)
+                        <optgroup label="{{ ucwords($group->group_name) }}">
+                            @foreach($group->enabled_agents as $agent)
+                                <option value="{{ $agent->user->id }}">{{ ucwords($agent->user->name).' ['.$agent->user->email.']' }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endif
+                @empty
+                    <option value="">@lang('messages.noGroupAdded')</option>
+                @endforelse
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.invoices.type') <a class="btn btn-xs btn-info btn-outline" href="javascript:;" id="add-type"><i class="fa fa-plus"></i> @lang('modules.tickets.addType')</a></label>
+            <select class="form-control selectpicker add-type" name="type_id" id="type_id" data-style="form-control">
+                @forelse($types as $type)
+                    <option value="{{ $type->id }}">{{ ucwords($type->type) }}</option>
+                @empty
+                    <option value="">@lang('messages.noTicketTypeAdded')</option>
+                @endforelse
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.tasks.priority') <span class="text-danger">*</span></label>
+            <select class="form-control selectpicker" name="priority" id="priority" data-style="form-control">
+                <option value="low">@lang('app.low')</option>
+                <option value="medium">@lang('app.medium')</option>
+                <option value="high">@lang('app.high')</option>
+                <option value="urgent">@lang('app.urgent')</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.tickets.channelName') <a class="btn btn-xs btn-info btn-outline" href="javascript:;" id="add-channel"><i class="fa fa-plus"></i> @lang('modules.tickets.addChannel')</a></label>
+            <select class="form-control selectpicker" name="channel_id" id="channel_id" data-style="form-control">
+                @forelse($channels as $channel)
+                    <option value="{{ $channel->id }}">{{ ucwords($channel->channel_name) }}</option>
+                @empty
+                    <option value="">@lang('messages.noTicketChannelAdded')</option>
+                @endforelse
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="control-label">@lang('modules.tickets.tags')</label>
+            <select multiple data-role="tagsinput" name="tags[]" id="tags">
+
+            </select>
+        </div>
+    </div>
+
+    <!--/span-->
+
+</div>
+<!--/row-->
+{!! Form::close() !!}
+@endsection
+
 @section('content')
 
-    {!! Form::open(['id'=>'storeTicket','class'=>'ajax-form','method'=>'POST']) !!}
+    {!! Form::open(['id'=>'storeTicket','class'=>'ajax-form storeTicket','method'=>'POST']) !!}
     <div class="form-body">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading text-right">@lang('modules.tickets.ticket') # {{ (is_null($lastTicket)) ? "1" : ($lastTicket->id+1) }}</div>
 
                     <div class="panel-wrapper collapse in">
                         <div class="panel-body">
@@ -62,7 +152,7 @@
 
                             </div>
                             <!--/row-->
-                            <div class="row m-b-20">
+                            {{-- <div class="row m-b-20">
                                 <div class="col-md-12">
                                     <button type="button" class="btn btn-block btn-outline-info btn-sm col-md-2 select-image-button" style="margin-bottom: 10px;display: none "><i class="fa fa-upload"></i> File Select Or Upload</button>
                                     <div id="file-upload-box" >
@@ -70,8 +160,8 @@
                                             <div class="col-md-12">
                                                 <div class="dropzone"
                                                      id="file-upload-dropzone">
-                                                    {{--{{ csrf_field() }}--}}
-                                                    <div class="fallback">
+
+                                                     <div class="fallback">
                                                         <input name="file" type="file" multiple/>
                                                     </div>
                                                     <input name="image_url" id="image_url"type="hidden" />
@@ -81,7 +171,7 @@
                                     </div>
                                     <input type="hidden" name="ticketIDField" id="ticketIDField">
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -103,7 +193,7 @@
                             <button aria-expanded="true" data-toggle="dropdown"
                                     class="btn btn-success dropdown-toggle waves-effect waves-light"
                                     type="button">@lang('app.submit') <span class="caret"></span></button>
-                            <ul role="menu" class="dropdown-menu">
+                            <ul role="menu" class="dropdown-menu pull-right">
                                 <li>
                                     <a href="javascript:;" class="submit-ticket" data-status="open">@lang('app.submit') @lang('app.open')
                                         <span style="width: 15px; height: 15px;"
@@ -135,104 +225,7 @@
 
 
             </div>
-            <div class="col-md-4">
-                <div class="panel panel-default">
-
-                    <div class="panel-wrapper collapse in">
-                        <div class="panel-body">
-
-                            <div class="row">
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.tickets.requesterName')</label>
-                                        <select  name="user_id" id="user_id" class="select2 form-control" data-style="form-control" >
-                                            <option value="">@lang('app.select') @lang('modules.tickets.requesterName')</option>
-                                            @foreach($requesters as $requester)
-                                                <option value="{{ $requester->id }}">{{ ucwords($requester->name).' ['.$requester->email.']' }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.tickets.agent')</label>
-                                        <select  name="agent_id" id="agent_id" class="select2 form-control" data-style="form-control" >
-                                            <option value="">Agent not assigned</option>
-                                            @forelse($groups as $group)
-                                                @if(count($group->enabled_agents) > 0)
-                                                    <optgroup label="{{ ucwords($group->group_name) }}">
-                                                        @foreach($group->enabled_agents as $agent)
-                                                            <option value="{{ $agent->user->id }}">{{ ucwords($agent->user->name).' ['.$agent->user->email.']' }}</option>
-                                                        @endforeach
-                                                    </optgroup>
-                                                @endif
-                                            @empty
-                                                <option value="">@lang('messages.noGroupAdded')</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.invoices.type') <a class="btn btn-xs btn-info btn-outline" href="javascript:;" id="add-type"><i class="fa fa-plus"></i> @lang('modules.tickets.addType')</a></label>
-                                        <select class="form-control selectpicker add-type" name="type_id" id="type_id" data-style="form-control">
-                                            @forelse($types as $type)
-                                                <option value="{{ $type->id }}">{{ ucwords($type->type) }}</option>
-                                            @empty
-                                                <option value="">@lang('messages.noTicketTypeAdded')</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.tasks.priority') <span class="text-danger">*</span></label>
-                                        <select class="form-control selectpicker" name="priority" id="priority" data-style="form-control">
-                                            <option value="low">@lang('app.low')</option>
-                                            <option value="medium">@lang('app.medium')</option>
-                                            <option value="high">@lang('app.high')</option>
-                                            <option value="urgent">@lang('app.urgent')</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.tickets.channelName') <a class="btn btn-xs btn-info btn-outline" href="javascript:;" id="add-channel"><i class="fa fa-plus"></i> @lang('modules.tickets.addChannel')</a></label>
-                                        <select class="form-control selectpicker" name="channel_id" id="channel_id" data-style="form-control">
-                                            @forelse($channels as $channel)
-                                                <option value="{{ $channel->id }}">{{ ucwords($channel->channel_name) }}</option>
-                                            @empty
-                                                <option value="">@lang('messages.noTicketChannelAdded')</option>
-                                            @endforelse
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('modules.tickets.tags')</label>
-                                        <select multiple data-role="tagsinput" name="tags[]" id="tags">
-
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!--/span-->
-
-                            </div>
-                            <!--/row-->
-
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
+            
         </div>
         <!-- .row -->
     </div>
@@ -275,36 +268,7 @@
 <script>
 
     projectID = '';
-    Dropzone.autoDiscover = false;
-    //Dropzone class
-    myDropzone = new Dropzone("div#file-upload-dropzone", {
-        url: "{{ route('admin.ticket-files.store') }}",
-        headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-        paramName: "file",
-        maxFilesize: 10,
-        maxFiles: 10,
-        acceptedFiles: "image/*,application/pdf",
-        autoProcessQueue: false,
-        uploadMultiple: true,
-        addRemoveLinks:true,
-        parallelUploads:10,
-        init: function () {
-            myDropzone = this;
-        }
-    });
-
-    myDropzone.on('sending', function(file, xhr, formData) {
-        console.log(myDropzone.getAddedFiles().length,'sending');
-        var ids = $('#ticketIDField').val();
-        formData.append('ticket_reply_id', ids);
-    });
-
-    myDropzone.on('completemultiple', function () {
-        var msgs = "@lang('messages.ticketAddSuccess')";
-        $.showToastr(msgs, 'success');
-        window.location.href = '{{ route('admin.tickets.index') }}'
-
-    });
+    
     $('.textarea_editor').wysihtml5();
 
     $(".select2").select2({
@@ -339,9 +303,10 @@
 
         $.easyAjax({
             url: '{{route('admin.tickets.store')}}',
-            container: '#storeTicket',
+            container: '.storeTicket',
             type: "POST",
-            data: $('#storeTicket').serialize(),
+            // file: true,
+            data: $('.storeTicket').serialize(),
             success: function(response){
                 if(myDropzone.getQueuedFiles().length > 0){
                     $('#ticketIDField').val(response.ticketReplyID);

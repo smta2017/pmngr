@@ -154,7 +154,7 @@ class MemberExpensesController extends MemberBaseController
 
         if ($request->hasFile('bill')) {
             $expense->bill = $request->bill->hashName();
-            $request->bill->store('user-uploads/expense-invoice');
+            $request->bill->store('expense-invoice');
             $img = Image::make('user-uploads/expense-invoice/' . $expense->bill);
             $img->resize(1000, null, function ($constraint) {
                 $constraint->aspectRatio();
@@ -164,8 +164,6 @@ class MemberExpensesController extends MemberBaseController
 
         $expense->status = 'pending';
         $expense->save();
-
-        Notification::send(User::allAdmins(), new NewExpenseAdmin($expense));
 
         return Reply::redirect(route('member.expenses.index'), __('messages.expenseSuccess'));
     }
@@ -228,7 +226,7 @@ class MemberExpensesController extends MemberBaseController
             File::delete(public_path().'/user-uploads/expense-invoice/'.$expense->bill);
 
             $expense->bill = $request->bill->hashName();
-            $request->bill->store('user-uploads/expense-invoice');
+            $request->bill->store('expense-invoice');
             $img = Image::make('user-uploads/expense-invoice/' . $expense->bill);
             $img->resize(1000, null, function ($constraint) {
                 $constraint->aspectRatio();

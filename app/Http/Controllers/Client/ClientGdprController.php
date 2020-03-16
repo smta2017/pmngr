@@ -54,11 +54,6 @@ class ClientGdprController extends ClientBaseController
         $removal->description = $request->description;
         $removal->save();
 
-        $notifyUsers = User::allAdmins();
-        foreach ($notifyUsers as $notifyUser) {
-            $notifyUser->notify(new RemovalRequestAdminNotification());
-        }
-
         return Reply::success('Removal request has been sent to the admin. You will informed once it is approved');
     }
 

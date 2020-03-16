@@ -576,7 +576,7 @@
         });
 
         $('.sub-total').html(decimalupto2(subtotal).toFixed(2));
-        $('.sub-total-field').val(decimalupto2(subtotal).toFixed(2));
+        $('.sub-total-field').val(decimalupto2(subtotal));
 
 
         var discountType = $('#discount_type').val();

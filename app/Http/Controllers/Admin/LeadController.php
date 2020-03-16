@@ -20,20 +20,21 @@ use Yajra\DataTables\Facades\DataTables;
 
 class LeadController extends AdminBaseController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
-        $this->pageIcon = 'user-follow';
+        $this->pageIcon = __('icon-people');
         $this->pageTitle = trans('app.menu.lead');
         $this->middleware(function ($request, $next) {
-            if(!in_array('leads',$this->user->modules)){
+            if (!in_array('leads', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);
         });
-
     }
 
-    public function index() {
+    public function index()
+    {
         $this->totalLeads = Lead::all();
 
         $this->totalClientConverted = $this->totalLeads->filter(function ($value, $key) {
@@ -50,98 +51,96 @@ class LeadController extends AdminBaseController
         return view('admin.lead.index', $this->data);
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $this->lead = Lead::findOrFail($id);
         return view('admin.lead.show', $this->data);
     }
 
-    public function data(CommonRequest $request, $id = null) {
+    public function data(CommonRequest $request, $id = null)
+    {
         $currentDate = Carbon::today()->format('Y-m-d');
-        $lead = Lead::select('leads.id','leads.client_id','leads.next_follow_up','client_name','company_name','lead_status.type as statusName','status_id', 'leads.created_at', 'lead_sources.type as source', \DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= {$currentDate} ORDER BY next_follow_up_date desc limit 1) as next_follow_up_date"))
-           ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
-           ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id');
-            if($request->followUp != 'all' && $request->followUp != ''){
-                $lead = $lead->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id')
-                    ->where('leads.next_follow_up', 'yes')
-                    ->where('lead_follow_up.next_follow_up_date', '<', $currentDate);
+        $lead = Lead::select('leads.id', 'leads.client_id', 'leads.next_follow_up', 'client_name', 'company_name', 'lead_status.type as statusName', 'status_id', 'leads.created_at', 'lead_sources.type as source', \DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= {$currentDate} ORDER BY next_follow_up_date desc limit 1) as next_follow_up_date"))
+            ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
+            ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id');
+        if ($request->followUp != 'all' && $request->followUp != '') {
+            $lead = $lead->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id')
+                ->where('leads.next_follow_up', 'yes')
+                ->where('lead_follow_up.next_follow_up_date', '<', $currentDate);
+        }
+        if ($request->client != 'all' && $request->client != '') {
+            if ($request->client == 'lead') {
+                $lead = $lead->whereNull('client_id');
+            } else {
+                $lead = $lead->whereNotNull('client_id');
             }
-            if($request->client != 'all' && $request->client != ''){
-                if($request->client == 'lead'){
-                    $lead = $lead->whereNull('client_id');
-                }
-                else{
-                    $lead = $lead->whereNotNull('client_id');
-                }
-            }
+        }
 
         $lead = $lead->GroupBy('leads.id')->get();
 
         return DataTables::of($lead)
-            ->addColumn('action', function($row){
+            ->addColumn('action', function ($row) {
 
-                if($row->client_id == null || $row->client_id == ''){
-                    $follow = '<li><a href="'.route('admin.clients.create').'/'.$row->id.'"><i class="fa fa-user"></i> '.__('modules.lead.changeToClient').'</a></li>';
-                    if($row->next_follow_up == 'yes'){
-                        $follow .= '<li onclick="followUp('.$row->id.')"><a href="javascript:;"><i class="fa fa-thumbs-up"></i> '.__('modules.lead.addFollowUp').'</a></li>';
+                if ($row->client_id == null || $row->client_id == '') {
+                    $follow = '<li><a href="' . route('admin.clients.create') . '/' . $row->id . '"><i class="fa fa-user"></i> ' . __('modules.lead.changeToClient') . '</a></li>';
+                    if ($row->next_follow_up == 'yes') {
+                        $follow .= '<li onclick="followUp(' . $row->id . ')"><a href="javascript:;"><i class="fa fa-thumbs-up"></i> ' . __('modules.lead.addFollowUp') . '</a></li>';
                     }
+                } else {
+                    $follow = '';
                 }
-                   else{
-                       $follow = '';
-                   }
                 $action = '<div class="btn-group m-r-10">
-                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline  dropdown-toggle waves-effect waves-light" type="button">'.__('modules.lead.action').'  <span class="caret"></span></button>
+                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline  dropdown-toggle waves-effect waves-light" type="button">' . __('modules.lead.action') . '  <span class="caret"></span></button>
                 <ul role="menu" class="dropdown-menu">
-                    <li><a href="'.route('admin.leads.show', $row->id).'"><i class="fa fa-search"></i> '.__('modules.lead.view').'</a></li>
-                    <li><a href="'.route('admin.leads.edit', $row->id).'"><i class="fa fa-edit"></i> '.__('modules.lead.edit').'</a></li>
-                    <li><a href="javascript:;" class="sa-params" data-user-id="'.$row->id.'"><i class="fa fa-trash "></i> '.__('app.delete').'</a></li>
-                     '.$follow.'   
+                    <li><a href="' . route('admin.leads.show', $row->id) . '"><i class="fa fa-search"></i> ' . __('modules.lead.view') . '</a></li>
+                    <li><a href="' . route('admin.leads.edit', $row->id) . '"><i class="fa fa-edit"></i> ' . __('modules.lead.edit') . '</a></li>
+                    <li><a href="javascript:;" class="sa-params" data-user-id="' . $row->id . '"><i class="fa fa-trash "></i> ' . __('app.delete') . '</a></li>
+                     ' . $follow . '   
                 </ul>
               </div>';
-               return $action;
+                return $action;
             })
-            ->addColumn('status', function($row){
+            ->addColumn('status', function ($row) {
                 $status = LeadStatus::all();
                 $statusLi = '';
-                foreach($status as $st) {
-                    if($row->status_id == $st->id){
+                foreach ($status as $st) {
+                    if ($row->status_id == $st->id) {
                         $selected = 'selected';
-                    }else{
+                    } else {
                         $selected = '';
                     }
-                    $statusLi .= '<option '.$selected.' value="'.$st->id.'">'.$st->type.'</option>';
+                    $statusLi .= '<option ' . $selected . ' value="' . $st->id . '">' . $st->type . '</option>';
                 }
 
-                $action = '<select class="form-control" name="statusChange" onchange="changeStatus( '.$row->id.', this.value)">
-                    '.$statusLi.'
+                $action = '<select class="form-control" name="statusChange" onchange="changeStatus( ' . $row->id . ', this.value)">
+                    ' . $statusLi . '
                 </select>';
 
 
                 return $action;
             })
-            ->editColumn('client_name', function($row){
-                if($row->client_id != null && $row->client_id != ''){
-                    $label = '<label class="label label-success">'.__('app.client').'</label>';
-                }
-                else{
-                    $label = '<label class="label label-info">'.__('app.lead').'</label>';
+            ->editColumn('client_name', function ($row) {
+                if ($row->client_id != null && $row->client_id != '') {
+                    $label = '<label class="label label-success">' . __('app.client') . '</label>';
+                } else {
+                    $label = '<label class="label label-info">' . __('app.lead') . '</label>';
                 }
 
-                return '<a href="'.route('admin.leads.show', $row->id).'">'.$row->client_name.'</a><div class="clearfix"></div> '.$label;   
+                return '<a href="' . route('admin.leads.show', $row->id) . '">' . $row->client_name . '</a><div class="clearfix"></div> ' . $label;
             })
-            ->editColumn('next_follow_up_date', function($row) use($currentDate){
-                if($row->next_follow_up_date != null && $row->next_follow_up_date != ''){
+            ->editColumn('next_follow_up_date', function ($row) use ($currentDate) {
+                if ($row->next_follow_up_date != null && $row->next_follow_up_date != '') {
                     $date = Carbon::parse($row->next_follow_up_date)->format($this->global->date_format);
-                }
-                else{
+                } else {
                     $date = '--';
                 }
-                if($row->next_follow_up_date < $currentDate && $date != '--'){
-                    return $date. ' <label class="label label-danger">'.__('app.pending').'</label>';
+                if ($row->next_follow_up_date < $currentDate && $date != '--') {
+                    return $date . ' <label class="label label-danger">' . __('app.pending') . '</label>';
                 }
 
                 return $date;
             })
-            ->editColumn('created_at', function($row){
+            ->editColumn('created_at', function ($row) {
                 return $row->created_at->format($this->global->date_format);
             })
             ->removeColumn('status_id')
@@ -150,7 +149,7 @@ class LeadController extends AdminBaseController
             ->removeColumn('next_follow_up')
             ->removeColumn('statusName')
             ->addIndexColumn()
-            ->rawColumns(['status','action','client_name','next_follow_up_date'])
+            ->rawColumns(['status', 'action', 'client_name', 'next_follow_up_date'])
             ->make(true);
     }
 
@@ -192,7 +191,7 @@ class LeadController extends AdminBaseController
         //log search
         $this->logSearchEntry($lead->id, $lead->client_name, 'admin.leads.show', 'lead');
         $this->logSearchEntry($lead->id, $lead->client_email, 'admin.leads.show', 'lead');
-        if(!is_null($lead->company_name)){
+        if (!is_null($lead->company_name)) {
             $this->logSearchEntry($lead->id, $lead->company_name, 'admin.leads.show', 'lead');
         }
 
@@ -240,7 +239,6 @@ class LeadController extends AdminBaseController
         $lead->save();
 
         return Reply::redirect(route('admin.leads.index'), __('messages.LeadUpdated'));
-
     }
 
     /**
@@ -271,7 +269,7 @@ class LeadController extends AdminBaseController
     public function gdpr($leadID)
     {
         $this->lead = Lead::findOrFail($leadID);
-        $this->allConsents = PurposeConsent::with(['lead' => function($query) use ($leadID) {
+        $this->allConsents = PurposeConsent::with(['lead' => function ($query) use ($leadID) {
             $query->where('lead_id', $leadID)
                 ->orderBy('created_at', 'desc');
         }])->get();
@@ -288,11 +286,9 @@ class LeadController extends AdminBaseController
 
         return DataTables::of($purpose)
             ->editColumn('status', function ($row) {
-                if($row->status == 'agree')
-                {
+                if ($row->status == 'agree') {
                     $status = __('modules.gdpr.optIn');
-                } else if($row->status == 'disagree')
-                {
+                } else if ($row->status == 'disagree') {
                     $status = __('modules.gdpr.optOut');
                 } else {
                     $status = '';
@@ -308,8 +304,7 @@ class LeadController extends AdminBaseController
         $lead = Lead::findOrFail($id);
         $consent = PurposeConsent::findOrFail($request->consent_id);
 
-        if($request->consent_description && $request->consent_description != '')
-        {
+        if ($request->consent_description && $request->consent_description != '') {
             $consent->description = $request->consent_description;
             $consent->save();
         }
@@ -334,7 +329,8 @@ class LeadController extends AdminBaseController
      * @param $leadID
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function followUpCreate($leadID){
+    public function followUpCreate($leadID)
+    {
         $this->leadID = $leadID;
         return view('admin.lead.follow_up', $this->data);
     }
@@ -343,7 +339,8 @@ class LeadController extends AdminBaseController
      * @param CommonRequest $request
      * @return array
      */
-    public function followUpStore(\App\Http\Requests\FollowUp\StoreRequest $request){
+    public function followUpStore(\App\Http\Requests\FollowUp\StoreRequest $request)
+    {
 
         $followUp = new LeadFollowUp();
         $followUp->lead_id = $request->lead_id;
@@ -357,7 +354,8 @@ class LeadController extends AdminBaseController
         return Reply::successWithData(__('messages.leadFollowUpAddedSuccess'), ['html' => $view]);
     }
 
-    public function followUpShow($leadID){
+    public function followUpShow($leadID)
+    {
         $this->leadID = $leadID;
         $this->lead = Lead::findOrFail($leadID);
         return view('admin.lead.followup.show', $this->data);
@@ -391,10 +389,9 @@ class LeadController extends AdminBaseController
         $this->sortBy = $request->sortBy;
 
         $this->lead = Lead::findOrFail($leadId);
-        if($request->sortBy == 'next_follow_up_date'){
+        if ($request->sortBy == 'next_follow_up_date') {
             $order = "asc";
-        }
-        else{
+        } else {
             $order = "desc";
         }
 
@@ -409,21 +406,21 @@ class LeadController extends AdminBaseController
     }
 
 
-    public function export($followUp, $client) {
+    public function export($followUp, $client)
+    {
         $currentDate = Carbon::today()->format('Y-m-d');
-        $lead = Lead::select('leads.id','client_name','website','client_email','company_name','lead_status.type as statusName','leads.created_at', 'lead_sources.type as source', \DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= {$currentDate} ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date"))
+        $lead = Lead::select('leads.id', 'client_name', 'website', 'client_email', 'company_name', 'lead_status.type as statusName', 'leads.created_at', 'lead_sources.type as source', \DB::raw("(select next_follow_up_date from lead_follow_up where lead_id = leads.id and leads.next_follow_up  = 'yes' and DATE(next_follow_up_date) >= {$currentDate} ORDER BY next_follow_up_date asc limit 1) as next_follow_up_date"))
             ->leftJoin('lead_status', 'lead_status.id', 'leads.status_id')
             ->leftJoin('lead_sources', 'lead_sources.id', 'leads.source_id');
-        if($followUp != 'all' && $followUp != ''){
+        if ($followUp != 'all' && $followUp != '') {
             $lead = $lead->leftJoin('lead_follow_up', 'lead_follow_up.lead_id', 'leads.id')
                 ->where('leads.next_follow_up', 'yes')
                 ->where('lead_follow_up.next_follow_up_date', '<', $currentDate);
         }
-        if($client != 'all' && $client != ''){
-            if($client == 'lead'){
+        if ($client != 'all' && $client != '') {
+            if ($client == 'lead') {
                 $lead = $lead->whereNull('client_id');
-            }
-            else{
+            } else {
                 $lead = $lead->whereNotNull('client_id');
             }
         }
@@ -435,7 +432,7 @@ class LeadController extends AdminBaseController
         $exportArray = [];
 
         // Define the Excel spreadsheet headers
-        $exportArray[] = ['ID', 'Client Name', 'Website', 'Email','Company Name','Status','Created On', 'Source', 'Next Follow Up Date'];
+        $exportArray[] = ['ID', 'Client Name', 'Website', 'Email', 'Company Name', 'Status', 'Created On', 'Source', 'Next Follow Up Date'];
 
         // Convert each member of the returned collection into an array,
         // and append it to the payments array.
@@ -444,7 +441,7 @@ class LeadController extends AdminBaseController
         }
 
         // Generate and return the spreadsheet
-        Excel::create('leads', function($excel) use ($exportArray) {
+        Excel::create('leads', function ($excel) use ($exportArray) {
 
             // Set the spreadsheet title, creator, and description
             $excel->setTitle('Leads');
@@ -452,22 +449,17 @@ class LeadController extends AdminBaseController
             $excel->setDescription('leads file');
 
             // Build the spreadsheet, passing in the payments array
-            $excel->sheet('sheet1', function($sheet) use ($exportArray) {
+            $excel->sheet('sheet1', function ($sheet) use ($exportArray) {
                 $sheet->fromArray($exportArray, null, 'A1', false, false);
 
-                $sheet->row(1, function($row) {
+                $sheet->row(1, function ($row) {
 
                     // call row manipulation methods
                     $row->setFont(array(
                         'bold'       =>  true
                     ));
-
                 });
-
             });
-
-
-
         })->download('xlsx');
     }
 }

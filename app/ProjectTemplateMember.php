@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class ProjectTemplateMember extends Model
+class ProjectTemplateMember extends BaseModel
 {
     use Notifiable;
 

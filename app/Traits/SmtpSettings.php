@@ -23,11 +23,9 @@ trait SmtpSettings
         $pushSetting = PushNotificationSetting::first();
         $company = company();
         $settings = GlobalSetting::first();
-        $companyName = $smtpSetting->mail_from_name;
 
-        if ($company) {
-            $companyName = $company->company_name;
-        }
+        $companyName = $company ? $company->company_name : $smtpSetting->mail_from_name;
+
         if (\config('app.env') !== 'development') {
             Config::set('mail.driver', $smtpSetting->mail_driver);
             Config::set('mail.host', $smtpSetting->mail_host);
@@ -43,13 +41,10 @@ trait SmtpSettings
 
         Config::set('app.name', $companyName);
 
-        if (($company) && !is_null($company->logo)) {
-            Config::set('app.logo', asset('user-uploads/app-logo/' . $company->logo));
-
-        } elseif (!is_null($settings->logo)) {
-            Config::set('app.logo', asset('user-uploads/app-logo/' . $settings->logo));
-        } else {
-            Config::set('app.logo', asset('worksuite-logo.png'));
+        if ($company) {
+            Config::set('app.logo', $company->logo_url);
+        }else {
+            Config::set('app.logo', $settings->logo_url);
         }
 
         (new MailServiceProvider(app()))->register();

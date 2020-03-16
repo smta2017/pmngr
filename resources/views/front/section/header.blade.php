@@ -17,7 +17,7 @@
             </div>
 
             <div class="col-12 col-lg-6 offset-lg-1 img-outside-right hidden-md-down">
-                <img class="shadow-4 mt-80" src="@if($detail->image) {{ asset('front-uploads/'.$detail->image) }} @else {{ asset('front/img-1.png') }} @endif" alt="...">
+                <img class="shadow-4 mt-80" src="{{ $detail->image_url }}" alt="...">
             </div>
         </div>
 

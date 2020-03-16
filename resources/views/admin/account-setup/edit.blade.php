@@ -92,7 +92,7 @@
                                                         <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.accountSettings.uploadLogo')) }}"
                                                              alt=""/>
                                                     @else
-                                                        <img src="{{ asset('user-uploads/app-logo/'.$global->logo) }}"
+                                                        <img src="{{ asset_url('app-logo/'.$global->logo) }}"
                                                              alt=""/>
                                                     @endif
                                                 </div>

@@ -23,7 +23,7 @@ class FrontSeeder extends Seeder
         $frontDetails->address = 'Company address';
         $frontDetails->phone = '+91 1234567890';
         $frontDetails->email = 'company@example.com';
-        
+
         $frontDetails->save();
 
         $feature = new \App\Feature();

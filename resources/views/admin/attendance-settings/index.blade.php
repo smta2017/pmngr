@@ -3,7 +3,7 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
@@ -40,7 +40,7 @@
                             {!! Form::open(['id'=>'editSettings','class'=>'ajax-form','method'=>'PUT']) !!}
                             <div class="row">
                                 <div class="form-body ">
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="input-group bootstrap-timepicker timepicker">
                                                 <label>@lang('modules.attendance.officeStartTime')</label>
@@ -50,7 +50,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="input-group bootstrap-timepicker timepicker">
                                                 <label>@lang('modules.attendance.officeEndTime')</label>
@@ -60,7 +60,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <div class="input-group bootstrap-timepicker timepicker">
                                                 <label>@lang('modules.attendance.halfDayMarkTime')</label>
@@ -71,7 +71,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-12">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="late_mark_duration">@lang('modules.attendance.lateMark')</label>
                                             <input type="number" class="form-control" id="late_mark_duration"
@@ -79,7 +79,7 @@
                                                    value="{{ $attendanceSetting->late_mark_duration }}">
                                         </div>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="late_mark_duration">@lang('modules.attendance.checkininday')</label>
                                             <input type="number" class="form-control" id="clockin_in_day"
@@ -228,8 +228,7 @@
                                                 class="btn btn-success waves-effect waves-light m-r-10">
                                             @lang('app.update')
                                         </button>
-                                        <button type="reset"
-                                                class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                     </div>
 
                                 </div>

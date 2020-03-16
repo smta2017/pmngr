@@ -126,7 +126,7 @@ class HolidaysController extends AdminBaseController
         foreach ($holiday as $index => $value) {
             if ($index){
                 $add = Holiday::firstOrCreate([
-                'date' => Carbon::createFromFormat('d/m/Y', $index)->format('Y-m-d'),
+                'date' => Carbon::createFromFormat($this->global->date_format, $index)->format('Y-m-d'),
                 'occassion' => $value,
                 ]);
             }
@@ -166,7 +166,7 @@ class HolidaysController extends AdminBaseController
     public function update(UpdateRequest $request, $id)
     {
         $holiday = Holiday::findOrFail($id);
-        $data = Input::all();
+        $data = request()->all();
         $holiday->update($data);
 
         return Redirect::route('admin.holidays.index');

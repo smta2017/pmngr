@@ -16,7 +16,7 @@ class UpdateGlobalSettings extends SuperAdminBaseRequest
         return [
             "company_name" => "required",
             "company_email" => "required|email",
-            "company_phone" => "required",
+//            "company_phone" => "required",
             "address" => "required"
         ];
     }

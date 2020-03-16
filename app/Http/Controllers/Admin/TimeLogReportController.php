@@ -19,7 +19,7 @@ class TimeLogReportController extends AdminBaseController
         $this->pageIcon = 'ti-pie-chart';
         $this->logTimeFor = LogTimeFor::first();
         $this->middleware(function ($request, $next) {
-            if($this->company->status == 'license_expired'){
+            if (!in_array('reports', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);

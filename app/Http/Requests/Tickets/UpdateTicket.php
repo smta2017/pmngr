@@ -26,7 +26,7 @@ class UpdateTicket extends CoreRequest
     {
         return [
 //            'message' => 'required',
-            'priority' => 'required'
+            // 'priority' => 'required'
         ];
     }
 }

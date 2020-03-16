@@ -169,7 +169,7 @@ class MemberProductController extends MemberBaseController
                           data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>';
                 }
                 if ($this->user->can('delete_product')) {
-                    $button .= '<a href="javascript:;" class="btn btn-danger btn-circle sa-params"
+                    $button .= ' <a href="javascript:;" class="btn btn-danger btn-circle sa-params"
                       data-toggle="tooltip" data-user-id="' . $row->id . '" data-original-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
                 }
                 return $button;

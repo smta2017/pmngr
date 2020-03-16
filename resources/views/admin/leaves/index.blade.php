@@ -4,11 +4,19 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }} <span class="text-warning b-l p-l-10 m-l-5">{{ count($pendingLeaves) }}</span> <a href="{{ route('admin.leaves.pending') }}" class="font-12 text-muted m-l-5"> @lang('modules.leaves.pendingLeaves')</a>
+            </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.leave.all-leaves') }}" class="btn btn-sm btn-info waves-effect waves-light btn-outline">
+                <i class="fa fa-list"></i> @lang('app.all') @lang('app.menu.leaves')
+            </a>
+            
+            <a href="{{ route('admin.leaves.create') }}" class="btn btn-sm btn-success waves-effect waves-light m-l-10 btn-outline">
+            <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')</a>
+            
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -37,35 +45,11 @@
 
 @section('content')
 
-    <div class="row">
-
-        <div class="col-md-3">
-            <div class="white-box p-t-10 p-b-10 bg-warning" id="pending-leaves" style="cursor: pointer">
-                <h3 class="box-title text-white">@lang('modules.leaves.pendingLeaves')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-logout text-white"></i></li>
-                    <li class="text-right"><span id="pendingLeaves" class="counter text-white">{{ count($pendingLeaves) }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-12 m-b-10">
-            <a href="{{ route('admin.leaves.create') }}" class="btn btn-sm btn-success waves-effect waves-light m-l-10  pull-right">
-                <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')
-            </a>
-            <a href="{{ route('admin.leave.all-leaves') }}" class="btn btn-sm btn-info waves-effect waves-light  pull-right">
-                <i class="fa fa-table"></i> @lang('app.tableView')
-            </a>
-
-        </div>
-
-    </div>
 
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <h3 class="box-title col-md-3">@lang('app.menu.leaves')</h3>
-                </div>
+               
 
 
                 <div id="calendar"></div>

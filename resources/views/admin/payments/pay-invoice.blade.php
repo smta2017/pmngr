@@ -32,7 +32,7 @@
     <div class="row">
         <div class="col-md-12">
 
-            <div class="panel ">
+            <div class="panel panel-inverse">
                 <div class="panel-heading"> @lang('modules.payments.addPayment')</div>
                 <div class="panel-wrapper collapse in" aria-expanded="true">
                     <div class="panel-body">
@@ -117,7 +117,7 @@
                             <button type="submit" id="save-form-2" class="btn btn-success"><i class="fa fa-check"></i>
                                 @lang('app.save')
                             </button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

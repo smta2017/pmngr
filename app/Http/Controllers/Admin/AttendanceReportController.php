@@ -19,7 +19,7 @@ class AttendanceReportController extends AdminBaseController
         $this->pageTitle = __('app.menu.attendanceReport');
         $this->pageIcon = 'icon-clock';
         $this->middleware(function ($request, $next) {
-            if ($this->company->status == 'license_expired') {
+            if (!in_array('reports', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);

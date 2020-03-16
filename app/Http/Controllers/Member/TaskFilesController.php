@@ -130,52 +130,10 @@ class TaskFilesController extends MemberBaseController
                 $file->task_id = $request->task_id;
                 switch($storage) {
                     case 'local':
-                        $fileData->storeAs('user-uploads/task-files/'.$request->task_id, $fileData->hashName());
+                        $fileData->image->store('task-files/'.$request->task_id, $fileData->hashName());
                         break;
                     case 's3':
                         Storage::disk('s3')->putFileAs('task-files/'.$request->task_id, $fileData, $fileData->getClientOriginalName(), 'public');
-                        break;
-                    case 'google':
-                        $dir = '/';
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                        $dir = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', 'task-files')
-                            ->first();
-
-                        if(!$dir) {
-                            Storage::cloud()->makeDirectory('task-files');
-                        }
-
-                        $directory = $dir['path'];
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                        $directory = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', $request->task_id)
-                            ->first();
-
-                        if ( ! $directory) {
-                            Storage::cloud()->makeDirectory($dir['path'].'/'.$request->task_id);
-                            $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                            $directory = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', $request->task_id)
-                                ->first();
-                        }
-
-                        Storage::cloud()->putFileAs($directory['basename'], $fileData, $fileData->getClientOriginalName());
-
-                        $file->google_url = Storage::cloud()->url($directory['path'].'/'.$fileData->getClientOriginalName());
-
-                        break;
-                    case 'dropbox':
-                        Storage::disk('dropbox')->putFileAs('task-files/'.$request->task_id.'/', $fileData, $fileData->getClientOriginalName());
-                        $dropbox = new Client(['headers' => ['Authorization' => "Bearer ".config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                        $res = $dropbox->request('POST', 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                            [\GuzzleHttp\RequestOptions::JSON => ["path" => '/task-files/'.$request->task_id.'/'.$fileData->getClientOriginalName()]]
-                        );
-                        $dropboxResult = $res->getBody();
-                        $dropboxResult = json_decode($dropboxResult, true);
-                        $file->dropbox_link = $dropboxResult['url'];
                         break;
                 }
 
@@ -183,7 +141,6 @@ class TaskFilesController extends MemberBaseController
                 $file->hashname = $fileData->hashName();
                 $file->size = $fileData->getSize();
                 $file->save();
-//                $this->logProjectActivity($request->task_id, __('messages.newFileUploadedToTheProject'));
             }
 
         }

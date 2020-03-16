@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Notice extends Model
+class Notice extends BaseModel
 {
     use Notifiable;
     protected $appends = ['notice_date'];

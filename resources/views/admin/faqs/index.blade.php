@@ -42,29 +42,60 @@
 
 @section('content')
 
-    <div class="row">
-        @foreach($faqCategories as $faqCategory)
+    <div class="white-box">
+        <div class="row">
+            @forelse($faqCategories as $faqCategory)
 
 
-            <div class="col-md-4">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading"> {{ $faqCategory->name }}</div>
-                    <div class="panel-wrapper collapse in">
-                        <div class="panel-body">
-                            <ul class="list-icons">
-                                @foreach($faqCategory->faqs as $faq)
-                                    <li>
-                                        <a href="javascript:void(0)" onclick="showFaqDetails({{$faq->id}})">
-                                            <i class="fa fa-file-text"></i> {{ $faq->title }}
-                                        </a>
-                                    </li>
-                                @endforeach
-                            </ul>
+                <div class="col-md-4">
+                    <div class="panel panel-inverse">
+                        <div class="panel-heading"> {{ $faqCategory->name }}</div>
+                        <div class="panel-wrapper collapse in">
+                            <div class="panel-body">
+                                <ul class="list-icons">
+                                    @forelse($faqCategory->faqs as $faq)
+                                        <li>
+                                            <a href="javascript:void(0)" onclick="showFaqDetails({{$faq->id}})">
+                                                <i class="fa fa-file-text"></i> {{ $faq->title }}
+                                            </a>
+                                        </li>
+                                        @empty
+                                            <tr>
+                                                <td colspan="3" class="text-center">
+                                                    <div class="empty-space" style="height: 200px;">
+                                                        <div class="empty-space-inner">
+                                                            <div class="icon" style="font-size:30px"><i
+                                                                        class="icon-layers"></i>
+                                                            </div>
+                                                            <div class="title m-b-15">@lang('messages.noFaqCreated')
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                    @endforelse
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endforeach
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-center">
+                            <div class="empty-space" style="height: 200px;">
+                                <div class="empty-space-inner">
+                                    <div class="icon" style="font-size:30px"><i
+                                                class="icon-layers"></i>
+                                    </div>
+                                    <div class="title m-b-15">@lang('messages.noFaqCreated')
+                                    </div>
+
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                @endforelse
+        </div>
     </div>
 
     {{--Ajax Modal--}}

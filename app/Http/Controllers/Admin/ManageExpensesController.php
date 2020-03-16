@@ -87,7 +87,7 @@ class ManageExpensesController extends AdminBaseController
 
         if ($request->hasFile('bill')) {
             $expense->bill = $request->bill->hashName();
-            $request->bill->store('user-uploads/expense-invoice');
+            $request->bill->store('expense-invoice');
             //            dd($expense->bill);
             // $img = Image::make('user-uploads/expense-invoice/' . $expense->bill);
             // $img->resize(500, null, function ($constraint) {
@@ -98,10 +98,6 @@ class ManageExpensesController extends AdminBaseController
 
         $expense->status = 'approved';
         $expense->save();
-
-        //send welcome email notification
-        $user = User::findOrFail($expense->user_id);
-        $user->notify(new NewExpenseMember($expense));
 
         return Reply::redirect(route('admin.expenses.index'), __('messages.expenseSuccess'));
     }
@@ -226,7 +222,7 @@ class ManageExpensesController extends AdminBaseController
             File::delete(public_path() . '/user-uploads/expense-invoice/' . $expense->bill);
 
             $expense->bill = $request->bill->hashName();
-            $request->bill->store('user-uploads/expense-invoice');
+            $request->bill->store('expense-invoice');
             // $img = Image::make('user-uploads/expense-invoice/' . $expense->bill);
             // $img->resize(500, null, function ($constraint) {
             //     $constraint->aspectRatio();
@@ -239,17 +235,13 @@ class ManageExpensesController extends AdminBaseController
         $expense->status = $request->status;
         $expense->save();
 
-        //send welcome email notification
-        $user = User::findOrFail($expense->user_id);
-        $user->notify(new NewExpenseStatus($expense));
-
         return Reply::redirect(route('admin.expenses.index'), __('messages.expenseUpdateSuccess'));
     }
 
     public function destroy($id)
     {
         Expense::destroy($id);
-       
+
         return Reply::success(__('messages.expenseDeleted'));
     }
 
@@ -319,7 +311,7 @@ class ManageExpensesController extends AdminBaseController
                 for ($row = 1; $row <= $lastRow; $row++) {
                     $cell = $sheet->getCell($column . $row);
                     $cell->getHyperlink()
-                        ->setUrl(asset('user-uploads/expense-invoice/') . '/' . $cell);
+                        ->setUrl(asset_url('expense-invoice/') . '/' . $cell);
                 }
             });
         })->download('xlsx');

@@ -38,7 +38,7 @@ class PaymentGatewayCredentialController extends AdminBaseController
         $credential->razorpay_key = $request->razorpay_key;
         $credential->razorpay_secret = $request->razorpay_secret;
         $credential->razorpay_webhook_secret = $request->razorpay_webhook_secret;
-        ($request->razorpay_status) ? $credential->razorpay_status = 'active' : $credential->razorpay_status = 'inactive';
+        ($request->razorpay_status) ? $credential->razorpay_status = 'active' : $credential->razorpay_status = 'deactive';
 
         $credential->save();
 

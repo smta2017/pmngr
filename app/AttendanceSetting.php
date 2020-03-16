@@ -6,7 +6,7 @@ use App\Observers\AttendanceSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class AttendanceSetting extends Model
+class AttendanceSetting extends BaseModel
 {
 
     protected static function boot()

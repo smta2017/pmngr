@@ -105,14 +105,13 @@ class StripeController extends Controller
 
         } else {
 
-
             $plan = Plan::create(array(
-                "name" => 'Payment for invoice #'. $invoice->invoice_number,
-                "id" => 'plan-'.$invoice->id.'-'.str_random('10'),
-                "interval" => $invoice->billing_frequency,
-                "interval_count" => $invoice->billing_interval,
-                "currency" => $invoice->currency->currency_code,
                 "amount" => $invoice->total*100,
+                "currency" => $invoice->currency->currency_code,
+                "interval" => $invoice->billing_frequency,
+                "product" => ['name' => $invoice->invoice_number],
+                "id" => 'plan-'.$invoice->id.'-'.str_random('10'),
+                "interval_count" => $invoice->billing_interval,
                 "metadata" => [
                     "invoice_id" => $invoice->id
                 ],

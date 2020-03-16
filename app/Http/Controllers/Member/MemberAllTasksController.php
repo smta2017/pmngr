@@ -133,16 +133,16 @@ class MemberAllTasksController extends MemberBaseController
             })
             ->editColumn('created_by', function ($row) {
                 if (!is_null($row->created_by)) {
-                    return ($row->created_image) ? '<img src="' . asset('user-uploads/avatar/' . $row->created_image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->created_by) : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->created_by);
+                    return ($row->created_image) ? '<img src="' . asset_url('avatar/' . $row->created_image) . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ' . ucwords($row->created_by) : '<img src="' . asset('default-profile-2.png') . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ' . ucwords($row->created_by);
                 }
                 return '-';
             })
             ->editColumn('name', function ($row) {
-                return ($row->image) ? '<img src="' . asset('user-uploads/avatar/' . $row->image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->name) : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->name);
+                return ($row->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($row->name) . '" src="' . asset_url('avatar/' . $row->image) . '"
+                    alt="user" class="img-circle" width="25" height="25"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($row->name) . '" src="' . asset('default-profile-2.png') . '"
+                    alt="user" class="img-circle" width="25" height="25"> '.ucwords($row->name);
             })
             ->editColumn('heading', function ($row) {
                 return '<a href="javascript:;" data-task-id="' . $row->id . '" class="show-task-detail">' . ucfirst($row->heading) . '</a>';
@@ -187,14 +187,12 @@ class MemberAllTasksController extends MemberBaseController
         $this->employees = User::allEmployees();
         $this->categories = TaskCategory::all();
         $completedTaskColumn = TaskboardColumn::where('slug', '!=', 'completed')->first();
-        if($completedTaskColumn)
-        {
+        if ($completedTaskColumn) {
             $this->allTasks = Task::where('board_column_id', $completedTaskColumn->id)
                 ->where('id', '!=', $id);
 
-            if($this->task->project_id != '')
-            {
-                $this->allTasks = $this->allTasks ->where('project_id', $this->task->project_id);
+            if ($this->task->project_id != '') {
+                $this->allTasks = $this->allTasks->where('project_id', $this->task->project_id);
             }
 
             if (!$this->user->can('view_tasks')) {
@@ -202,7 +200,7 @@ class MemberAllTasksController extends MemberBaseController
             }
 
             $this->allTasks = $this->allTasks->get();
-        }else {
+        } else {
             $this->allTasks = [];
         }
 
@@ -241,31 +239,13 @@ class MemberAllTasksController extends MemberBaseController
         $task->project_id = $request->project_id;
         $task->save();
 
-        if ($oldStatus->slug == 'incomplete'  && $taskBoardColumn->slug == 'completed') {
-            // notify user
-            if (!$this->user->can('add_tasks') && $this->global->task_self == 'yes') {
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($this->user->id);
-            } else {
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($request->user_id);
-            }
-            $notifyUser->notify(new TaskCompleted($task));
-        } else {
-            if (!$this->user->can('add_tasks') && $this->global->task_self == 'yes') {
-                $notifyUser = User::findOrFail($this->user->id);
-            } else {
-                $notifyUser = User::findOrFail($request->user_id);
-            }
-            //Send notification to user
-            $notifyUser->notify(new TaskUpdated($task));
-        }
-
         if ($request->project_id) {
             //calculate project progress if enabled
             $this->calculateProjectProgress($request->project_id);
         }
 
         return Reply::dataOnly(['taskID' => $task->id]);
-//        return Reply::redirect(route('member.all-tasks.index'), __('messages.taskUpdatedSuccessfully'));
+        //        return Reply::redirect(route('member.all-tasks.index'), __('messages.taskUpdatedSuccessfully'));
     }
 
     public function destroy(Request $request, $id)
@@ -310,8 +290,7 @@ class MemberAllTasksController extends MemberBaseController
         $this->employees = User::allEmployees();
         $this->categories = TaskCategory::all();
         $completedTaskColumn = TaskboardColumn::where('slug', '!=', 'completed')->first();
-        if($completedTaskColumn)
-        {
+        if ($completedTaskColumn) {
             $this->allTasks = Task::where('board_column_id', $completedTaskColumn->id);
 
             if (!$this->user->can('view_tasks')) {
@@ -319,8 +298,7 @@ class MemberAllTasksController extends MemberBaseController
             }
 
             $this->allTasks = $this->allTasks->get();
-
-        }else {
+        } else {
             $this->allTasks = [];
         }
 
@@ -355,7 +333,7 @@ class MemberAllTasksController extends MemberBaseController
         }
         $task->start_date = Carbon::createFromFormat($this->global->date_format, $request->start_date)->format('Y-m-d');
         $task->due_date = Carbon::createFromFormat($this->global->date_format, $request->due_date)->format('Y-m-d');
-        $task->project_id = $request->task_project_id;
+        $task->project_id = (isset($request->task_project_id)) ? $request->task_project_id : $request->project_id;;
         $task->priority = $request->priority;
         $task->board_column_id = $taskBoardColumn->id;
         $task->task_category_id = $request->category_id;
@@ -378,7 +356,7 @@ class MemberAllTasksController extends MemberBaseController
             $newTask = $task;
             $parentGanttId = $request->parent_gantt_id;
             $taskDuration = $newTask->due_date->diffInDays($newTask->start_date);
-            $taskDuration = $taskDuration +1;
+            $taskDuration = $taskDuration + 1;
 
             $ganttTaskArray[] = [
                 'id' => $newTask->id,
@@ -393,7 +371,7 @@ class MemberAllTasksController extends MemberBaseController
             ];
 
             $gantTaskLinkArray[] = [
-                'id' => 'link_'. $newTask->id,
+                'id' => 'link_' . $newTask->id,
                 'source' => $parentGanttId,
                 'target' => $newTask->id,
                 'type' => 1
@@ -460,20 +438,6 @@ class MemberAllTasksController extends MemberBaseController
         if ($request->project_id) {
             $this->calculateProjectProgress($request->project_id);
         }
-        // Send notification to user
-        if (!$this->user->can('add_tasks') && $this->global->task_self == 'yes') {
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($this->user->id);
-        } else {
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($request->user_id);
-        }
-        $notifyUser->notify(new NewTask($task));
-
-        if ($task->project_id != null) {
-            if ($task->project->client_id != null && $task->project->allow_client_notification == 'enable') {
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                $notifyUser->notify(new NewClientTask($task));
-            }
-        }
 
         if (!is_null($request->project_id)) {
             $this->logProjectActivity($request->project_id, __('messages.newTaskAddedToTheProject'));
@@ -499,7 +463,7 @@ class MemberAllTasksController extends MemberBaseController
         }
         return Reply::dataOnly(['taskID' => $task->id]);
 
-//        return Reply::redirect(route('member.all-tasks.index'), __('messages.taskCreatedSuccessfully'));
+        //        return Reply::redirect(route('member.all-tasks.index'), __('messages.taskCreatedSuccessfully'));
     }
 
     public function ajaxCreate($columnId)
@@ -508,8 +472,7 @@ class MemberAllTasksController extends MemberBaseController
         $this->columnId = $columnId;
         $this->employees = User::allEmployees();
         $completedTaskColumn = TaskboardColumn::where('slug', '!=', 'completed')->first();
-        if($completedTaskColumn)
-        {
+        if ($completedTaskColumn) {
             $this->allTasks = Task::where('board_column_id', $completedTaskColumn->id);
 
             if (!$this->user->can('view_tasks')) {
@@ -517,7 +480,7 @@ class MemberAllTasksController extends MemberBaseController
             }
 
             $this->allTasks = $this->allTasks->get();
-        }else {
+        } else {
             $this->allTasks = [];
         }
         return view('member.all-tasks.ajax_create', $this->data);
@@ -533,13 +496,11 @@ class MemberAllTasksController extends MemberBaseController
     public function dependentTaskLists($projectId, $taskId = null)
     {
         $completedTaskColumn = TaskboardColumn::where('slug', '!=', 'completed')->first();
-        if($completedTaskColumn)
-        {
+        if ($completedTaskColumn) {
             $this->allTasks = Task::where('board_column_id', $completedTaskColumn->id)
                 ->where('project_id', $projectId);
 
-            if($taskId != null)
-            {
+            if ($taskId != null) {
                 $this->allTasks = $this->allTasks->where('id', '!=', $taskId);
             }
 
@@ -548,7 +509,7 @@ class MemberAllTasksController extends MemberBaseController
             }
 
             $this->allTasks = $this->allTasks->get();
-        }else {
+        } else {
             $this->allTasks = [];
         }
 

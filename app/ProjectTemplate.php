@@ -7,7 +7,7 @@ use App\Traits\CustomFieldsTrait;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectTemplate extends Model
+class ProjectTemplate extends BaseModel
 {
     use CustomFieldsTrait;
 

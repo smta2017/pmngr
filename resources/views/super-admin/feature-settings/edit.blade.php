@@ -6,7 +6,7 @@
 {!!  Form::open(['url' => '' ,'method' => 'put', 'id' => 'add-edit-form','class'=>'form-horizontal']) 	 !!}
 <div class="modal-body">
     <div class="box-body">
-        @if(isset($type) && $type == 'icon')
+        @if(isset($type) && $type != 'image' && $type != 'apps')
             <div class="form-group">
                 <label class="col-sm-2 control-label">@lang('app.icon')</label>
                 <div class="btn-group col-sm-10">
@@ -41,20 +41,15 @@
                 <span class="help-block"></span>
             </div>
         </div>
-        @if(isset($type) && $type == 'image')
+        @if(isset($type) && $type == 'image' || $type == 'apps')
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="exampleInputPassword1">@lang('app.image') </label>
                 <div class="col-sm-10">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="fileinput-new thumbnail"
                              style="width: 200px; height: 150px;">
-                            @if(is_null($feature->image))
-                                <img src="{{asset('front/img/demo/slack/tools.png')}}"
-                                     alt=""/>
-                            @else
-                                <img src="{{ asset('user-uploads/front/feature/'.$feature->image) }}"
-                                     alt=""/>
-                            @endif
+                            <img src="{{ $feature->image_url }}"
+                                 alt=""/>
                         </div>
                         <div class="fileinput-preview fileinput-exists thumbnail"
                              style="max-width: 200px; max-height: 150px;"></div>

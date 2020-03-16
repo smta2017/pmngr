@@ -6,7 +6,7 @@ use App\Observers\LeadStatusObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class LeadStatus extends Model
+class LeadStatus extends BaseModel
 {
     protected $table = 'lead_status';
 

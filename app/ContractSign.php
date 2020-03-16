@@ -7,7 +7,7 @@ use App\Observers\ContractSignObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContractSign extends Model
+class ContractSign extends BaseModel
 {
 
     protected static function boot()

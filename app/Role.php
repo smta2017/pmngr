@@ -2,7 +2,7 @@
 
 use App\Observers\RoleObserver;
 use Illuminate\Database\Eloquent\Builder;
-use Zizaco\Entrust\EntrustRole;
+use Trebol\Entrust\EntrustRole;
 use Illuminate\Support\Facades\Auth;
 
 class Role extends EntrustRole

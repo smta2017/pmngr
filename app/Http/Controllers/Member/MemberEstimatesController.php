@@ -133,10 +133,6 @@ class MemberEstimatesController extends MemberBaseController
 
         $this->logSearchEntry($estimate->id, 'Estimate #'.$estimate->id, 'admin.estimates.edit', 'estimate');
 
-        // Notify client
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($estimate->client_id);
-        $notifyUser->notify(new NewEstimate($estimate));
-
         return Reply::redirect(route('member.estimates.index'), __('messages.estimateCreated'));
 
     }
@@ -203,10 +199,6 @@ class MemberEstimatesController extends MemberBaseController
         $estimate->status = $request->status;
         $estimate->note = $request->note;
         $estimate->save();
-
-        // Notify client
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($estimate->client_id);
-        $notifyUser->notify(new NewEstimate($estimate));
 
         // delete and create new
         EstimateItem::where('estimate_id', $estimate->id)->delete();

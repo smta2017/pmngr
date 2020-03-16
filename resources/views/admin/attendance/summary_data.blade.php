@@ -7,10 +7,14 @@
                     @for($i =1; $i <= $daysInMonth; $i++)
                         <th>{{ $i }}</th>
                     @endfor
+                    <th>@lang('app.total')</th>
                 </tr>
             </thead>
             <tbody>
             @foreach($employeeAttendence as $key => $attendance)
+                @php
+                    $totalPresent = 0;
+                @endphp
                 <tr>
                     {{-- <td> {{ substr($key, strripos($key,'#')+strlen('#')) }} </td> --}}
                     <td> {!! end($attendance) !!} </td>
@@ -20,13 +24,19 @@
                                 @if($day == 'Absent')
                                     <a href="javascript:;" class="edit-attendance" data-attendance-date="{{ $key2 }}"><i class="fa fa-times text-danger"></i></a>
                                 @elseif($day == 'Holiday')
-                                    <a href="javascript:;" class="edit-attendances" data-attendance-date="{{ $key2 }}"><i class="fa fa-h-square text-warning"></i></a>
+                                    <a href="javascript:;" class="edit-attendances" data-attendance-date="{{ $key2 }}"><i class="fa fa-star text-warning"></i></a>
                                 @else
+                                    @if($day != '-')
+                                        @php
+                                            $totalPresent = $totalPresent + 1;
+                                        @endphp
+                                    @endif
                                     {!! $day !!}
                                 @endif
                             </td>
                         @endif
                     @endforeach
+                    <td class="text-success">{{ $totalPresent .' / '.(count($attendance)-1) }}</td>
                 </tr>
             @endforeach
             </tbody>

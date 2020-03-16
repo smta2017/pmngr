@@ -37,7 +37,27 @@
                             <input type="hidden" name="lead" value="{{ $leadDetail->id }}">
                         @endif
                             <div class="form-body">
-                                <h3 class="box-title">@lang('modules.client.companyDetails')</h3>
+                                <h3 class="box-title ">@lang('modules.client.clientDetails')</h3>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label class="required">@lang('modules.client.clientName')</label>
+                                            <input type="text" name="name" id="name"  value="{{ $leadDetail->client_name ?? '' }}"   class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="required">@lang('modules.client.clientEmail')</label>
+                                            <input type="email" name="email" id="email" value="{{ $leadDetail->client_email ?? '' }}"  class="form-control">
+                                            <span class="help-block">@lang('modules.client.emailNote')</span>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+
+                                <h3 class="box-title m-t-20">@lang('modules.client.companyDetails')</h3>
                                 <hr>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -68,34 +88,8 @@
                                 </div>
                                 <!--/row-->
 
-                                <h3 class="box-title m-t-40">@lang('modules.client.clientDetails')</h3>
+                                <h3 class="box-title m-t-20">@lang('modules.client.clientOtherDetails')</h3>
                                 <hr>
-                                <div class="row">
-                                    <div class="col-md-6 ">
-                                        <div class="form-group">
-                                            <label>@lang('modules.client.clientName')</label>
-                                            <input type="text" name="name" id="name"  value="{{ $leadDetail->client_name ?? '' }}"   class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>@lang('modules.client.clientEmail')</label>
-                                            <input type="email" name="email" id="email" value="{{ $leadDetail->client_email ?? '' }}"  class="form-control">
-                                            <span class="help-block">@lang('modules.client.emailNote')</span>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>@lang('modules.client.mobile')</label>
-                                            <input type="tel" name="mobile" id="mobile" value="{{ $leadDetail->mobile ?? '' }}" class="form-control">
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
                                 <!--/row-->
                                 <div class="row">
 
@@ -133,7 +127,13 @@
                                 </div>
                                 <!--/row-->
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>@lang('modules.client.mobile')</label>
+                                            <input type="tel" name="mobile" id="mobile" value="{{ $leadDetail->mobile ?? '' }}" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="gst_number">@lang('app.gstNumber')</label>
                                             <input type="text" id="gst_number" name="gst_number" class="form-control" value="">
@@ -232,7 +232,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

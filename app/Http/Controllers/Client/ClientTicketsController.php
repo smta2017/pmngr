@@ -6,7 +6,6 @@ use App\Helper\Reply;
 use App\Http\Requests\Tickets\StoreTicketRequest;
 use App\Http\Requests\Tickets\UpdateTicketRequest;
 use App\ModuleSetting;
-use App\Notifications\NewTicket;
 use App\Ticket;
 use App\TicketReply;
 use App\User;
@@ -67,9 +66,6 @@ class ClientTicketsController extends ClientBaseController
         $reply->ticket_id = $ticket->id;
         $reply->user_id = $this->user->id; //current logged in user
         $reply->save();
-
-        //send admin notification
-        Notification::send(User::allAdmins(), new NewTicket($ticket));
 
         return Reply::redirect(route('client.tickets.index'), __('messages.ticketAddSuccess'));
     }

@@ -88,8 +88,7 @@ class ManageAllTimeLogController extends AdminBaseController
         return view('admin.time-logs.show-active-timer', $this->data);
     }
 
-    public function data($startDate = null, $endDate = null, $projectId = null, $employee = null) {
-
+    public function data(Request $request) {
         $projectName = 'projects.project_name';
         $timeLogs = ProjectTimeLog::join('users', 'users.id', '=', 'project_time_logs.user_id')
             ->join('employee_details', 'users.id', '=', 'employee_details.user_id');
@@ -106,23 +105,23 @@ class ManageAllTimeLogController extends AdminBaseController
         $timeLogs = $timeLogs->select('project_time_logs.id', $projectName, 'project_time_logs.start_time', 'project_time_logs.end_time', 'project_time_logs.total_hours', 'project_time_logs.total_minutes', 'project_time_logs.memo', 'project_time_logs.user_id', 'project_time_logs.project_id', 'project_time_logs.task_id', 'users.name', 'employee_details.hourly_rate');
 
 
-        if(!is_null($startDate)){
-            $timeLogs->where(DB::raw('DATE(project_time_logs.`start_time`)'), '>=', $startDate);
+        if(!is_null($request->startDate)){
+            $timeLogs->where(DB::raw('DATE(project_time_logs.`start_time`)'), '>=', Carbon::parse($request->startDate));
         }
 
-        if(!is_null($endDate)){
-            $timeLogs->where(DB::raw('DATE(project_time_logs.`end_time`)'), '<=', $endDate);
+        if(!is_null($request->endDate)){
+            $timeLogs->where(DB::raw('DATE(project_time_logs.`end_time`)'), '<=', Carbon::parse($request->endDate));
         }
 
-        if(!is_null($employee) && $employee !== 'all'){
-            $timeLogs->where('project_time_logs.user_id', $employee);
+        if(!is_null($request->employee) && $request->employee !== 'all'){
+            $timeLogs->where('project_time_logs.user_id', $request->employee);
         }
 
-        if(!is_null($projectId) && $projectId !== 'all'){
+        if(!is_null($request->projectId) && $request->projectId !== 'all'){
             if($this->logTimeFor != null && $this->logTimeFor->log_time_for == 'task'){
-                $timeLogs->where('project_time_logs.task_id', '=', $projectId);
+                $timeLogs->where('project_time_logs.task_id', '=', $request->projectId);
             }else{
-                $timeLogs->where('project_time_logs.project_id', '=', $projectId);
+                $timeLogs->where('project_time_logs.project_id', '=', $request->projectId);
             }
         }
 
@@ -166,7 +165,7 @@ class ManageAllTimeLogController extends AdminBaseController
                 $hours = intdiv($row->total_minutes, 60);
 
                 $earning = round($hours*$row->hourly_rate);
-                
+
                 return $this->global->currency->currency_symbol.$earning. ' ('.$this->global->currency->currency_code.')';
             })
             ->editColumn('project_name', function ($row) {

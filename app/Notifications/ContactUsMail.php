@@ -17,11 +17,10 @@ class ContactUsMail extends Notification
      *
      * @return void
      */
-    public function __construct($data, $fromEmail)
+    public function __construct($data)
     {
         $this->data = $data;
         $this->setMailConfigs();
-        Config::set('mail.from.address', $fromEmail);
     }
 
     /**

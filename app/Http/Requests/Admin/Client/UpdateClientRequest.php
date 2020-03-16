@@ -30,7 +30,7 @@ class UpdateClientRequest extends CoreRequest
                 'required',
                 Rule::unique('client_details')->where(function($query) {
                     $query->where(['email' => $this->request->get('email'), 'company_id' => company()->id]);
-                })->ignore($this->route('client'), 'user_id')
+                })->ignore($this->route('client'), 'id')
             ], 
             // 'slack_username' => 'nullable|unique:employee_details,slack_username,'.$this->route('client'),
             'name'  => 'required',

@@ -6,7 +6,7 @@ use App\Observers\OfflinePaymentMethodObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class OfflinePaymentMethod extends Model
+class OfflinePaymentMethod extends BaseModel
 {
     protected $table = 'offline_payment_methods';
     protected $dates = ['created_at'];

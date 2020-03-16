@@ -64,9 +64,8 @@
                                                         @forelse($project->members as $member)
                                                             <tr>
                                                                 <td>
-                                                                    {!!  ($member->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$member->user->image).'"
-                                                            alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="img-circle" width="40">' !!}
+                                                                    {!!  '<img src="'.$member->user->image_url.'"
+                                                            alt="user" class="img-circle" width="40" height="40">' !!}
                                                                     {{ ucwords($member->user->name) }}
                                                                 </td>
                                                                 <td>

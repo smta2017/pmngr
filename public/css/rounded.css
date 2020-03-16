@@ -1,7 +1,6 @@
 .logo img {
     max-height: 30px;
     display: inline-block;
-    max-width: 200px;
     line-height: 60px;
     text-align: center;
     margin: 15px 0;
@@ -35,7 +34,8 @@
 }
 
 .panel-default .panel-heading, .panel-white .panel-heading, .panel-black .panel-heading, .panel-inverse .panel-heading, .panel-blue .panel-heading, .panel-info .panel-heading {
-    border-radius: 6px 6px 0 0;
+    /* border-radius: 6px 6px 0 0; */
+    border-radius: 0;
 }
 
 .btn {
@@ -86,7 +86,7 @@
     border-radius: 0 0 8px 8px;
 }
 
-.lobipanel .panel-body {
+.lobipanel .panel-body, .lobipanel-placeholder {
     border-radius: 8px;
 }
 
@@ -118,4 +118,15 @@
 
 .input-daterange .form-control:last-child {
     border-radius: 0 4px 4px 0;
+}
+.gantt_container{
+    border-radius: 6px;
+}
+
+.datepicker {
+    border-radius: 8px;
+}
+
+.vtabs .tabs-vertical {
+    border-right: 1px solid #f2f2f3;
 }

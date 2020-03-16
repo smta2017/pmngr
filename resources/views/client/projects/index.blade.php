@@ -49,6 +49,7 @@
                             <th>@lang('modules.projects.members')</th>
                             <th>@lang('modules.projects.deadline')</th>
                             <th>@lang('app.completion')</th>
+                            <th>@lang('app.status')</th>
                             <th>@lang('app.action')</th>
                         </tr>
                         </thead>
@@ -110,6 +111,7 @@
                 { data: 'members', name: 'members' },
                 { data: 'deadline', name: 'deadline' },
                 { data: 'completion_percent', name: 'completion_percent' },
+                { data: 'status', name: 'status' },
                 { data: 'action', name: 'action' }
             ]
         });

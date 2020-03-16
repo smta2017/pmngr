@@ -160,13 +160,6 @@ class PublicUrlController extends FrontBaseController
         //log search
         $this->logSearchEntry($invoice->id, 'Invoice ' . $invoice->invoice_number, 'admin.all-invoices.show', 'invoice');
 
-        if ($invoice->client_id != null) {
-            $clientId = $invoice->client_id;
-            // Notify client
-            $notifyUser = User::withoutGlobalScopes(['active', 'company'])->findOrFail($clientId);
-            $notifyUser->notify(new NewInvoice($invoice));
-        }
-
         DB::commit();
         return Reply::redirect(route('front.invoice', md5($invoice->id)),'Estimate successfully accepted.');
     }

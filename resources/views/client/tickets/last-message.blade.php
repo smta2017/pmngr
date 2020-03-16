@@ -3,9 +3,7 @@
     <div class="row">
 
         <div class="col-xs-2 col-md-1">
-            {!!  ($reply->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$reply->user->image).'"
-                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                alt="user" class="img-circle" width="40">' !!}
+            {!!  '<img src="'.$reply->user->image_url.'" alt="user" class="img-circle" width="40" height="40">' !!}
         </div>
         <div class="col-xs-10 col-md-11">
             <h4 class="m-t-0"><a

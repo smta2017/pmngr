@@ -90,7 +90,10 @@ class ManageAllCreditNotesController extends AdminBaseController
                 return $action;
             })
             ->editColumn('project_name', function ($row) {
-                return '<a href="' . route('admin.projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
+                if($row->project_id){
+                    return '<a href="' . route('admin.projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
+                }
+                return '--';
             })
             ->editColumn('cn_number', function ($row) {
                 return '<a href="' . route('admin.all-credit-notes.show', $row->id) . '">' . ucfirst($row->cn_number) . '</a>';
@@ -128,7 +131,6 @@ class ManageAllCreditNotesController extends AdminBaseController
     public function download($id)
     {
         //        header('Content-type: application/pdf');
-
         $this->creditNote = CreditNotes::findOrFail($id);
         $this->invoiceNumber = 0;
         if (Invoice::where('id', '=', $this->creditNote->invoice_id)->exists()) {

@@ -40,78 +40,35 @@
                         {!! Form::open(['id'=>'createClient','class'=>'ajax-form','method'=>'POST']) !!}
                             <div class="form-body">
                             <div class="row">
-                                <div class="col-md-12 ">
+                                <div class="col-md-4 ">
                                     <div class="form-group">
-                                        <label>@lang('app.name')</label>
+                                        <label class="required">@lang('app.name')</label>
                                         <input type="text" name="name" id="name"
                                                class="form-control" value="">
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>@lang('app.email')</label>
+                                        <label class="required">@lang('app.email')</label>
                                         <input type="email" name="email" id="email"
                                                class="form-control" value="">
                                     </div>
                                 </div>
-                                <!--/span-->
-                            </div>
-                            <div class="row">
-
-                                <div class="col-md-12">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>@lang('app.password')</label>
+                                        <label class="required">@lang('app.password')</label>
                                         <input type="password" name="password" id="password"
                                                class="form-control">
                                         <span class="help-block"> </span>
                                     </div>
                                 </div>
                                 <!--/span-->
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>@lang('app.mobileNumber')</label>
-                                        <input type="tel" name="mobile" id="mobile" class="form-control"
-                                               value="">
-                                    </div>
-                                </div>
-                                <!--/span-->
-
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>@lang('modules.employees.gender')</label>
-                                        <select name="gender" id="gender" class="form-control">
-                                            <option value="male">@lang('app.male')</option>
-                                            <option value="female">@lang('app.female')</option>
-                                            <option value="others">@lang('app.others')</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!--/span-->
-
-                                <!--/span-->
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>@lang('app.status')</label>
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="active">@lang('app.active')</option>
-                                            <option value="deactive">@lang('app.deactive')</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <!--/span-->
                             </div>
-                            <!--/row-->
+
 
                             <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('app.address')</label>
-                                        <textarea name="address" id="address" rows="5"
-                                                  class="form-control"></textarea>
-                                    </div>
-                                </div>
+
                                 <div class="col-md-12">
                                     <label>@lang('modules.profile.profilePicture')</label>
 
@@ -143,7 +100,6 @@
                         </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
                             </div>
                         {!! Form::close() !!}
                     </div>

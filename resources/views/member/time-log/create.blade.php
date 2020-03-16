@@ -1,85 +1,81 @@
-<div class="panel panel-default">
-    <div class="panel-heading "><i class="ti-plus"></i> @lang('modules.timeLogs.startTimer')
-        <div class="panel-action">
-            <a href="javascript:;" class="close" data-dismiss="modal"><i class="ti-close"></i></a>
-        </div>
-    </div>
-    <div class="panel-wrapper collapse in">
-        <div class="panel-body">
-            {!! Form::open(['id'=>'startTimer','class'=>'ajax-form','method'=>'POST', 'onSubmit' => 'return false']) !!}
-            @if((isset($tasks) && count($tasks) > 0) || (isset($projects) && count($projects) > 0) )
-            <div class="form-body">
-                <div class="row">
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label">
-                                @if($logTimeFor->log_time_for == 'task')
-                                    @lang('modules.timeLogs.selectTask')
-                                @else
-                                    @lang('modules.timeLogs.selectProject')
-                                @endif
-                                </label>
-                            @if($logTimeFor->log_time_for == 'task')
-                                <select class="select2 form-control" name="project_id" data-placeholder="@lang('app.selectTask')" id="task_id">
-                                    <option value=""></option>
-                                    @foreach($tasks as $task)
-                                        <option value="{{ $task->id }}">{{ ucwords($task->heading) }}</option>
-                                    @endforeach
-
-                                </select>
-                            @else
-                                <select class="form-control" name="project_id" id="project_id" >
-                                    @forelse($projects as $project)
-                                        @if(!is_null($project->project))
-                                        <option value="{{ $project->project_id }}">{{ ucwords($project->project->project_name) }}</option>
-                                        @endif
-                                    @empty
-                                        <option value="">@lang('messages.noProjectAssigned')</option>
-                                    @endforelse
-                                </select>
-                            @endif
-
-                        </div>
-                    </div>
-                    <!--/span-->
-
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label">@lang('modules.timeLogs.memo')</label>
-                            <input type="text" id="memo" name="memo" class="form-control">
-                        </div>
-                    </div>
-
-                    <!--/span-->
-
-                </div>
-                <!--/row-->
-
-            </div>
-            <div class="form-actions">
-                <button type="button" id="start-timer-btn" class="btn btn-success"><i class="fa fa-check"></i> @lang('modules.timeLogs.startTimer')</button>
-            </div>
-            {!! Form::close() !!}
-            @else
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <p>
-                                @if((isset($tasks) && count($tasks) == 0))
-                                    @lang('modules.timeLogs.noProjectFound')
-                                @endif
-                                @if(isset($projects) && count($projects) == 0)
-                                @lang('modules.timeLogs.noTaskFound')
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title"><i class="ti-plus"></i> @lang('modules.timeLogs.startTimer')</h4>
 </div>
+<div class="modal-body">
+    {!! Form::open(['id'=>'startTimer','class'=>'ajax-form','method'=>'POST', 'onSubmit' => 'return false']) !!}
+    @if((isset($tasks) && count($tasks) > 0) || (isset($projects) && count($projects) > 0) )
+    <div class="form-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">
+                        @if($logTimeFor->log_time_for == 'task')
+                            @lang('modules.timeLogs.selectTask')
+                        @else
+                            @lang('modules.timeLogs.selectProject')
+                        @endif
+                        </label>
+                    @if($logTimeFor->log_time_for == 'task')
+                        <select class="select2 form-control" name="project_id" data-placeholder="@lang('app.selectTask')" id="task_id">
+                            <option value=""></option>
+                            @foreach($tasks as $task)
+                                <option value="{{ $task->id }}">{{ ucwords($task->heading) }}</option>
+                            @endforeach
+
+                        </select>
+                    @else
+                        <select class="form-control" name="project_id" id="project_id" >
+                            @forelse($projects as $project)
+                                @if(!is_null($project->project))
+                                <option value="{{ $project->project_id }}">{{ ucwords($project->project->project_name) }}</option>
+                                @endif
+                            @empty
+                                <option value="">@lang('messages.noProjectAssigned')</option>
+                            @endforelse
+                        </select>
+                    @endif
+
+                </div>
+            </div>
+            <!--/span-->
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">@lang('modules.timeLogs.memo')</label>
+                    <input type="text" id="memo" name="memo" class="form-control">
+                </div>
+            </div>
+
+            <!--/span-->
+
+        </div>
+        <!--/row-->
+
+    </div>
+    <div class="form-actions">
+        <button type="button" id="start-timer-btn" class="btn btn-success"><i class="fa fa-check"></i> @lang('modules.timeLogs.startTimer')</button>
+    </div>
+    {!! Form::close() !!}
+    @else
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <p>
+                        @if((isset($tasks) && count($tasks) == 0))
+                            @lang('modules.timeLogs.noProjectFound')
+                        @endif
+                        @if(isset($projects) && count($projects) == 0)
+                        @lang('modules.timeLogs.noTaskFound')
+                        @endif
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+</div>
+    
 
 <script>
 

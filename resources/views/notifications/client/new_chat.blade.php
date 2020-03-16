@@ -5,7 +5,7 @@
                 <span class="btn btn-circle btn-success"><i class="icon-envelope"></i></span>
             </div>
             <div class="mail-contnet">
-                <span class="mail-desc m-0">You have received a new message.</span> <span class="time">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $notification->data['created_at'])->diffForHumans() }}</span>
+                <span class="mail-desc m-0">You have received a new message.</span> <span class="time">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $notification->created_at)->diffForHumans() }}</span>
             </div>
         </a>
     </div>

@@ -37,14 +37,11 @@
     <div class="col-md-4 col-xs-12">
         <div class="white-box">
             <div class="user-bg">
-                {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" width="100%">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" width="100%">' !!}
+                <img src="{{$employee->image_url}}" alt="user" width="100%">
+
                 <div class="overlay-box">
                     <div class="user-content"> <a href="javascript:void(0)">
-                            {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" class="thumb-lg img-circle">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="thumb-lg img-circle">' !!}
+                            <img src="{{$employee->image_url}}" alt="user" class="thumb-lg img-circle">
                             </a>
                         <h4 class="text-white">{{ ucwords($employee->name) }}</h4>
                         <h5 class="text-white">{{ $employee->email }}</h5>
@@ -87,9 +84,8 @@
                         @forelse($activities as $key=>$activity)
                         <div class="sl-item">
                             <div class="sl-left">
-                                {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" class="img-circle">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="img-circle">' !!}
+                                <img src="{{ $employee->image_url }}" alt="user" class="img-circle">'
+
                             </div>
                             <div class="sl-right">
                                 <div class="m-l-40"><a href="#" class="text-info">{{ ucwords($employee->name) }}</a> <span  class="sl-date">{{ $activity->created_at->diffForHumans() }}</span>
@@ -253,7 +249,7 @@
                                            data-toggle="tooltip" data-original-title="Download"
                                            class="btn btn-inverse btn-circle"><i
                                                     class="fa fa-download"></i></a>
-                                        <a target="_blank" href="{{ asset('user-uploads/employee-docs/'.$employeeDoc->user_id.'/'.$employeeDoc->hashname) }}"
+                                        <a target="_blank" href="{{ asset_url('employee-docs/'.$employeeDoc->user_id.'/'.$employeeDoc->hashname) }}"
                                            data-toggle="tooltip" data-original-title="View"
                                            class="btn btn-info btn-circle"><i
                                                     class="fa fa-search"></i></a>

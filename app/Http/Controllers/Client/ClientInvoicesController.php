@@ -4,23 +4,18 @@ namespace App\Http\Controllers\Client;
 
 use App\ClientPayment;
 use App\CreditNotes;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\Invoices\OfflinePaymentRequest;
 use App\Invoice;
 use App\InvoiceItems;
 use App\InvoiceSetting;
-use App\ModuleSetting;
 use App\Notifications\OfflineInvoicePaymentRequest;
 use App\OfflineInvoicePayment;
 use App\OfflinePaymentMethod;
 use App\PaymentGatewayCredentials;
-use App\Setting;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Notifications\InvoicePaymentReceived;
-use App\User;
-use Illuminate\Support\Facades\Notification;
 use Yajra\DataTables\Facades\DataTables;
 
 class ClientInvoicesController extends ClientBaseController
@@ -219,9 +214,6 @@ class ClientInvoicesController extends ClientBaseController
         $invoice->status = 'paid';
         $invoice->save();
 
-        $admins = User::allAdmins();
-        Notification::send($admins, new InvoicePaymentReceived($invoice));
-
         return Reply::redirect(route('client.invoices.show', $invoiceId), __('messages.paymentSuccess'));
     }
 
@@ -253,11 +245,10 @@ class ClientInvoicesController extends ClientBaseController
         $offlinePayment->payment_method_id = $request->offline_id;
         $offlinePayment->description = $request->description;
 
-        if (!\File::exists(public_path('user-uploads/offline-payment-files'))) {
-            \File::makeDirectory(public_path('user-uploads/offline-payment-files'), 0775, true);
-        }
 
-        $request->slip->storeAs('user-uploads/offline-payment-files/', $request->slip->hashName());
+        if ($request->hasFile('offline-payment-files')) {
+            $offlinePayment->slip = Files::upload($request->slip, 'offline-payment-files');
+        }
 
         $offlinePayment->slip = $request->slip->hashName();
         $offlinePayment->save();
@@ -274,9 +265,6 @@ class ClientInvoicesController extends ClientBaseController
         $clientPayment->status = 'pending';
         $clientPayment->paid_on = Carbon::now();
         $clientPayment->save();
-
-        $admins = User::allAdmins();
-        Notification::send($admins, new InvoicePaymentReceived($checkAlreadyRequest));
 
         return Reply::redirect(route('client.invoices.show', $checkAlreadyRequest->id));
     }

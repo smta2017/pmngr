@@ -22,26 +22,30 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="white-box">
-                <h3 class="box-title m-b-0">@lang('app.add') @lang('app.menu.designation')</h3>
+        <div class="col-md-12">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">@lang('app.add') @lang('app.menu.designation')</div>
 
-                <p class="text-muted m-b-30 font-13"></p>
+                <p class="text-muted font-13"></p>
 
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12">
-                        {!! Form::open(['id'=>'createCurrency','class'=>'ajax-form','method'=>'POST']) !!}
-                        <div class="form-group">
-                            <label for="company_name">@lang('app.menu.designation')</label>
-                            <input type="text" class="form-control" id="designation_name" name="designation_name">
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                {!! Form::open(['id'=>'createCurrency','class'=>'ajax-form','method'=>'POST']) !!}
+                                <div class="form-group">
+                                    <label for="company_name">@lang('app.menu.designation')</label>
+                                    <input type="text" class="form-control" id="designation_name" name="designation_name">
+                                </div>
+
+
+                                <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
+                                    @lang('app.save')
+                                </button>
+                                <a href="{{route('admin.teams.index')}}" class="btn btn-default waves-effect waves-light">@lang('app.back')</a>
+                                {!! Form::close() !!}
+                            </div>
                         </div>
-
-
-                        <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
-                            @lang('app.save')
-                        </button>
-                        <button type="reset" class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
-                        {!! Form::close() !!}
                     </div>
                 </div>
             </div>

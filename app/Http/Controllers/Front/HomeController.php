@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Front;
 
-use App;
 use App\Company;
 use App\CreditNotes;
 use App\Feature;
 use App\FooterMenu;
+use App\FrontClients;
+use App\FrontDetail;
+use App\FrontFaq;
 use App\GlobalSetting;
 use App\Helper\Reply;
 use App\Http\Requests\Front\ContactUs\ContactUsRequest;
@@ -17,6 +19,7 @@ use App\Package;
 use App\Project;
 use App\Setting;
 use App\Task;
+use App\Testimonials;
 use App\User;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Notification;
@@ -45,7 +48,7 @@ class HomeController extends FrontBaseController
     public function index($slug = null)
     {
 
-        $this->pageTitle = '';
+        $this->pageTitle = 'Home';
         $this->packages = Package::where('default', 'no')->get();
 
         $features = Feature::all();
@@ -56,34 +59,93 @@ class HomeController extends FrontBaseController
         $this->featureWithIcons = $features->filter(function ($value, $key) {
             return $value->type == 'icon';
         });
+
+        $this->frontClients = FrontClients::all();
+        $this->frontDetail  = FrontDetail::first();
+        $this->testimonials = Testimonials::all();
+
         $this->packageFeatures = Module::get()->pluck('module_name')->toArray();
 
         if($slug){
             $this->slugData = FooterMenu::where('slug', $slug)->first();
-            return view('front.footer-page', $this->data);
-        }   
-
-        
+            $this->pageTitle = ucwords($this->slugData->name);
+            return view('saas.footer-page', $this->data);
+        }
+        if($this->setting->front_design == 1){
+            return view('saas.home', $this->data);
+        }
         return view('front.home', $this->data);
+    }
+
+    public function feature()
+    {
+
+        $this->pageTitle = 'Feature';
+
+        $features = Feature::all();
+
+        $this->featureTasks = $features->filter(function ($value, $key) {
+            return $value->type == 'task';
+        });
+
+        $this->featureBills = $features->filter(function ($value, $key) {
+            return $value->type == 'bills';
+        });
+
+        $this->featureTeams = $features->filter(function ($value, $key) {
+            return $value->type == 'team';
+        });
+
+        $this->featureApps = $features->filter(function ($value, $key) {
+            return $value->type == 'apps';
+        });
+
+        $this->frontClients = FrontClients::all();
+
+        return view('saas.feature', $this->data);
+    }
+
+    public function pricing()
+    {
+        $this->pageTitle = 'Pricing';
+        $this->packages  = Package::where('default', 'no')->get();
+        $this->frontFaqs = FrontFaq::all();
+
+        $this->packageFeatures = Module::get()->pluck('module_name')->toArray();
+
+        return view('saas.pricing', $this->data);
+    }
+
+    public function contact()
+    {
+        $this->pageTitle = 'Contact-Us';
+        return view('saas.contact', $this->data);
     }
 
     public function page($slug = null)
     {
         $this->slugData = FooterMenu::where('slug', $slug)->first();
-        $this->pageTitle = 'Page-'.$this->slugData->name;
+        $this->pageTitle = 'Page-'.ucwords($this->slugData->name);
 
+        if($this->setting->front_design == 1){
+            return view('saas.footer-page', $this->data);
+        }
         return view('front.footer-page', $this->data);
     }
 
     public function contactUs(ContactUsRequest $request) {
 
         $this->pageTitle = 'Contact Us';
-        $superAdmins = User::where('super_admin', '1')->get();
+        $superadmins = User::allSuperAdmin();
 
         $this->table = '<table><tbody style="color:#0000009c;">
         <tr>
             <td><p>Name : </p></td>
             <td><p>'.ucwords($request->name).'</p></td>
+        </tr>
+        <tr>
+            <td><p>Email : </p></td>
+            <td><p>'.$request->email.'</p></td>
         </tr>
         <tr>
             <td style="font-family: Avenir, Helvetica, sans-serif;box-sizing: border-box;min-width: 98px;vertical-align: super;"><p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; font-size: 16px; line-height: 1.5em; margin-top: 0; text-align: left;">Message : </p></td>
@@ -93,8 +155,8 @@ class HomeController extends FrontBaseController
         
 </table><br>';
 
-        Notification::route('mail', $this->detail->email)
-            ->notify(new ContactUsMail($this->data, $request->email));
+        Notification::route('mail', $superadmins)
+            ->notify(new ContactUsMail($this->data));
 
 
         return Reply::success('Thanks for contacting us. We will catch you soon.');
@@ -106,19 +168,16 @@ class HomeController extends FrontBaseController
         $this->pageIcon = 'icon-people';
 
         $this->invoice = Invoice::whereRaw('md5(id) = ?', $id)->with('payment')->firstOrFail();
-//        dd($this->invoice);
         $this->paidAmount = $this->invoice->getPaidAmount();
 
+        $this->discount = 0;
         if($this->invoice->discount > 0){
+            $this->discount = $this->invoice->discount;
+
             if($this->invoice->discount_type == 'percent'){
                 $this->discount = (($this->invoice->discount/100)*$this->invoice->sub_total);
             }
-            else{
-                $this->discount = $this->invoice->discount;
-            }
-        }
-        else{
-            $this->discount = 0;
+
         }
 
         $taxList = array();

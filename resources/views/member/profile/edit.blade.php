@@ -98,7 +98,7 @@
                                                     <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.profile.uploadPicture')) }}"
                                                          alt=""/>
                                                 @else
-                                                    <img src="{{ asset('user-uploads/avatar/'.$userDetail->image) }}" alt=""/>
+                                                    <img src="{{ asset_url('avatar/'.$userDetail->image) }}" alt=""/>
                                                 @endif
                                             </div>
                                             <div class="fileinput-preview fileinput-exists thumbnail"
@@ -125,7 +125,7 @@
                             <button type="submit" id="save-form" class="btn btn-success"><i class="fa fa-check"></i>
                                 @lang('app.update')
                             </button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

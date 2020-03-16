@@ -6,7 +6,7 @@ use App\Observers\EmailNotificationSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class EmailNotificationSetting extends Model
+class EmailNotificationSetting extends BaseModel
 {
     protected $guarded = ['id'];
 

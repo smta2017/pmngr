@@ -18,12 +18,13 @@ use Yajra\DataTables\Facades\DataTables;
 class MemberAttendanceController extends MemberBaseController
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageIcon = 'icon-clock';
         $this->pageTitle = 'app.menu.attendance';
         $this->middleware(function ($request, $next) {
-            if(!in_array('attendance',$this->user->modules)){
+            if (!in_array('attendance', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);
@@ -50,9 +51,9 @@ class MemberAttendanceController extends MemberBaseController
         $this->employees = User::allEmployees();
         $this->userId = $this->user->id;
 
-        $this->totalWorkingDays = $this->startDate->diffInDaysFiltered(function(Carbon $date) use ($openDays){
-            foreach($openDays as $day){
-                if($date->dayOfWeek == $day){
+        $this->totalWorkingDays = $this->startDate->diffInDaysFiltered(function (Carbon $date) use ($openDays) {
+            foreach ($openDays as $day) {
+                if ($date->dayOfWeek == $day) {
                     return $date;
                 }
             }
@@ -81,7 +82,7 @@ class MemberAttendanceController extends MemberBaseController
      */
     public function create()
     {
-        if(!$this->user->can('add_attendance')){
+        if (!$this->user->can('add_attendance')) {
             abort(403);
         }
         return view('member.attendance.create', $this->data);
@@ -99,30 +100,30 @@ class MemberAttendanceController extends MemberBaseController
         $clockInCount = Attendance::getTotalUserClockIn($now->format('Y-m-d'), $this->user->id);
 
         // Check user by ip
-        if($this->attendanceSettings->ip_check == 'yes'){
-            $ips = (array)json_decode($this->attendanceSettings->ip_address);
-            if(!in_array($request->ip(), $ips)){
+        if ($this->attendanceSettings->ip_check == 'yes') {
+            $ips = (array) json_decode($this->attendanceSettings->ip_address);
+            if (!in_array($request->ip(), $ips)) {
                 return Reply::error(__('messages.notAnAuthorisedDevice'));
             }
         }
 
         // Check user by location
-        if($this->attendanceSettings->radius_check == 'yes'){
+        if ($this->attendanceSettings->radius_check == 'yes') {
             $checkRadius  = $this->isWithinRadius($request);
-            if(!$checkRadius){
+            if (!$checkRadius) {
                 return Reply::error(__('messages.notAnValidLocation'));
             }
         }
 
         // Check maximum attendance in a day
-        if($clockInCount < $this->attendanceSettings->clockin_in_day) {
+        if ($clockInCount < $this->attendanceSettings->clockin_in_day) {
 
             // Set TimeZone And Convert into timestamp
             $currentTimestamp = $now->setTimezone('UTC');
             $currentTimestamp = $currentTimestamp->timestamp;;
 
             // Set TimeZone And Convert into timestamp in halfday time
-            if($this->attendanceSettings->halfday_mark_time){
+            if ($this->attendanceSettings->halfday_mark_time) {
                 $halfDayTimestamp = $now->format('Y-m-d') . ' ' . $this->attendanceSettings->halfday_mark_time;
                 $halfDayTimestamp = Carbon::createFromFormat('Y-m-d H:i:s', $halfDayTimestamp, $this->global->timezone);
                 $halfDayTimestamp = $halfDayTimestamp->setTimezone('UTC');
@@ -155,7 +156,7 @@ class MemberAttendanceController extends MemberBaseController
                 $attendance->late = 'yes';
             }
 
-            $attendance->half_day = 'no';// default halfday
+            $attendance->half_day = 'no'; // default halfday
 
             // Check day's first record and half day time
             if (!is_null($this->attendanceSettings->halfday_mark_time) && is_null($checkTodayAttendance) && $currentTimestamp > $halfDayTimestamp) {
@@ -168,7 +169,6 @@ class MemberAttendanceController extends MemberBaseController
         }
 
         return Reply::error(__('messages.maxColckIn'));
-
     }
 
     /**
@@ -238,12 +238,11 @@ class MemberAttendanceController extends MemberBaseController
         $attendance->clock_out_time = $clockOut;
         $attendance->clock_out_ip = $request->clock_out_ip;
         $attendance->working_from = $request->working_from;
-        $attendance->late = ($request->has('late'))? 'yes' : 'no';
-        $attendance->half_day = ($request->has('half_day'))? 'yes' : 'no';
+        $attendance->late = ($request->has('late')) ? 'yes' : 'no';
+        $attendance->half_day = ($request->has('half_day')) ? 'yes' : 'no';
         $attendance->save();
 
         return Reply::success(__('messages.attendanceSaveSuccess'));
-
     }
 
     /**
@@ -258,16 +257,16 @@ class MemberAttendanceController extends MemberBaseController
         $now = Carbon::now();
         $attendance = Attendance::findOrFail($id);
 
-        if($this->attendanceSettings->ip_check == 'yes'){
-            $ips = (array)json_decode($this->attendanceSettings->ip_address);
-            if(!in_array($request->ip(), $ips)){
+        if ($this->attendanceSettings->ip_check == 'yes') {
+            $ips = (array) json_decode($this->attendanceSettings->ip_address);
+            if (!in_array($request->ip(), $ips)) {
                 return Reply::error(__('messages.notAnAuthorisedDevice'));
             }
         }
 
-        if($this->attendanceSettings->radius_check == 'yes'){
+        if ($this->attendanceSettings->radius_check == 'yes') {
             $checkRadius  = $this->isWithinRadius($request);
-            if(!$checkRadius){
+            if (!$checkRadius) {
                 return Reply::error(__('messages.notAnValidLocation'));
             }
         }
@@ -291,14 +290,15 @@ class MemberAttendanceController extends MemberBaseController
         return Reply::success(__('messages.attendanceDelete'));
     }
 
-    public function refreshCount($startDate = null, $endDate = null, $userId = null){
+    public function refreshCount($startDate = null, $endDate = null, $userId = null)
+    {
         $openDays = json_decode($this->attendanceSettings->office_open_days);
         $startDate = Carbon::createFromFormat('!Y-m-d', $startDate);
         $endDate = Carbon::createFromFormat('!Y-m-d', $endDate)->addDay(1);
 
-        $totalWorkingDays = $startDate->diffInDaysFiltered(function(Carbon $date) use ($openDays){
-            foreach($openDays as $day){
-                if($date->dayOfWeek == $day){
+        $totalWorkingDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($openDays) {
+            foreach ($openDays as $day) {
+                if ($date->dayOfWeek == $day) {
                     return $date;
                 }
             }
@@ -310,15 +310,15 @@ class MemberAttendanceController extends MemberBaseController
         $holidays = Count(Holiday::getHolidayByDates($startDate->format('Y-m-d'), $endDate->format('Y-m-d')));
 
         return Reply::dataOnly(['daysPresent' => $daysPresent, 'daysLate' => $daysLate, 'halfDays' => $halfDays, 'totalWorkingDays' => $totalWorkingDays, 'absentDays' => $daysAbsent, 'holidays' => $holidays]);
-
     }
 
-    public function employeeData($startDate = null, $endDate = null, $userId = null){
+    public function employeeData($startDate = null, $endDate = null, $userId = null)
+    {
 
         $ant = [];
         $dateWiseData = [];
 
-        $attendances = Attendance::userAttendanceByDate($startDate, $endDate, $userId);// Getting Attendance Data
+        $attendances = Attendance::userAttendanceByDate($startDate, $endDate, $userId); // Getting Attendance Data
         $holidays = Holiday::getHolidayByDates($startDate, $endDate); // Getting Holiday Data
 
         // Getting Leaves Data
@@ -333,7 +333,7 @@ class MemberAttendanceController extends MemberBaseController
         $holidayArray = $holidayData->toArray();
 
         // Set Date as index for same date clock-ins
-        foreach($attendances as $attand){
+        foreach ($attendances as $attand) {
             $ant[$attand->clock_in_date][] = $attand;
         }
 
@@ -341,39 +341,39 @@ class MemberAttendanceController extends MemberBaseController
         $startDate = Carbon::parse($startDate)->subDay();
 
         // Set All Data in a single Array
-        for($date = $endDate; $date->diffInDays($startDate) > 0; $date->subDay()){
+        for ($date = $endDate; $date->diffInDays($startDate) > 0; $date->subDay()) {
 
             // Set default array for record
             $dateWiseData[$date->toDateString()] = [
-                'holiday' =>false,
-                'attendance' =>false,
-                'leave' =>false
+                'holiday' => false,
+                'attendance' => false,
+                'leave' => false
             ];
 
             // Set Holiday Data
-            if(array_key_exists($date->toDateString(), $holidayArray)){
+            if (array_key_exists($date->toDateString(), $holidayArray)) {
                 $dateWiseData[$date->toDateString()]['holiday'] = $holidayData[$date->toDateString()];
             }
 
             // Set Attendance Data
-            if(array_key_exists($date->toDateString(), $ant)){
+            if (array_key_exists($date->toDateString(), $ant)) {
                 $dateWiseData[$date->toDateString()]['attendance'] = $ant[$date->toDateString()];
             }
 
             // Set Leave Data
-            if(array_key_exists($date->toDateString(), $leavesDates)){
+            if (array_key_exists($date->toDateString(), $leavesDates)) {
                 $dateWiseData[$date->toDateString()]['leave'] = $leavesDates[$date->toDateString()];
             }
-
         }
 
         // Getting View data
-        $view = view('member.attendance.user_attendance',['dateWiseData' => $dateWiseData,'global' => $this->global])->render();
+        $view = view('member.attendance.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->global])->render();
 
         return Reply::dataOnly(['status' => 'success', 'data' => $view]);
     }
 
-    public function data(Request $request){
+    public function data(Request $request)
+    {
 
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $attendances = Attendance::attendanceByDate($date);
@@ -411,13 +411,12 @@ class MemberAttendanceController extends MemberBaseController
         $clockIn = Carbon::createFromFormat('h:i A', $request->clock_in_time, $this->global->timezone);
         $clockIn->setTimezone('UTC');
         $clockIn = $clockIn->format('H:i:s');
-        if($request->clock_out_time != ''){
+        if ($request->clock_out_time != '') {
             $clockOut = Carbon::createFromFormat('h:i A', $request->clock_out_time, $this->global->timezone);
             $clockOut->setTimezone('UTC');
             $clockOut = $clockOut->format('H:i:s');
-            $clockOut = $date.' '.$clockOut;
-        }
-        else{
+            $clockOut = $date . ' ' . $clockOut;
+        } else {
             $clockOut = null;
         }
 
@@ -428,10 +427,10 @@ class MemberAttendanceController extends MemberBaseController
             ->whereNull('clock_out_time')
             ->first();
 
-        if(!is_null($attendance)){
+        if (!is_null($attendance)) {
             $attendance->update([
                 'user_id' => $request->user_id,
-                'clock_in_time' => $date.' '.$clockIn,
+                'clock_in_time' => $date . ' ' . $clockIn,
                 'clock_in_ip' => $request->clock_in_ip,
                 'clock_out_time' => $clockOut,
                 'clock_out_ip' => $request->clock_out_ip,
@@ -439,14 +438,13 @@ class MemberAttendanceController extends MemberBaseController
                 'late' => $request->late,
                 'half_day' => $request->half_day
             ]);
-        }else{
+        } else {
 
             // Check maximum attendance in a day
-            if($clockInCount < $this->attendanceSettings->clockin_in_day)
-            {
+            if ($clockInCount < $this->attendanceSettings->clockin_in_day) {
                 Attendance::create([
                     'user_id' => $request->user_id,
-                    'clock_in_time' => $date.' '.$clockIn,
+                    'clock_in_time' => $date . ' ' . $clockIn,
                     'clock_in_ip' => $request->clock_in_ip,
                     'clock_out_time' => $clockOut,
                     'clock_out_ip' => $request->clock_out_ip,
@@ -454,8 +452,7 @@ class MemberAttendanceController extends MemberBaseController
                     'late' => $request->late,
                     'half_day' => $request->half_day
                 ]);
-            }
-            else{
+            } else {
                 return Reply::error(__('messages.maxColckIn'));
             }
         }
@@ -463,14 +460,16 @@ class MemberAttendanceController extends MemberBaseController
         return Reply::success(__('messages.attendanceSaveSuccess'));
     }
 
-    public function checkHoliday(Request $request){
+    public function checkHoliday(Request $request)
+    {
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $checkHoliday = Holiday::checkHolidayByDate($date);
         return Reply::dataOnly(['status' => 'success', 'holiday' => $checkHoliday]);
     }
 
     // Attendance Detail Show
-    public function attendanceDetail(Request $request){
+    public function attendanceDetail(Request $request)
+    {
 
         // Getting Attendance Data By User And Date
         $this->attendances =  Attendance::attedanceByUserAndDate($request->date, $request->userID);
@@ -490,31 +489,30 @@ class MemberAttendanceController extends MemberBaseController
      *
      * @return boolean
      */
-    private function isWithinRadius($request) {
+    private function isWithinRadius($request)
+    {
         $radius = $this->attendanceSettings->radius;
-        $requestCoordinates = $this->checkFromIp($request);
+        $currentLatitude = $request->currentLatitude;
+        $currentLongitude = $request->currentLongitude;
+        // $requestCoordinates = $this->checkFromIp($request);
 
-        if($requestCoordinates){
-            $latFrom = deg2rad($this->global->latitude);
-            $latTo = deg2rad($requestCoordinates[0]);
+        $latFrom = deg2rad($this->global->latitude);
+        $latTo = deg2rad($currentLatitude);
 
-            $lonFrom = deg2rad($this->global->longitude);
-            $lonTo = deg2rad($requestCoordinates[1]);
+        $lonFrom = deg2rad($this->global->longitude);
+        $lonTo = deg2rad($currentLongitude);
 
-            $theta = $lonFrom - $lonTo;
+        $theta = $lonFrom - $lonTo;
 
-            $dist = sin($latFrom) * sin($latTo) +  cos($latFrom) * cos($latTo) * cos($theta);
-            $dist = acos($dist);
-            $dist = rad2deg($dist);
-            $distance = $dist * 60 * 1.1515 * 1609.344;
-            return $distance <= $radius;
-        }
-
-        return false;
-
+        $dist = sin($latFrom) * sin($latTo) +  cos($latFrom) * cos($latTo) * cos($theta);
+        $dist = acos($dist);
+        $dist = rad2deg($dist);
+        $distance = $dist * 60 * 1.1515 * 1609.344;
+        return $distance <= $radius;
     }
 
-    private function checkFromIp($request) {
+    private function checkFromIp($request)
+    {
         $userIp = $request->ip();
         // If app env is local $userIp will evaluate to local server address i.e. 127.0.0.1,
         // for which we can not check ip based location track, hence I am presuming that if
@@ -525,7 +523,7 @@ class MemberAttendanceController extends MemberBaseController
 
         // Try fetching geo location from header request ip address.
         $ipData = (array) json_decode(file_get_contents("http://ipinfo.io/{$userIp}/json"));
-        if($ipData) {
+        if ($ipData) {
 
             if (!empty($ipData) && !empty($ipData['loc'])) {
                 $requestCoordinates = explode(',', $ipData['loc']);
@@ -533,8 +531,7 @@ class MemberAttendanceController extends MemberBaseController
             }
 
             return false;
-
-        } else{
+        } else {
 
             return false;
         }
@@ -584,7 +581,7 @@ class MemberAttendanceController extends MemberBaseController
 
         $this->daysInMonth = cal_days_in_month(CAL_GREGORIAN, $request->month, $request->year);
         $now = Carbon::now()->timezone($this->global->timezone);
-        $requestedDate = Carbon::parse(Carbon::parse('01-'.$request->month.'-'.$request->year))->endOfMonth();
+        $requestedDate = Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year))->endOfMonth();
 
         foreach ($employees as $employee) {
 
@@ -600,17 +597,15 @@ class MemberAttendanceController extends MemberBaseController
             $final[$employee->id . '#' . $employee->name] = array_replace($dataTillToday, $dataFromTomorrow);
 
             foreach ($employee->attendance as $attendance) {
-                $final[$employee->id . '#' . $employee->name][Carbon::parse($attendance->clock_in_time)->timezone($this->global->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="'.$attendance->id.'"><i class="fa fa-check text-success"></i></a>';
+                $final[$employee->id . '#' . $employee->name][Carbon::parse($attendance->clock_in_time)->timezone($this->global->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-check text-success"></i></a>';
             }
 
-            $image = ($employee->image) ? '<img src="' . asset('user-uploads/avatar/' . $employee->image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' : '<img src="' . asset('img/default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ';
-            $final[$employee->id . '#' . $employee->name][] = '<a class="userData" id="userID'.$employee->id.'" data-employee-id="'.$employee->id.'"  href="' . route('member.employees.show', $employee->id) . '">' . $image . ' ' . ucwords($employee->name) . '</a>';
-
-
+            $image = ($employee->image) ? '<img src="' . $employee->image_url . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ' : '<img src="' . asset('default-profile-3.png') . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ';
+            $final[$employee->id . '#' . $employee->name][] = '<a class="userData" id="userID' . $employee->id . '" data-employee-id="' . $employee->id . '"  href="' . route('member.employees.show', $employee->id) . '">' . $image . ' ' . ucwords($employee->name) . '</a>';
         }
-//
+        //
         $this->employeeAttendence = $final;
 
         $view = view('member.attendance.summary_data', $this->data)->render();
@@ -646,13 +641,13 @@ class MemberAttendanceController extends MemberBaseController
         return view('member.attendance.attendance_info', $this->data);
     }
 
-    public function mark(Request $request, $userid,$day,$month,$year)
+    public function mark(Request $request, $userid, $day, $month, $year)
     {
         if (!$this->user->can('add_attendance')) {
             abort(403);
         }
 
-        $this->date = Carbon::createFromFormat('d-m-Y', $day.'-'.$month.'-'.$year)->format('Y-m-d');
+        $this->date = Carbon::createFromFormat('d-m-Y', $day . '-' . $month . '-' . $year)->format('Y-m-d');
         $this->row = Attendance::attendanceByUserDate($userid, $this->date);
         $this->clock_in = 0;
         $this->total_clock_in = Attendance::where('user_id', $userid)
@@ -698,8 +693,8 @@ class MemberAttendanceController extends MemberBaseController
                 'clock_out_time' => $clockOut,
                 'clock_out_ip' => $request->clock_out_ip,
                 'working_from' => $request->working_from,
-                'late' => ($request->has('late'))? 'yes' : 'no',
-                'half_day' => ($request->has('half_day'))? 'yes' : 'no'
+                'late' => ($request->has('late')) ? 'yes' : 'no',
+                'half_day' => ($request->has('half_day')) ? 'yes' : 'no'
             ]);
         } else {
 
@@ -712,8 +707,8 @@ class MemberAttendanceController extends MemberBaseController
                     'clock_out_time' => $clockOut,
                     'clock_out_ip' => $request->clock_out_ip,
                     'working_from' => $request->working_from,
-                    'late' => ($request->has('late'))? 'yes' : 'no',
-                    'half_day' => ($request->has('half_day'))? 'yes' : 'no'
+                    'late' => ($request->has('late')) ? 'yes' : 'no',
+                    'half_day' => ($request->has('half_day')) ? 'yes' : 'no'
                 ]);
             } else {
                 return Reply::error(__('messages.maxColckIn'));
@@ -722,5 +717,4 @@ class MemberAttendanceController extends MemberBaseController
 
         return Reply::success(__('messages.attendanceSaveSuccess'));
     }
-
 }

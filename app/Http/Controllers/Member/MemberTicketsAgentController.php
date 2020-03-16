@@ -19,11 +19,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class MemberTicketsAgentController extends MemberBaseController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageTitle = 'app.menu.dashboard';
         $this->pageIcon = 'ti-ticket';
-
     }
 
     /**
@@ -31,9 +31,10 @@ class MemberTicketsAgentController extends MemberBaseController
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {
+    public function index()
+    {
         $isAgent = TicketAgentGroups::where('agent_id', $this->user->id)->first();
-        if(!$isAgent){
+        if (!$isAgent) {
             return redirect(route('member.tickets.index'));
         }
 
@@ -84,9 +85,10 @@ class MemberTicketsAgentController extends MemberBaseController
      * @return \Illuminate\Http\Response
      */
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $isAgent = TicketAgentGroups::where('agent_id', $this->user->id)->first();
-        if(!$isAgent){
+        if (!$isAgent) {
             return redirect(route('member.tickets.index'));
         }
 
@@ -104,7 +106,8 @@ class MemberTicketsAgentController extends MemberBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTicket $request, $id) {
+    public function update(UpdateTicket $request, $id)
+    {
         $ticket = Ticket::findOrFail($id);
         $ticket->status = $request->status;
         $ticket->type_id = $request->type_id;
@@ -112,16 +115,22 @@ class MemberTicketsAgentController extends MemberBaseController
         $ticket->channel_id = $request->channel_id;
         $ticket->save();
 
+        $lastMessage = null;
         //save first message
-        $reply = new TicketReply();
-        $reply->message = $request->message;
-        $reply->ticket_id = $ticket->id;
-        $reply->user_id = $this->user->id; //current logged in user
-        $reply->save();
+        if ($request->message != "") {
+            $reply = new TicketReply();
+            $reply->message = $request->message;
+            $reply->ticket_id = $ticket->id;
+            $reply->user_id = $this->user->id; //current logged in user
+            $reply->save();
+
+            $this->reply = $reply;
+            $lastMessage = view('member.tickets.agent.last-message', $this->data)->render();
+        }
 
         // save tags
         $tags = $request->tags;
-        if($tags){
+        if ($tags) {
             TicketTag::where('ticket_id', $ticket->id)->delete();
 
             foreach ($tags as $tag) {
@@ -135,10 +144,7 @@ class MemberTicketsAgentController extends MemberBaseController
                     'ticket_id' => $ticket->id
                 ]);
             }
-
         }
-        $this->reply = $reply;
-        $lastMessage = view('member.tickets.last-message', $this->data)->render();
 
         return Reply::successWithData(__('messages.ticketReplySuccess'), ['lastMessage' => $lastMessage]);
     }
@@ -165,19 +171,19 @@ class MemberTicketsAgentController extends MemberBaseController
             ->groupBy('created_at')
             ->orderBy('created_at', 'ASC');
 
-        if($status){
+        if ($status) {
             $totalTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $totalTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $totalTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $totalTickets->where('type_id', '=', $typeId);
         }
 
@@ -186,8 +192,8 @@ class MemberTicketsAgentController extends MemberBaseController
             DB::raw('count(id) as total')
         ]);
 
-        foreach($totalTickets as $ticket) {
-            if(!isset($total[$ticket->date])) {
+        foreach ($totalTickets as $ticket) {
+            if (!isset($total[$ticket->date])) {
                 $total[$ticket->date] = 0;
             }
             $total[$ticket->date] += $ticket->total;
@@ -197,26 +203,26 @@ class MemberTicketsAgentController extends MemberBaseController
         $resolvedTickets = Ticket::where(DB::raw('DATE(`updated_at`)'), '>=', $fromDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $toDate)
             ->where('agent_id', $this->user->id)
-            ->where(function($query){
+            ->where(function ($query) {
                 $query->where('status', 'closed');
                 $query->orWhere('status', 'resolved');
             })
             ->groupBy('updated_at')
             ->orderBy('updated_at', 'ASC');
 
-        if($status){
+        if ($status) {
             $resolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $resolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $resolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $resolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -225,8 +231,8 @@ class MemberTicketsAgentController extends MemberBaseController
             DB::raw('count(id) as resolved')
         ]);
 
-        foreach($resolvedTickets as $ticket) {
-            if(!isset($resolved[$ticket->date])) {
+        foreach ($resolvedTickets as $ticket) {
+            if (!isset($resolved[$ticket->date])) {
                 $resolved[$ticket->date] = 0;
             }
             $resolved[$ticket->date] += $ticket->resolved;
@@ -236,26 +242,26 @@ class MemberTicketsAgentController extends MemberBaseController
         $unresolvedTickets = Ticket::where(DB::raw('DATE(`updated_at`)'), '>=', $fromDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $toDate)
             ->where('agent_id', $this->user->id)
-            ->where(function($query){
-                $query->where('status','<>', 'closed');
-                $query->where('status','<>', 'resolved');
+            ->where(function ($query) {
+                $query->where('status', '<>', 'closed');
+                $query->where('status', '<>', 'resolved');
             })
             ->groupBy('updated_at')
             ->orderBy('updated_at', 'ASC');
 
-        if($status){
+        if ($status) {
             $unresolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $unresolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $unresolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $unresolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -264,17 +270,16 @@ class MemberTicketsAgentController extends MemberBaseController
             DB::raw('count(id) as unresolved')
         ]);
 
-        foreach($unresolvedTickets as $ticket) {
-            if(!isset($unresolved[$ticket->date])) {
+        foreach ($unresolvedTickets as $ticket) {
+            if (!isset($unresolved[$ticket->date])) {
                 $unresolved[$ticket->date] = 0;
             }
             $unresolved[$ticket->date] += $ticket->unresolved;
         }
 
-        $dates = array_keys(array_merge(array_merge($total,$resolved),$unresolved));
+        $dates = array_keys(array_merge(array_merge($total, $resolved), $unresolved));
 
-        foreach ($dates as $date)
-        {
+        foreach ($dates as $date) {
             $graphData[] = [
                 'date' =>  $date,
                 'total' =>  isset($total[$date]) ? $total[$date] : 0,
@@ -283,7 +288,7 @@ class MemberTicketsAgentController extends MemberBaseController
             ];
         }
 
-        usort($graphData, function ($a, $b){
+        usort($graphData, function ($a, $b) {
             $t1 = strtotime($a['date']);
             $t2 = strtotime($b['date']);
             return $t1 - $t2;
@@ -292,68 +297,65 @@ class MemberTicketsAgentController extends MemberBaseController
         return $graphData;
     }
 
-    public function data($startDate = null, $endDate = null, $status = null, $priority = null, $channelId = null, $typeId = null) {
+    public function data($startDate = null, $endDate = null, $status = null, $priority = null, $channelId = null, $typeId = null)
+    {
         $tickets = Ticket::select('*')
             ->where('agent_id', $this->user->id);
 
-        if($startDate != 0){
+        if ($startDate != 0) {
             $tickets->where(DB::raw('DATE(`created_at`)'), '>=', $startDate);
         }
 
-        if($endDate != 0){
+        if ($endDate != 0) {
             $tickets->where(DB::raw('DATE(`created_at`)'), '<=', $endDate);
         }
 
-        if($status){
+        if ($status) {
             $tickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $tickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $tickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $tickets->where('type_id', '=', $typeId);
         }
 
         $tickets->get();
 
         return DataTables::of($tickets)
-            ->addColumn('action', function($row){
-                return '<a class="btn btn-info" href="' . route("member.ticket-agent.edit", $row->id) . '" ><i class="fa fa-eye"></i> '.__('modules.client.viewDetails').'</a>';
+            ->addColumn('action', function ($row) {
+                return '<a class="btn btn-info" href="' . route("member.ticket-agent.edit", $row->id) . '" ><i class="fa fa-eye"></i> ' . __('modules.client.viewDetails') . '</a>';
             })
-            ->addColumn('others', function($row){
+            ->addColumn('others', function ($row) {
                 $others = '<ul style="list-style: none; padding: 0; font-size: small; line-height: 1.8em;">
-                    <li><span class="font-bold">'.__('modules.tickets.agent').'</span>: '.(is_null($row->agent_id) ? "-" : ucwords($row->agent->name)).'</li>';
-                if($row->status == 'open'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-danger">'.$row->status.'</label></li>';
+                    <li><span class="font-bold">' . __('modules.tickets.agent') . '</span>: ' . (is_null($row->agent_id) ? "-" : ucwords($row->agent->name)) . '</li>';
+                if ($row->status == 'open') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-danger">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'pending') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-warning">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'resolved') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-info">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'closed') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-success">' . $row->status . '</label></li>';
                 }
-                elseif($row->status == 'pending'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-warning">'.$row->status.'</label></li>';
-                }
-                elseif($row->status == 'resolved'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-info">'.$row->status.'</label></li>';
-                }
-                elseif($row->status == 'closed'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-success">'.$row->status.'</label></li>';
-                }
-                $others.= '<li><span class="font-bold">'.__('modules.tasks.priority').'</span>: '.$row->priority.'</li>
+                $others .= '<li><span class="font-bold">' . __('modules.tasks.priority') . '</span>: ' . $row->priority . '</li>
                 </ul>';
                 return $others;
             })
-            ->editColumn('subject', function($row){
+            ->editColumn('subject', function ($row) {
                 return ucfirst($row->subject);
             })
-            ->editColumn('user_id', function($row){
+            ->editColumn('user_id', function ($row) {
                 return ucwords($row->requester->name);
             })
-            ->editColumn('created_at', function($row){
-                return $row->created_at->format($this->global->date_format .' '.$this->global->time_format);
-
+            ->editColumn('created_at', function ($row) {
+                return $row->created_at->format($this->global->date_format . ' ' . $this->global->time_format);
             })
             ->rawColumns(['others', 'action'])
             ->removeColumn('agent_id')
@@ -364,26 +366,27 @@ class MemberTicketsAgentController extends MemberBaseController
             ->make(true);
     }
 
-    public function refreshCount($startDate = null, $endDate = null, $status = null, $priority = null, $channelId = null, $typeId = null){
+    public function refreshCount($startDate = null, $endDate = null, $status = null, $priority = null, $channelId = null, $typeId = null)
+    {
         $openTickets = Ticket::select(DB::raw('count(`id`) as total'))
             ->where('status', 'open')
             ->where('agent_id', $this->user->id)
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($status){
+        if ($status) {
             $openTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $openTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $openTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $openTickets->where('type_id', '=', $typeId);
         }
 
@@ -395,19 +398,19 @@ class MemberTicketsAgentController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($status){
+        if ($status) {
             $pendingTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $pendingTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $pendingTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $pendingTickets->where('type_id', '=', $typeId);
         }
 
@@ -418,19 +421,19 @@ class MemberTicketsAgentController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($status){
+        if ($status) {
             $resolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $resolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $resolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $resolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -442,19 +445,19 @@ class MemberTicketsAgentController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($status){
+        if ($status) {
             $closedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $closedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $closedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $closedTickets->where('type_id', '=', $typeId);
         }
 
@@ -465,19 +468,19 @@ class MemberTicketsAgentController extends MemberBaseController
             ->where(DB::raw('DATE(`created_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`created_at`)'), '<=', $endDate);
 
-        if($status){
+        if ($status) {
             $totalTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $totalTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $totalTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $totalTickets->where('type_id', '=', $typeId);
         }
 
@@ -488,13 +491,12 @@ class MemberTicketsAgentController extends MemberBaseController
         $chartData = json_encode($chartData);
 
         return Reply::dataOnly(['chartData' => $chartData, 'totalTickets' => $totalTickets->total, 'closedTickets' => $closedTickets->total, 'openTickets' => $openTickets->total, 'pendingTickets' => $pendingTickets->total, 'resolvedTickets' => $resolvedTickets->total]);
-
     }
 
-    public function fetchTemplate(Request $request){
+    public function fetchTemplate(Request $request)
+    {
         $templateId = $request->templateId;
         $template = TicketReplyTemplate::findOrFail($templateId);
         return Reply::dataOnly(['replyText' => $template->reply_text, 'status' => 'success']);
     }
-
 }

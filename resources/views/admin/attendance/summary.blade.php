@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.attendances.create') }}"
+            class="btn btn-success btn-outline btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"  aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -28,13 +30,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <a href="{{ route('admin.attendances.create') }}"
-                   class="btn btn-success btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
-                                                                                                aria-hidden="true"></i></a>
-            </div>
-        </div>
+   
 
         <div class="sttabs tabs-style-line col-md-12">
             <div class="white-box">
@@ -56,7 +52,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="white-box p-b-0 bg-inverse text-white">
+            <div class="white-box p-b-0">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -102,8 +98,8 @@
                     </div>
 
                     <div class="col-md-2">
-                        <div class="form-group m-t-25">
-                            <button type="button" id="apply-filter" class="btn btn-success btn-block">@lang('app.apply')</button>
+                        <div class="form-group m-t-20">
+                            <button type="button" id="apply-filter" class="btn btn-info btn-block">@lang('app.apply')</button>
                         </div>
                     </div>
 

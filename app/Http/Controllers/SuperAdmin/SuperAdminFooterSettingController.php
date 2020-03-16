@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\FooterMenu;
+use App\FrontDetail;
 use App\Helper\Reply;
+use App\Http\Requests\SuperAdmin\FooterSetting\FooterTextRequest;
 use App\Http\Requests\SuperAdmin\FooterSetting\StoreRequest;
 use App\Http\Requests\SuperAdmin\FooterSetting\UpdateRequest;
 use Illuminate\Http\Request;
@@ -39,6 +41,17 @@ class SuperAdminFooterSettingController extends SuperAdminBaseController
         $this->footer = FooterMenu::all();
 
         return view('super-admin.footer-settings.create', $this->data);
+    }
+
+    /**
+     * Display edit form of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function footerText(Request $request)
+    {
+        $this->frontDetail = FrontDetail::first();
+        return view('super-admin.footer-settings.footer-text', $this->data);
     }
 
     /**
@@ -81,6 +94,20 @@ class SuperAdminFooterSettingController extends SuperAdminBaseController
         $footer->save();
 
         return Reply::redirect(route('super-admin.footer-settings.index'), 'messages.feature.addedSuccess');
+    }
+
+    /**
+     * @param FooterTextRequest $request
+     * @param $id
+     * @return array
+     */
+    public function updateText(FooterTextRequest $request)
+    {
+        $frontClients = FrontDetail::first();
+        $frontClients->footer_copyright_text = $request->footer_copyright_text;
+        $frontClients->save();
+
+        return Reply::success('messages.updatedSuccessfully');
 
     }
 

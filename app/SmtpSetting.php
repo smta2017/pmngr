@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class SmtpSetting extends Model
+class SmtpSetting extends BaseModel
 {
     protected $guarded = ['id'];
     protected $appends = ['set_smtp_message'];

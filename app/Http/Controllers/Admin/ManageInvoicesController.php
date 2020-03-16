@@ -151,12 +151,6 @@ class ManageInvoicesController extends AdminBaseController
 
         $this->logSearchEntry($invoice->id, 'Invoice #'.$invoice->invoice_number, 'admin.all-invoices.show', 'invoice');
 
-                // Notify client
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($invoice->project->client_id);
-        if (!is_null($notifyUser)) {
-            $notifyUser->notify(new NewInvoice($invoice));
-        }
-
         $this->project = Project::findOrFail($request->project_id);
         $view = view('admin.projects.invoices.invoice-ajax', $this->data)->render();
         return Reply::successWithData(__('messages.invoiceCreated'), ['html' => $view]);

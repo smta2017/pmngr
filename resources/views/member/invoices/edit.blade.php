@@ -64,7 +64,7 @@
                                     </div>
 
                                 </div>
-
+                                @if(in_array('projects', $modules))
                                 <div class="col-md-4">
 
                                     <div class="form-group">
@@ -87,7 +87,7 @@
                                     </div>
 
                                 </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">@lang('app.company_name')</label>
@@ -96,7 +96,7 @@
                                                 @if($invoice->project_id == '')
                                                     <select class="form-control select2" name="client_id" id="client_id" data-style="form-control">
                                                         @foreach($clients as $client)
-                                                            <option value="{{ $client->id }}" @if($client->id == $project->client_id) selected @endif>{{ ucwords($client->name) }}
+                                                            <option value="{{ $client->id }}" @if($client->id == $invoice->client_id) selected @endif>{{ ucwords($client->name) }}
                                                                 @if($client->company_name != '') {{ '('.$client->company_name.')' }} @endif</option>
                                                         @endforeach
                                                     </select>

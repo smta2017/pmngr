@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
-class Project extends Model
+class Project extends BaseModel
 {
     use CustomFieldsTrait; use SoftDeletes;
 

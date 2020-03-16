@@ -69,7 +69,7 @@
                                     </div>
 
                                 </div>
-
+                                @if(in_array('projects', $modules))
                                 <div class="col-md-4">
 
                                     <div class="form-group">
@@ -92,7 +92,7 @@
                                     </div>
 
                                 </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">@lang('modules.credit-notes.currency')</label>

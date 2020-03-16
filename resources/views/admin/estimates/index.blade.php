@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.estimates.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.estimates.createEstimate') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -32,26 +34,13 @@
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.estimates.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.estimates.createEstimate') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
+
+
+                @section('filter-section')
+                <div class="row" id="ticket-filters">
+   
                     <form action="" id="filter-form">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <h5 >@lang('app.selectDateRange')</h5>
                             <div class="input-daterange input-group" id="date-range">
                                 <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
@@ -61,7 +50,7 @@
                                        value=""/>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <h5 >@lang('app.status')</h5>
                             <div class="form-group">
                                 {{--<label class="control-label">@lang('app.status')</label>--}}
@@ -73,8 +62,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group m-t-10">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label class="control-label col-xs-12">&nbsp;</label>
                                 <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
                                 <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
@@ -82,6 +71,7 @@
                         </div>
                     </form>
                 </div>
+                @endsection
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="invoice-table">

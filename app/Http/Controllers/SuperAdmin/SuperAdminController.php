@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\SuperAdmin\SuperAdmin\CreateSuperAdmin;
 use App\Http\Requests\SuperAdmin\SuperAdmin\UpdateSuperAdmin;
@@ -63,19 +64,9 @@ class SuperAdminController extends SuperAdminBaseController
         $user->super_admin = '1';
 
         if ($request->hasFile('image')) {
-            File::delete('user-uploads/avatar/'.$user->image);
-
-            $user->image = $request->image->hashName();
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/'.$user->image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
+            Files::deleteFile($user->image,'avatar');
+            $user->image = Files::upload($request->image, 'avatar',300);
         }
-
         $user->save();
 
         return Reply::redirect(route('super-admin.super-admin.index'));
@@ -100,7 +91,8 @@ class SuperAdminController extends SuperAdminBaseController
      */
     public function edit($id)
     {
-        $this->userDetail = User::withoutGlobalScope('active')->findOrFail($id);
+        $this->userDetail = User::withoutGlobalScope('active')->where('super_admin','1')
+            ->findOrFail($id);
 
         return view('super-admin.super-admin.edit', $this->data);
     }
@@ -114,7 +106,9 @@ class SuperAdminController extends SuperAdminBaseController
      */
     public function update(UpdateSuperAdmin $request, $id)
     {
-        $user = User::withoutGlobalScope('active')->findOrFail($id);
+        $user = User::withoutGlobalScope('active')
+            ->where('super_admin','1')
+            ->findOrFail($id);
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         if ($request->password != '') {
@@ -127,17 +121,8 @@ class SuperAdminController extends SuperAdminBaseController
         }
 
         if ($request->hasFile('image')) {
-            File::delete('user-uploads/avatar/'.$user->image);
-
-            $user->image = $request->image->hashName();
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/'.$user->image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
+            Files::deleteFile($user->image,'avatar');
+            $user->image = Files::upload($request->image, 'avatar',300);
         }
         $user->save();
 

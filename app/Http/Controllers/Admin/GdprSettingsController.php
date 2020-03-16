@@ -184,10 +184,6 @@ class GdprSettingsController extends AdminBaseController
         $removal->save();
 
         try {
-
-            if($removal->user){
-                $removal->user->notify(new RemovalRequestApprovedRejectUser($type));
-            }
             if ($type == 'approved' && $removal->user) {
                 $removal->user->delete();
             }
@@ -251,10 +247,6 @@ class GdprSettingsController extends AdminBaseController
         $removal->save();
 
         try {
-            if($removal->lead){
-                $removal->lead->notify(new RemovalRequestApprovedRejectLead($type));
-            }
-
             if ($type == 'approved' && $removal->lead) {
                 $removal->lead->delete();
             }

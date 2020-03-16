@@ -3,19 +3,17 @@
 namespace App;
 
 use App\Observers\CompanyObserver;
-use Illuminate\Database\Eloquent\Model;
-
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
-use Stripe\Invoice as StripeInvoice;
 use Laravel\Cashier\Invoice;
+use Stripe\Invoice as StripeInvoice;
 
-class Company extends Model
+class Company extends BaseModel
 {
     protected $table = 'companies';
     protected $dates = ['trial_ends_at', 'licence_expire_on', 'created_at', 'updated_at', 'last_login'];
-    protected $fillable = ['last_login'];
+    protected $fillable = ['last_login', 'company_name', 'company_email', 'company_phone', 'website', 'address', 'currency_id', 'timezone', 'locale', 'date_format', 'time_format', 'week_start', 'longitude', 'latitude'];
+    protected $appends = ['logo_url'];
     use Notifiable, Billable;
 
     public function findInvoice($id)
@@ -32,23 +30,18 @@ class Company extends Model
 
             $stripeInvoice->date = $stripeInvoice->created;
             return new Invoice($this, $stripeInvoice);
-        } catch (Exception $e) {
+
+        } catch (\Exception $e) {
             //
         }
+
+
     }
 
     public static function boot()
     {
         parent::boot();
         static::observe(CompanyObserver::class);
-
-        // Add global scope for active
-        /*static::addGlobalScope(
-            'active',
-            function(Builder $builder) {
-                $builder->where('status', '=', 'active');
-            }
-        );*/
     }
 
     public function currency()
@@ -67,16 +60,13 @@ class Company extends Model
             ->join('employee_details', 'employee_details.user_id', 'users.id');
     }
 
-    public function logo()
-    {
-        $globalSetting = GlobalSetting::select('logo')->first();
 
-        if ($this->logo != null) {
-            return asset('user-uploads/app-logo/' . $this->logo);
-        } elseif ($globalSetting->logo) {
-            return asset('user-uploads/app-logo/' . $globalSetting->logo);
-        } else {
-            return asset('logo-1.png');
+    public function getLogoUrlAttribute()
+    {
+        if (is_null($this->logo)) {
+            $global = GlobalSetting::first();
+            return $global->logo_url;
         }
+        return asset_url('app-logo/' . $this->logo);
     }
 }

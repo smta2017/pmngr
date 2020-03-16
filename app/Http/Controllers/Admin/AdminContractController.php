@@ -111,9 +111,6 @@ class AdminContractController extends AdminBaseController
     public function store(StoreRequest $request) {
         $contract = new Contract();
         $contract = $this->storeUpdate($request, $contract);
-        // Notify client
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($contract->client_id);
-        $notifyUser->notify(new NewContract($contract));
 
         return Reply::redirect(route('admin.contracts.edit', $contract->id), __('messages.contractAdded'));
     }
@@ -274,9 +271,6 @@ class AdminContractController extends AdminBaseController
         }
 
         $contract->save();
-
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($contract->client_id);
-        $notifyUser->notify(new NewContract($contract));
 
         return Reply::redirect(route('admin.contracts.edit', $contract->id), __('messages.contractAdded'));
 

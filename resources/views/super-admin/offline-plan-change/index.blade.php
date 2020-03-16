@@ -3,8 +3,11 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+        <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}
+                <span class="text-info b-l p-l-10 m-l-5">{{ $totalRequest }}</span> <span
+                class="font-12 text-muted m-l-5"> @lang('app.total') @lang('app.offlineRequest')</span>
+            </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
@@ -28,15 +31,6 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('app.total') @lang('app.offlineRequest')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-user text-white"></i></li>
-                    <li class="text-right"><span id="totalPackages" class="counter text-white">{{ $totalRequest }}</span></li>
-                </ul>
-            </div>
-        </div>
 
         <div class="col-md-12">
             <div class="white-box">

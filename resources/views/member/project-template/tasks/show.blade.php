@@ -68,8 +68,7 @@
                                                                data-task-id="{{ $task->id }}">{{ ucfirst($task->heading) }}</a>
                                                         </div>
                                                         <div class="col-md-2 text-right">
-                                                            {!! ($task->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('user-uploads/avatar/' . $task->user->image) . '"
-                        alt="user" class="img-circle" height="35"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('default-profile-2.png') . '"
+                                                            {!! '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . $task->user->image_url . '"
                         alt="user" class="img-circle" height="35"> ' !!}
                                                         </div>
                                                     </div>

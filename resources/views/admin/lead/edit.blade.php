@@ -108,13 +108,13 @@
                             <div class="row">
                                 <!--/span-->
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>@lang('modules.lead.mobile')</label>
                                         <input type="tel" name="mobile" id="mobile" value="{{ $lead->mobile }}" class="form-control">
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>@lang('app.next_follow_up')</label>
                                         <select name="next_follow_up" id="next_follow_up" class="form-control">
@@ -125,17 +125,13 @@
                                         </select>
                                     </div>
                                 </div>
-                                <!--/span-->
-                            </div>
-                            <div class="row">
-
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>@lang('app.status')</label>
                                         <select name="status" id="status" class="form-control">
                                             @forelse($status as $sts)
-                                            <option @if($lead->status_id == $sts->id) selected
-                                                    @endif value="{{ $sts->id }}"> {{ $sts->type }}</option>
+                                                <option @if($lead->status_id == $sts->id) selected
+                                                        @endif value="{{ $sts->id }}"> {{ ucfirst($sts->type) }}</option>
                                             @empty
 
                                             @endforelse
@@ -143,20 +139,22 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>@lang('app.source')</label>
                                         <select name="source" id="source" class="form-control">
                                             @forelse($sources as $source)
                                                 <option @if($lead->source_id == $source->id) selected
-                                                        @endif value="{{ $source->id }}"> {{ $source->type }}</option>
+                                                        @endif value="{{ $source->id }}"> {{ ucfirst($source->type) }}</option>
                                             @empty
 
                                             @endforelse
                                         </select>
                                     </div>
                                 </div>
+                                <!--/span-->
                             </div>
+
                             <!--/row-->
 
                             <div class="row">

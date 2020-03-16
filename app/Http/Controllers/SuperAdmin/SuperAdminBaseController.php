@@ -69,6 +69,9 @@ class SuperAdminBaseController extends Controller
             $this->offlineRequestCount = 0;
         }
 
+        $this->worksuitePlugins = worksuite_plugins();
+
+
         $this->middleware(function ($request, $next) {
             $this->user = $request->user();
             return $next($request);

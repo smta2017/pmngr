@@ -434,7 +434,7 @@ img {
 }
 
 .img-outside-right img {
-  width: 100%;
+  width: 400px;
   -webkit-transform: translateX(15%);
           transform: translateX(15%);
 }

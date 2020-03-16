@@ -38,12 +38,7 @@
                         <div id="vhome3" class="tab-pane active">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div class="white-box">
 
-                                        <div class="alert alert-info ">
-                                            <h4 class="text-white">Favicon</h4>
-                                            <i class="fa fa-info-circle"></i> @lang('messages.faviconNote')
-                                        </div>
 
                                         <div class="form-group">
                                             <div class="radio-list">
@@ -88,25 +83,25 @@
                                                 <div class="col-md-3">
                                                     <div class="example">
                                                         <p class="box-title m-t-30">@lang('modules.themeSettings.headerColor')</p>
-                                                        <input type="text" class="colorpicker form-control" required name="theme_settings[1][header_color]" value="{{ $adminTheme->header_color }}" />
+                                                        <input type="text" class="colorpicker form-control header_color" required name="theme_settings[1][header_color]" value="{{ $adminTheme->header_color }}" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="example">
                                                         <p class="box-title m-t-30">@lang('modules.themeSettings.sidebarColor')</p>
-                                                        <input type="text" class="complex-colorpicker form-control" required name="theme_settings[1][sidebar_color]" value="{{ $adminTheme->sidebar_color }}" />
+                                                        <input type="text" class="complex-colorpicker sidebar_color form-control" required name="theme_settings[1][sidebar_color]" value="{{ $adminTheme->sidebar_color }}" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="example">
                                                         <p class="box-title m-t-30">@lang('modules.themeSettings.sidebarTextColor')</p>
-                                                        <input type="text" class="complex-colorpicker form-control" required name="theme_settings[1][sidebar_text_color]" value="{{ $adminTheme->sidebar_text_color }}" />
+                                                        <input type="text" class="complex-colorpicker sidebar_text_color form-control" required name="theme_settings[1][sidebar_text_color]" value="{{ $adminTheme->sidebar_text_color }}" />
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="example">
                                                         <p class="box-title m-t-30">@lang('modules.themeSettings.linkColor')</p>
-                                                        <input type="text" class="complex-colorpicker form-control" required name="theme_settings[1][link_color]" value="{{ $adminTheme->link_color }}" />
+                                                        <input type="text" class="complex-colorpicker link_color form-control" required name="theme_settings[1][link_color]" value="{{ $adminTheme->link_color }}" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -213,7 +208,6 @@
                                             {!! Form::close() !!}
                                         </div>
 
-                                    </div>
                                 </div>
                             </div>
                             <!-- /.row -->
@@ -253,6 +247,22 @@
     });
     $(".gradient-colorpicker").asColorPicker({
         mode: 'gradient'
+    });
+
+    $('.header_color').on('asColorPicker::change', function (e) {
+        document.documentElement.style.setProperty('--header_color', e.target.value);
+    });
+
+    $('.sidebar_color').on('asColorPicker::change', function (e) {
+        document.documentElement.style.setProperty('--sidebar_color', e.target.value);
+    });
+
+    $('.sidebar_text_color').on('asColorPicker::change', function (e) {
+        document.documentElement.style.setProperty('--sidebar_text_color', e.target.value);
+    });
+
+    $('.link_color').on('asColorPicker::change', function (e) {
+        document.documentElement.style.setProperty('--link_color', e.target.value);
     });
 
     $('.my-code-area').ace({ theme: 'twilight', lang: 'css' })

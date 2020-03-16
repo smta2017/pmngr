@@ -16,12 +16,12 @@ class UpdateFrontSettings extends SuperAdminBaseRequest
         return [
             "header_title" => "required",
             "header_description" => "required",
-            "feature_title" => "required",
-            "price_title" => "required",
-            "price_description" => "required",
-            "address" => "required",
-            "phone" => "required",
-            "email" => "required | email",
+//            "feature_title" => "required",
+//            "price_title" => "required",
+//            "price_description" => "required",
+//            "address" => "required",
+//            "phone" => "required",
+//            "email" => "required | email",
             'social_links.*' => 'nullable|url'
         ];
     }

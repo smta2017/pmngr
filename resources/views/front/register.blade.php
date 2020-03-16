@@ -3,10 +3,12 @@
     <section class="section bg-img" id="section-contact" style="background-image: url({{ asset('front/img/bg-cup.jpg') }})" data-overlay="8">
         <div class="container">
             <div class="row gap-y">
+
                 <div class="col-12 col-md-6 offset-md-3 form-section">
 
                     {!! Form::open(['id'=>'register','class'=>'row', 'method'=>'POST']) !!}
                         <div class="col-12 col-md-10 bg-white px-30 py-45 rounded">
+                            <h2 class="text-center m-b-15">Sign Up</h2>
                             <p id="alert"></p>
                             <div id="form-box">
                                 <div class="form-group">

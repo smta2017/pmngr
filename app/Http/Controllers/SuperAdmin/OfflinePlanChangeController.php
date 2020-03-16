@@ -88,8 +88,6 @@ class OfflinePlanChangeController extends SuperAdminBaseController
         $offlinePlanChnage->status = 'verified';
         $offlinePlanChnage->save();
 
-        $company->notify(new OfflinePackageChangeConfirmation($offlinePlanChnage));
-
         return Reply::success('Request successfully verified');
     }
 
@@ -100,8 +98,6 @@ class OfflinePlanChangeController extends SuperAdminBaseController
         // set status of request verified
         $offlinePlanChnage->status = 'rejected';
         $offlinePlanChnage->save();
-
-        $company->notify(new OfflinePackageChangeConfirmation($offlinePlanChnage));
 
         return Reply::success('Request successfully rejected');
     }

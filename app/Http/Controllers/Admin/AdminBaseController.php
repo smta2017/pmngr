@@ -70,7 +70,6 @@ class AdminBaseController extends Controller
         parent::__construct();
         // Inject currently logged in user object into every view of user dashboard
         $this->middleware(function ($request, $next) {
-
             $this->global = $this->company = Company::with('currency', 'package')->withoutGlobalScope('active')->where('id', Auth::user()->company_id)->first();
 
             $this->superadmin = GlobalSetting::with('currency')->first();
@@ -108,7 +107,11 @@ class AdminBaseController extends Controller
             $expireOn = $company->licence_expire_on;
             $currentDate = Carbon::now();
 
+            $packageSettingData = PackageSetting::first();
+            $this->packageSetting = ($packageSettingData->status == 'active') ? $packageSettingData : null;
+
             if ((!is_null($expireOn) && $expireOn->lessThan($currentDate))) {
+
                 $this->checkLicense($company);
             }
 
@@ -133,6 +136,8 @@ class AdminBaseController extends Controller
             $this->stickyNotes = StickyNote::where('user_id', $this->user->id)
                 ->orderBy('updated_at', 'desc')
                 ->get();
+
+            $this->worksuitePlugins = worksuite_plugins();
 
             if (config('filesystems.default') == 's3') {
                 $this->url = "https://" . config('filesystems.disks.s3.bucket') . ".s3.amazonaws.com/";

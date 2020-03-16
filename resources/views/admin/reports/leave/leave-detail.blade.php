@@ -42,6 +42,7 @@
                     <tr style="display:table; width:100%; table-layout:fixed;">
                         <td>
                             <label>{{ ucwords(str_replace('_', '-', $leave->type_name)) }}</label>
+                            {!! ($leave->duration == 'half day') ? '<label class="label label-inverse">'.__('modules.leaves.halfDay').'</label>' : "" !!}
                         </td>
                         <td>
                             {{ $leave->leave_date->format($global->date_format) }}

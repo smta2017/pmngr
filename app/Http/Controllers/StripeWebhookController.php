@@ -15,6 +15,7 @@ use App\Traits\StripeSettings;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Routing\Controller;
 use Stripe\Stripe;
@@ -30,7 +31,7 @@ class StripeWebhookController extends Controller
 
         $stripeCredentials = PaymentGatewayCredentials::first();
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(config('cashier.secret'));
 
         // You can find your endpoint's secret in your webhook settings
         $endpoint_secret = $stripeCredentials->stripe_webhook_secret;
@@ -46,7 +47,7 @@ class StripeWebhookController extends Controller
         } catch(\UnexpectedValueException $e) {
             // Invalid payload
             return response('Invalid Payload', 400);
-        } catch(\Stripe\Error\SignatureVerification $e) {
+        } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             return response('Invalid signature', 400);
         }
@@ -94,9 +95,9 @@ class StripeWebhookController extends Controller
 
     public function saveInvoices(Request $request) {
         $this->setStripConfigs();
-        $stripeCredentials = config('services.stripe.webhook_secret');
+        $stripeCredentials = config('cashier.webhook.secret');
 
-        Stripe::setApiKey(config('services.stripe.secret'));
+        Stripe::setApiKey(config('cashier.secret'));
 
         // You can find your endpoint's secret in your webhook settings
         $endpoint_secret = $stripeCredentials;
@@ -106,13 +107,14 @@ class StripeWebhookController extends Controller
         $event = null;
 
         try {
+
             $event = Webhook::constructEvent(
                 $payload, $sig_header, $endpoint_secret
             );
         } catch(\UnexpectedValueException $e) {
             // Invalid payload
             return response('Invalid Payload', 400);
-        } catch(\Stripe\Error\SignatureVerification $e) {
+        } catch(\Stripe\Exception\SignatureVerificationException $e) {
             // Invalid signature
             return response('Invalid signature', 400);
         }
@@ -175,7 +177,7 @@ class StripeWebhookController extends Controller
             $customerId = $payload['data']['object']['customer'];
 
             $company = Company::where('stripe_id', $customerId)->first();
-            $subscription = Subscription::where('comapny_id', $company->id)->first();
+            $subscription = Subscription::where('company_id', $company->id)->first();
 
             if($subscription){
                 $subscription->ends_at = \Carbon\Carbon::createFromTimeStamp($payload['data']['object']['current_period_end'])->format('Y-m-d');

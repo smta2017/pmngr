@@ -28,17 +28,17 @@ use Yajra\DataTables\Facades\DataTables;
 class MemberTicketsController extends MemberBaseController
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageTitle = 'app.menu.tickets';
         $this->pageIcon = 'ti-ticket';
         $this->middleware(function ($request, $next) {
-            if(!in_array('tickets',$this->user->modules)){
+            if (!in_array('tickets', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);
         });
-
     }
 
     /**
@@ -50,7 +50,7 @@ class MemberTicketsController extends MemberBaseController
     {
         $this->isAgent = TicketAgentGroups::where('agent_id', $this->user->id)->first();
 
-        if($this->user->can('view_tickets')){
+        if ($this->user->can('view_tickets')) {
             $this->startDate = Carbon::today()->subWeek(1)->timezone($this->global->timezone)->format('m/d/Y');
             $this->endDate = Carbon::today()->timezone($this->global->timezone)->format('m/d/Y');
             $this->channels = TicketChannel::all();
@@ -68,7 +68,7 @@ class MemberTicketsController extends MemberBaseController
      */
     public function create()
     {
-        if($this->user->can('add_tickets')){
+        if ($this->user->can('add_tickets')) {
             $this->groups = TicketGroup::all();
             $this->types = TicketType::all();
             $this->channels = TicketChannel::all();
@@ -78,7 +78,6 @@ class MemberTicketsController extends MemberBaseController
             return view('member.tickets.create-admin', $this->data);
         }
         return view('member.tickets.create', $this->data);
-
     }
 
     /**
@@ -100,10 +99,6 @@ class MemberTicketsController extends MemberBaseController
         $reply->ticket_id = $ticket->id;
         $reply->user_id = $this->user->id; //current logged in user
         $reply->save();
-
-
-        //send admin notification
-        Notification::send(User::allAdmins(), new NewTicket($ticket));
 
         return Reply::redirect(route('member.tickets.index'), __('messages.ticketAddSuccess'));
     }
@@ -127,7 +122,7 @@ class MemberTicketsController extends MemberBaseController
      */
     public function edit($id)
     {
-        if($this->user->can('add_tickets')){
+        if ($this->user->can('add_tickets')) {
             $this->ticket = Ticket::findOrFail($id);
             $this->groups = TicketGroup::all();
             $this->types = TicketType::all();
@@ -165,7 +160,8 @@ class MemberTicketsController extends MemberBaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
         Ticket::destroy($id);
         return Reply::success(__('messages.ticketDeleteSuccess'));
     }
@@ -174,50 +170,49 @@ class MemberTicketsController extends MemberBaseController
      * @param $id
      * @return array
      */
-    public function destroyReply($id){
+    public function destroyReply($id)
+    {
         $ticketFiles = TicketFile::where('ticket_reply_id', $id)->get();
 
-        foreach($ticketFiles as $file){
-            Files::deleteFile($file->hashname,'user-uploads/ticket-files/'.$file->ticket_reply_id);
+        foreach ($ticketFiles as $file) {
+            Files::deleteFile($file->hashname, 'user-uploads/ticket-files/' . $file->ticket_reply_id);
             $file->delete();
         }
         TicketReply::destroy($id);
         return Reply::success(__('messages.ticketDeleteSuccess'));
     }
 
-    public function data() {
+    public function data()
+    {
         $tickets = Ticket::where('user_id', $this->user->id)->get();
 
         return DataTables::of($tickets)
-            ->addColumn('action', function($row){
-                return '<a href="' . route("member.tickets.edit", $row->id) . '" class="btn btn-info" ><i class="fa fa-eye"></i> '.__('modules.client.viewDetails').'</a>';
+            ->addColumn('action', function ($row) {
+                return '<a href="' . route("member.tickets.edit", $row->id) . '" class="btn btn-info" ><i class="fa fa-eye"></i> ' . __('modules.client.viewDetails') . '</a>';
             })
-            ->editColumn('subject', function($row){
+            ->editColumn('subject', function ($row) {
                 return ucfirst($row->subject);
             })
-            ->editColumn('agent_id', function($row){
-                if(!is_null($row->agent_id)){
+            ->editColumn('agent_id', function ($row) {
+                if (!is_null($row->agent_id)) {
                     return ucwords($row->agent->name);
                 }
             })
-            ->editColumn('status', function($row){
-                if($row->status == 'open'){
-                    return'<label class="label label-danger">'.$row->status.'</label>';
-                }
-                elseif($row->status == 'pending'){
-                    return'<label class="label label-warning">'.$row->status.'</label>';
-                }
-                elseif($row->status == 'resolved'){
-                    return'<label class="label label-info">'.$row->status.'</label>';
-                }
-                elseif($row->status == 'closed'){
-                    return'<label class="label label-success">'.$row->status.'</label>';
+            ->editColumn('status', function ($row) {
+                if ($row->status == 'open') {
+                    return '<label class="label label-danger">' . $row->status . '</label>';
+                } elseif ($row->status == 'pending') {
+                    return '<label class="label label-warning">' . $row->status . '</label>';
+                } elseif ($row->status == 'resolved') {
+                    return '<label class="label label-info">' . $row->status . '</label>';
+                } elseif ($row->status == 'closed') {
+                    return '<label class="label label-success">' . $row->status . '</label>';
                 }
             })
-            ->editColumn('created_at', function($row){
+            ->editColumn('created_at', function ($row) {
                 return $row->created_at->format($this->global->date_format);
             })
-            ->editColumn('updated_at', function($row){
+            ->editColumn('updated_at', function ($row) {
                 return $row->updated_at->format($this->global->date_format);
             })
             ->rawColumns(['action', 'status'])
@@ -228,13 +223,14 @@ class MemberTicketsController extends MemberBaseController
             ->make(true);
     }
 
-    public function closeTicket($id){
+    public function closeTicket($id)
+    {
         $ticket = Ticket::findOrFail($id);
         $ticket->status = 'closed';
         $ticket->save();
 
         $reply = new TicketReply();
-        $reply->message = 'Ticket <strong>closed</strong> by '.ucwords($this->user->name);
+        $reply->message = 'Ticket <strong>closed</strong> by ' . ucwords($this->user->name);
         $reply->ticket_id = $id;
         $reply->user_id = $this->user->id; //current logged in user
         $reply->save();
@@ -242,18 +238,18 @@ class MemberTicketsController extends MemberBaseController
         return Reply::redirect(route('member.tickets.index'), __('messages.ticketReplySuccess'));
     }
 
-    public function reopenTicket($id){
+    public function reopenTicket($id)
+    {
         $ticket = Ticket::findOrFail($id);
-        if(is_null($ticket->agent_id)){
+        if (is_null($ticket->agent_id)) {
             $ticket->status = 'open';
-        }
-        else{
+        } else {
             $ticket->status = 'pending';
         }
         $ticket->save();
 
         $reply = new TicketReply();
-        $reply->message = 'Ticket <strong>reopend</strong> by '.ucwords($this->user->name);
+        $reply->message = 'Ticket <strong>reopend</strong> by ' . ucwords($this->user->name);
         $reply->ticket_id = $id;
         $reply->user_id = $this->user->id; //current logged in user
         $reply->save();
@@ -261,81 +257,79 @@ class MemberTicketsController extends MemberBaseController
         return Reply::redirect(route('member.tickets.index'), __('messages.ticketReplySuccess'));
     }
 
-    public function adminData($startDate = null, $endDate = null, $agentId = null, $status = null, $priority = null, $channelId = null, $typeId = null) {
+    public function adminData($startDate = null, $endDate = null, $agentId = null, $status = null, $priority = null, $channelId = null, $typeId = null)
+    {
         $tickets = Ticket::select('*');
 
-        if($startDate != 0){
+        if ($startDate != 0) {
             $tickets->where(DB::raw('DATE(`created_at`)'), '>=', $startDate);
         }
 
-        if($endDate != 0){
+        if ($endDate != 0) {
             $tickets->where(DB::raw('DATE(`created_at`)'), '<=', $endDate);
         }
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $tickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $tickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $tickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $tickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $tickets->where('type_id', '=', $typeId);
         }
 
         $tickets->get();
 
         return DataTables::of($tickets)
-            ->addColumn('action', function($row){
+            ->addColumn('action', function ($row) {
                 $action = '<div class="btn-group m-r-10">
                 <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline  dropdown-toggle waves-effect waves-light" type="button">Action <span class="caret"></span></button>
                 <ul role="menu" class="dropdown-menu">';
 
-                if($this->user->can('edit_tickets')){
-                    $action.= '<li><a href="' . route("member.tickets.edit", $row->id) . '" ><i class="fa fa-pencil"></i> Edit</a></li>';
+                if ($this->user->can('edit_tickets')) {
+                    $action .= '<li><a href="' . route("member.tickets.edit", $row->id) . '" ><i class="fa fa-eye"></i> ' . __('modules.client.viewDetails') . '</a></li>';
                 }
 
-                if($this->user->can('delete_tickets')){
-                  $action.= '<li><a href="javascript:;" class="sa-params" data-ticket-id="' . $row->id . '"><i class="fa fa-times"></i> Delete</a></li>';
+                if ($this->user->can('delete_tickets')) {
+                    $action .= '<li><a href="javascript:;" class="sa-params" data-ticket-id="' . $row->id . '"><i class="fa fa-times"></i> '.__('app.delete').'</a></li>';
                 }
-                $action.= '</ul></div>';
+                $action .= '</ul></div>';
                 return $action;
             })
-            ->addColumn('others', function($row){
+            ->addColumn('others', function ($row) {
                 $others = '<ul style="list-style: none; padding: 0; font-size: small; line-height: 1.8em;">
-                    <li><span class="font-bold">'.__('modules.tickets.agent').'</span>: '.(is_null($row->agent_id) ? "-" : ucwords($row->agent->name)).'</li>';
-                if($row->status == 'open'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-danger">'.$row->status.'</label></li>';
+                    <li><span class="font-bold">' . __('modules.tickets.agent') . '</span>: ' . (is_null($row->agent_id) ? "-" : ucwords($row->agent->name)) . '</li>';
+                if ($row->status == 'open') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-danger">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'pending') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-warning">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'resolved') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-info">' . $row->status . '</label></li>';
+                } elseif ($row->status == 'closed') {
+                    $others .= '<li><span class="font-bold">' . __('app.status') . '</span>: <label class="label label-success">' . $row->status . '</label></li>';
                 }
-                elseif($row->status == 'pending'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-warning">'.$row->status.'</label></li>';
-                }
-                elseif($row->status == 'resolved'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-info">'.$row->status.'</label></li>';
-                }
-                elseif($row->status == 'closed'){
-                    $others.= '<li><span class="font-bold">'.__('app.status').'</span>: <label class="label label-success">'.$row->status.'</label></li>';
-                }
-                $others.= '<li><span class="font-bold">'.__('modules.tasks.priority').'</span>: '.$row->priority.'</li>
+                $others .= '<li><span class="font-bold">' . __('modules.tasks.priority') . '</span>: ' . $row->priority . '</li>
                 </ul>';
                 return $others;
             })
-            ->editColumn('subject', function($row){
+            ->editColumn('subject', function ($row) {
                 return ucfirst($row->subject);
             })
-            ->editColumn('user_id', function($row){
+            ->editColumn('user_id', function ($row) {
                 return ucwords($row->requester->name);
             })
-            ->editColumn('created_at', function($row){
+            ->editColumn('created_at', function ($row) {
                 return $row->created_at->format($this->global->date_format);
             })
             ->rawColumns(['others', 'action'])
@@ -347,29 +341,30 @@ class MemberTicketsController extends MemberBaseController
             ->make(true);
     }
 
-    public function refreshCount($startDate = null, $endDate = null, $agentId = null, $status = null, $priority = null, $channelId = null, $typeId = null){
+    public function refreshCount($startDate = null, $endDate = null, $agentId = null, $status = null, $priority = null, $channelId = null, $typeId = null)
+    {
         $openTickets = Ticket::select(DB::raw('count(`id`) as total'))
             ->where('status', 'open')
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $openTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $openTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $openTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $openTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $openTickets->where('type_id', '=', $typeId);
         }
 
@@ -380,23 +375,23 @@ class MemberTicketsController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $pendingTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $pendingTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $pendingTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $pendingTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $pendingTickets->where('type_id', '=', $typeId);
         }
 
@@ -407,23 +402,23 @@ class MemberTicketsController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $resolvedTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $resolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $resolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $resolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $resolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -434,23 +429,23 @@ class MemberTicketsController extends MemberBaseController
             ->where(DB::raw('DATE(`updated_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $endDate);
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $closedTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $closedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $closedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $closedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $closedTickets->where('type_id', '=', $typeId);
         }
 
@@ -460,23 +455,23 @@ class MemberTicketsController extends MemberBaseController
             ->where(DB::raw('DATE(`created_at`)'), '>=', $startDate)
             ->where(DB::raw('DATE(`created_at`)'), '<=', $endDate);
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $totalTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $totalTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $totalTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $totalTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $totalTickets->where('type_id', '=', $typeId);
         }
 
@@ -487,7 +482,6 @@ class MemberTicketsController extends MemberBaseController
         $chartData = json_encode($chartData);
 
         return Reply::dataOnly(['chartData' => $chartData, 'totalTickets' => $totalTickets->total, 'closedTickets' => $closedTickets->total, 'openTickets' => $openTickets->total, 'pendingTickets' => $pendingTickets->total, 'resolvedTickets' => $resolvedTickets->total]);
-
     }
 
     public function getGraphData($fromDate, $toDate, $agentId = null, $status = null, $priority = null, $channelId = null, $typeId = null)
@@ -500,23 +494,23 @@ class MemberTicketsController extends MemberBaseController
             ->groupBy('created_at')
             ->orderBy('created_at', 'ASC');
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $totalTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $totalTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $totalTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $totalTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $totalTickets->where('type_id', '=', $typeId);
         }
 
@@ -525,8 +519,8 @@ class MemberTicketsController extends MemberBaseController
             DB::raw('count(id) as total')
         ]);
 
-        foreach($totalTickets as $ticket) {
-            if(!isset($total[$ticket->date])) {
+        foreach ($totalTickets as $ticket) {
+            if (!isset($total[$ticket->date])) {
                 $total[$ticket->date] = 0;
             }
             $total[$ticket->date] += $ticket->total;
@@ -535,30 +529,30 @@ class MemberTicketsController extends MemberBaseController
         $resolved = [];
         $resolvedTickets = Ticket::where(DB::raw('DATE(`updated_at`)'), '>=', $fromDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $toDate)
-            ->where(function($query){
+            ->where(function ($query) {
                 $query->where('status', 'closed');
                 $query->orWhere('status', 'resolved');
             })
             ->groupBy('updated_at')
             ->orderBy('updated_at', 'ASC');
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $resolvedTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $resolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $resolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $resolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $resolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -567,8 +561,8 @@ class MemberTicketsController extends MemberBaseController
             DB::raw('count(id) as resolved')
         ]);
 
-        foreach($resolvedTickets as $ticket) {
-            if(!isset($resolved[$ticket->date])) {
+        foreach ($resolvedTickets as $ticket) {
+            if (!isset($resolved[$ticket->date])) {
                 $resolved[$ticket->date] = 0;
             }
             $resolved[$ticket->date] += $ticket->resolved;
@@ -577,30 +571,30 @@ class MemberTicketsController extends MemberBaseController
         $unresolved = [];
         $unresolvedTickets = Ticket::where(DB::raw('DATE(`updated_at`)'), '>=', $fromDate)
             ->where(DB::raw('DATE(`updated_at`)'), '<=', $toDate)
-            ->where(function($query){
-                $query->where('status','<>', 'closed');
-                $query->where('status','<>', 'resolved');
+            ->where(function ($query) {
+                $query->where('status', '<>', 'closed');
+                $query->where('status', '<>', 'resolved');
             })
             ->groupBy('updated_at')
             ->orderBy('updated_at', 'ASC');
 
-        if($agentId != 0){
+        if ($agentId != 0) {
             $unresolvedTickets->where('agent_id', '=', $agentId);
         }
 
-        if($status){
+        if ($status) {
             $unresolvedTickets->where('status', '=', $status);
         }
 
-        if($priority){
+        if ($priority) {
             $unresolvedTickets->where('priority', '=', $priority);
         }
 
-        if($channelId != 0){
+        if ($channelId != 0) {
             $unresolvedTickets->where('channel_id', '=', $channelId);
         }
 
-        if($typeId != 0){
+        if ($typeId != 0) {
             $unresolvedTickets->where('type_id', '=', $typeId);
         }
 
@@ -609,17 +603,16 @@ class MemberTicketsController extends MemberBaseController
             DB::raw('count(id) as unresolved')
         ]);
 
-        foreach($unresolvedTickets as $ticket) {
-            if(!isset($unresolved[$ticket->date])) {
+        foreach ($unresolvedTickets as $ticket) {
+            if (!isset($unresolved[$ticket->date])) {
                 $unresolved[$ticket->date] = 0;
             }
             $unresolved[$ticket->date] += $ticket->unresolved;
         }
 
-        $dates = array_keys(array_merge(array_merge($total,$resolved),$unresolved));
+        $dates = array_keys(array_merge(array_merge($total, $resolved), $unresolved));
 
-        foreach ($dates as $date)
-        {
+        foreach ($dates as $date) {
             $graphData[] = [
                 'date' =>  $date,
                 'total' =>  isset($total[$date]) ? $total[$date] : 0,
@@ -628,7 +621,7 @@ class MemberTicketsController extends MemberBaseController
             ];
         }
 
-        usort($graphData, function ($a, $b){
+        usort($graphData, function ($a, $b) {
             $t1 = strtotime($a['date']);
             $t2 = strtotime($b['date']);
             return $t1 - $t2;
@@ -637,7 +630,8 @@ class MemberTicketsController extends MemberBaseController
         return $graphData;
     }
 
-    public function storeAdmin(StoreTicket $request) {
+    public function storeAdmin(StoreTicket $request)
+    {
         $ticket = new Ticket();
         $ticket->subject = $request->subject;
         $ticket->status = $request->status;
@@ -658,7 +652,7 @@ class MemberTicketsController extends MemberBaseController
         // save tags
         $tags = $request->tags;
 
-        if($tags){
+        if ($tags) {
             TicketTag::where('ticket_id', $ticket->id)->delete();
             foreach ($tags as $tag) {
                 $tag = TicketTagList::firstOrCreate([
@@ -674,14 +668,15 @@ class MemberTicketsController extends MemberBaseController
         }
 
         //log search
-        $this->logSearchEntry($ticket->id, 'Ticket: '.$ticket->subject, 'admin.tickets.edit', 'ticket');
+        $this->logSearchEntry($ticket->id, 'Ticket: ' . $ticket->subject, 'admin.tickets.edit', 'ticket');
 
         return Reply::dataOnly(['ticketReplyID' => $reply->id]);
 
-//        return Reply::redirect(route('member.tickets.index'), __('messages.ticketAddSuccess'));
+        //        return Reply::redirect(route('member.tickets.index'), __('messages.ticketAddSuccess'));
     }
 
-    public function updateAdmin(UpdateTicket $request, $id) {
+    public function updateAdmin(UpdateTicket $request, $id)
+    {
         $ticket = Ticket::findOrFail($id);
         $ticket->status = $request->status;
         $ticket->agent_id = $request->agent_id;
@@ -692,7 +687,7 @@ class MemberTicketsController extends MemberBaseController
 
         $lastMessage = null;
 
-        if($request->message != ''){
+        if ($request->message != '') {
             //save first message
             $reply = new TicketReply();
             $reply->message = $request->message;
@@ -703,7 +698,7 @@ class MemberTicketsController extends MemberBaseController
             $this->fileSave($request, $reply->id);
             // save tags
             $tags = $request->tags;
-            if($tags){
+            if ($tags) {
                 TicketTag::where('ticket_id', $ticket->id)->delete();
 
                 foreach ($tags as $tag) {
@@ -717,7 +712,6 @@ class MemberTicketsController extends MemberBaseController
                         'ticket_id' => $ticket->id
                     ]);
                 }
-
             }
             $this->reply = $reply;
             $lastMessage = view('member.tickets.last-message', $this->data)->render();
@@ -736,53 +730,12 @@ class MemberTicketsController extends MemberBaseController
                 $file->ticket_reply_id = $ticketReplyID;
                 switch ($storage) {
                     case 'local':
-                        $fileData->storeAs('user-uploads/ticket-files/' . $ticketReplyID, $fileData->hashName());
+                        $fileData->image->store('ticket-files/' . $ticketReplyID, $fileData->hashName());
                         break;
                     case 's3':
                         Storage::disk('s3')->putFileAs('ticket-files/' . $ticketReplyID, $fileData, $fileData->getClientOriginalName(), 'public');
                         break;
-                    case 'google':
-                        $dir = '/';
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                        $dir = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', 'ticket-files')
-                            ->first();
 
-                        if (!$dir) {
-                            Storage::cloud()->makeDirectory('ticket-files');
-                        }
-
-                        $directory = $dir['path'];
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                        $directory = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', $ticketReplyID)
-                            ->first();
-
-                        if (!$directory) {
-                            Storage::cloud()->makeDirectory($dir['path'] . '/' . $ticketReplyID);
-                            $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                            $directory = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', $ticketReplyID)
-                                ->first();
-                        }
-
-                        Storage::cloud()->putFileAs($directory['basename'], $fileData, $fileData->getClientOriginalName());
-
-                        $file->google_url = Storage::cloud()->url($directory['path'] . '/' . $fileData->getClientOriginalName());
-
-                        break;
-                    case 'dropbox':
-                        Storage::disk('dropbox')->putFileAs('ticket-files/' . $ticketReplyID . '/', $fileData, $fileData->getClientOriginalName());
-                        $dropbox = new Client(['headers' => ['Authorization' => "Bearer " . config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                        $res = $dropbox->request('POST', 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                            [\GuzzleHttp\RequestOptions::JSON => ["path" => '/ticket-files/' . $ticketReplyID . '/' . $fileData->getClientOriginalName()]]
-                        );
-                        $dropboxResult = $res->getBody();
-                        $dropboxResult = json_decode($dropboxResult, true);
-                        $file->dropbox_link = $dropboxResult['url'];
-                        break;
                 }
 
                 $file->filename = $fileData->getClientOriginalName();
@@ -792,5 +745,4 @@ class MemberTicketsController extends MemberBaseController
             }
         }
     }
-
 }

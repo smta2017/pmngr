@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FaqCategory extends Model
+class FaqCategory extends BaseModel
 {
     protected $table = 'faq_categories';
 

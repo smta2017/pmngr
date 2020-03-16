@@ -1,13 +1,12 @@
-<div class="panel-body b-b"  id="replyMessageBox_{{$reply->id}}">
+<div class="panel-body bg-owner-reply"  id="replyMessageBox_{{$reply->id}}">
 
-    <div class="row">
+    <div class="row m-b-5">
 
         <div class="col-xs-2 col-md-1">
-            {!!  ($reply->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$reply->user->image).'"
-                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                alt="user" class="img-circle" width="40">' !!}
+            <img src="{{ $reply->user->image_url }}"
+                                alt="user" class="img-circle" width="40" height="40">
         </div>
-        <div class="col-xs-9 col-md-10">
+        <div class="col-xs-8 col-md-10">
             <h4 class="m-t-0"><a
                         @if($reply->user->hasRole('employee'))
                         href="{{ route('admin.employees.show', $reply->user_id) }}"
@@ -22,59 +21,36 @@
                 {!! ucfirst(nl2br($reply->message)) !!}
             </div>
         </div>
-
-        <div class="col-xs-1 col-md-1">
+        <div class="col-xs-2 col-md-1">
             <a href="javascript:;" data-toggle="tooltip" data-original-title="Delete"
-               data-file-id="{{ $reply->id }}"
-               class="btn btn-danger btn-circle sa-params" data-pk="list"><i
-                        class="fa fa-times"></i></a>
+                data-file-id="{{ $reply->id }}"
+                class="btn btn-inverse btn-outline sa-params" data-pk="list"><i
+            class="fa fa-trash"></i></a>
         </div>
 
     </div>
-    <!--/row-->
     @if(sizeof($reply->files) > 0)
-        <div class="row" id="list">
+        <div class="row bg-white" id="list">
             <ul class="list-group" id="files-list">
                 @forelse($reply->files as $file)
-                    <li class="list-group-item">
+                    <li class="list-group-item b-none col-md-6">
                         <div class="row">
-                            <div class="col-md-9">
+                            <div class="col-md-8">
                                 {{ $file->filename }}
                             </div>
-                            <div class="col-md-3">
-                                @if($file->external_link != '')
-                                    <a target="_blank" href="{{ $file->external_link }}"
-                                       data-toggle="tooltip" data-original-title="View"
-                                       class="btn btn-info btn-circle pull-right"><i
-                                                class="fa fa-search"></i></a>
-                                @elseif(config('filesystems.default') == 'local')
-                                    <a target="_blank" href="{{ asset_url('ticket-files/'.$reply->id.'/'.$file->hashname) }}"
-                                       data-toggle="tooltip" data-original-title="View"
-                                       class="btn btn-info btn-circle pull-right"><i
-                                                class="fa fa-search"></i></a>
+                            <div class="col-md-4 text-right">
 
-                                @elseif(config('filesystems.default') == 's3')
-                                    <a target="_blank" href="{{ $url.'ticket-files/'.$reply->id.'/'.$file->filename }}"
-                                       data-toggle="tooltip" data-original-title="View"
-                                       class="btn btn-info btn-circle pull-right"><i
-                                                class="fa fa-search"></i></a>
-                                @elseif(config('filesystems.default') == 'google')
-                                    <a target="_blank" href="{{ $file->google_url }}"
-                                       data-toggle="tooltip" data-original-title="View"
-                                       class="btn btn-info btn-circle pull-right"><i
-                                                class="fa fa-search"></i></a>
-                                @elseif(config('filesystems.default') == 'dropbox')
-                                    <a target="_blank" href="{{ $file->dropbox_link }}"
-                                       data-toggle="tooltip" data-original-title="View"
-                                       class="btn btn-info btn-circle pull-right"><i
-                                                class="fa fa-search"></i></a>
-                                @endif
+                                    <a target="_blank" href="{{ asset_url('ticket-files/'.$reply->id.'/'.$file->hashname) }}"
+                                    data-toggle="tooltip" data-original-title="View"
+                                    class="btn btn-info btn-sm btn-outline"><i
+                                                class="fa fa-search text-info"></i></a>
+
 
                                 @if(is_null($file->external_link))
                                     &nbsp;&nbsp;
                                     <a href="{{ route('admin.ticket-files.download', $file->id) }}"
-                                       data-toggle="tooltip" data-original-title="Download"
-                                       class="btn btn-inverse btn-circle pull-right m-r-10"><i
+                                    data-toggle="tooltip" data-original-title="Download"
+                                    class="btn btn-inverse btn-sm btn-outline"><i
                                                 class="fa fa-download"></i></a>
                                 @endif
                                 {{--&nbsp;&nbsp;--}}
@@ -82,9 +58,9 @@
                                 {{--data-original-title="Delete"--}}
                                 {{--data-file-id="{{ $file->id }}"--}}
                                 {{--class="btn btn-danger btn-circle sa-params" data-pk="list"><i--}}
-                                {{--class="fa fa-times"></i></a>--}}
+                                            {{--class="fa fa-times"></i></a>--}}
 
-                                <span class="clearfix m-l-10">{{ $file->created_at->diffForHumans() }}</span>
+                                <span class="clearfix font-12 text-muted">{{ $file->created_at->diffForHumans() }}</span>
                             </div>
                         </div>
                     </li>
@@ -100,7 +76,6 @@
 
             </ul>
         </div>
-        <!--/row-->
+    <!--/row-->
     @endif
-
 </div>

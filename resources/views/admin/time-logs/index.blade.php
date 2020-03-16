@@ -8,7 +8,11 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:;" id="show-add-form"
+                class="btn btn-success btn-sm btn-outline"><i
+                        class="fa fa-clock-o"></i> @lang('modules.timeLogs.logTime')
+            </a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -32,12 +36,10 @@
 @section('content')
 
 
-    <h2>@lang('app.filterResults')</h2>
-
-    <div class="white-box">
-        <div class="row m-b-10">
+    @section('filter-section')
+    <div class="row m-b-10">
         {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="example">
                 <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
                 <div class="input-daterange input-group" id="date-range">
@@ -48,7 +50,7 @@
             </div>
             </div>
 
-        <div class="col-md-3">
+        <div class="col-md-12">
             <h5 class="box-title m-t-30">
                 @if($logTimeFor->log_time_for == 'task')
                     @lang('app.selectTask')
@@ -79,9 +81,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-12">
             <div class="form-group">
-                <h5 class="box-title m-t-30">@lang('modules.employees.title')</h5>
+                <h5 class="box-title">@lang('modules.employees.title')</h5>
                 <select class="form-control select2" name="employee" id="employee" data-style="form-control">
                     <option value="all">@lang('modules.client.all')</option>
                     @forelse($employees as $employee)
@@ -92,20 +94,18 @@
             </div>
         </div>
 
-        <div class="col-md-2">
-            <h5 class="box-title m-t-30">&nbsp;</h5>
+        <div class="col-md-12">
             <button type="button" class="btn btn-success" id="filter-results"><i class="fa fa-check"></i> @lang('app.apply')</button>
         </div>
         {!! Form::close() !!}
-        <hr>
 
     </div>
-    </div>
+    @endsection
 
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <h3 class="box-title b-b"><i class="fa fa-clock-o"></i> @lang('modules.projects.activeTimers')</h3>
+                <h3 class="box-title text-primary"><i class="fa fa-clock-o"></i> @lang('modules.projects.activeTimers')</h3>
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -119,7 +119,7 @@
                             @endif
                                 @lang('app.name')</th>
                             <th>@lang('modules.projects.activeSince')</th>
-                            <td> </td>
+                            <th> </th>
                         </tr>
                         </thead>
                         <tbody id="timer-list">
@@ -132,9 +132,18 @@
                                 <td><a href="javascript:;" data-time-id="{{ $time->id }}" class="label label-danger stop-timer">@lang('app.stop')</a></td>
                             </tr>
                         @empty
-                            <tr>
-                                <td colspan="3">@lang('messages.noActiveTimer')</td>
-                            </tr>
+                            <td colspan="4" class="text-center">
+                                <div class="empty-space" style="height: 100px;">
+                                    <div class="empty-space-inner">
+                                        <div class="icon" style="font-size:30px"><i
+                                                    class="icon-layers"></i>
+                                        </div>
+                                        <div class="title m-b-15"> @lang('messages.noActiveTimer')
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
                         @endforelse
                         </tbody>
                     </table>
@@ -146,22 +155,6 @@
     <div class="row">
         <div class="col-md-12" >
             <div class="white-box">
-
-                <h2>@lang('app.menu.timeLogs')</h2>
-
-                <div class="row">
-                    <div class="col-sm-12 text-right hidden-xs">
-                        <div class="form-group pull-left">
-                            <a href="javascript:;" id="show-add-form"
-                               class="btn btn-success btn-outline"><i
-                                        class="fa fa-clock-o"></i> @lang('modules.timeLogs.logTime')
-                            </a>
-                        </div>
-                        <div class="form-group pull-right">
-                            <a onclick="exportTimeLog()" class="btn btn-info"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="row">
                     <div class="col-md-12 hide" id="hideShowTimeLogForm">
@@ -394,10 +387,6 @@
         var projectID = $('#project_id').val();
         var employee = $('#employee').val();
         var url = '{{ route('admin.all-time-logs.data') }}?_token={{ csrf_token() }}';
-        url = url.replace(':startDate', startDate);
-        url = url.replace(':endDate', endDate);
-        url = url.replace(':projectId', projectID);
-        url = url.replace(':employee', employee);
 
         table = $('#timelog-table').dataTable({
             destroy: true,

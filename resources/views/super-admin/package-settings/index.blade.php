@@ -30,7 +30,7 @@
                 <div class="panel-heading">@lang("app.update") @lang("app.package") @lang('app.menu.settings')</div>
 
                 <div class="vtabs customvtab m-t-10">
-                    @include('sections.package_setting_menu')
+                    @include('sections.super_admin_setting_menu')
 
                     <div class="tab-content">
                         <div id="vhome3" class="tab-pane active">
@@ -44,32 +44,26 @@
                                             {!! Form::open(['id'=>'editSettings','class'=>'ajax-form','method'=>'PUT']) !!}
                                             <hr>
                                             <div class="row">
-                                                <div class="col-sm-12 col-md-6 col-xs-12">
+                                                <div class="col-sm-12 col-md-3 col-xs-12">
                                                     <div class="form-group">
                                                         <label class="control-label">@lang('app.name')</label>
                                                         <input type="text" id="name" name="name" value="{{ $package->name ?? '' }}" class="form-control" >
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-6 col-xs-12">
+                                                <div class="col-sm-12 col-md-3 col-xs-12">
                                                     <div class="form-group">
                                                         <label>@lang('app.max') @lang('app.menu.employees')</label>
                                                         <input type="number" name="max_employees" id="max_employees" value="{{ $package->max_employees ?? '' }}"  class="form-control">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-6 col-xs-12">
+                                                <div class="col-sm-12 col-md-3 col-xs-12">
                                                     <div class="form-group">
                                                         <label for="no_of_days">@lang('modules.packageSetting.noOfDays')</label>
                                                         <input type="number" class="form-control" id="no_of_days" name="no_of_days"
                                                                value="{{ $packageSetting->no_of_days }}">
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-6 col-xs-12">
+                                                <div class="col-sm-12 col-md-3 col-xs-12">
                                                     <div class="form-group">
                                                         <label for="no_of_days">@lang('modules.packageSetting.notificationBeforeDays')</label>
                                                         <input type="number" class="form-control" id="notification_before" name="notification_before"
@@ -77,14 +71,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label" >@lang('app.status')</label>
-                                                    <div class="switchery-demo">
-                                                        <input type="checkbox" name="status" @if($packageSetting->status == 'active') checked @endif class="js-switch " data-color="#00c292" data-secondary-color="#f96262"  />
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <h3 class="box-title">@lang('app.select') @lang('app.module')</h3>
                                             <hr>
                                             <div class="row">
@@ -105,12 +92,19 @@
                                                 </div>
 
                                             </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label" >@lang('app.status')</label>
+                                                    <div class="switchery-demo">
+                                                        <input type="checkbox" name="status" @if($packageSetting->status == 'active') checked @endif class="js-switch " data-color="#00c292" data-secondary-color="#f96262"  />
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <button type="submit" id="save-form"
                                                     class="btn btn-success waves-effect waves-light m-r-10">
                                                 @lang('app.update')
                                             </button>
-                                            <button type="reset"
-                                                    class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                             {!! Form::close() !!}
                                         </div>
                                     </div>

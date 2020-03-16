@@ -136,9 +136,6 @@ class MemberEmployeesController extends MemberBaseController
 
         $user->attachRole(2);
 
-        // Notify User
-        $user->notify(new NewUser($request->input('password')));
-
         $this->logSearchEntry($user->id, $user->name, 'admin.employees.show', 'employee');
 
         return Reply::redirect(route('member.employees.index'), __('messages.employeeAdded'));
@@ -328,6 +325,9 @@ class MemberEmployeesController extends MemberBaseController
                     return '<a href="' . route('member.employees.show', $row->id) . '">' . ucwords($row->name) . '</a><br> <label class="label label-info">project admin</label>';
                 }
                 return '<a href="' . route('member.employees.show', $row->id) . '">' . ucwords($row->name) . '</a>';
+            })
+            ->editColumn('email', function ($row) {
+                return $row->email;
             })
             ->rawColumns(['name', 'action'])
             ->make(true);

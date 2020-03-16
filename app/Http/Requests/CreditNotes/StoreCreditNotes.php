@@ -25,7 +25,7 @@ class StoreCreditNotes extends CoreRequest
     public function rules()
     {
         $rules = [
-            'project_id' => 'required',
+//            'project_id' => 'required',
             'cn_number' => Rule::unique('credit_notes')->where(function ($query) {
                 return $query->where('company_id', company()->id);
             }),

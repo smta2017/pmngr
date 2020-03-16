@@ -12,7 +12,6 @@ namespace App\Traits;
 use App\Company;
 use App\Currency;
 use App\GlobalSetting;
-use App\Setting;
 use GuzzleHttp\Client;
 
 trait CurrencyExchange
@@ -30,29 +29,30 @@ trait CurrencyExchange
             foreach ($currencies as $currency) {
 
                 $currency = Currency::findOrFail($currency->id);
-                if ($currencyApiKey!='00') {
-                    if ($currency->is_cryptocurrency == 'no') {
-                        // get exchange rate
-                        $client = new Client();
-                        $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey);
-                        $conversionRate = $res->getBody();
-                        $conversionRate = json_decode($conversionRate, true);
-    
-                        if (!empty($conversionRate)) {
-                            $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
-                        }
-                    } else {
-                        // get exchange rate
-                        $client = new Client();
-                        $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey);
-                        $conversionRate = $res->getBody();
-                        $conversionRate = json_decode($conversionRate, true);
-    
-                        $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
-                        $currency->exchange_rate = $usdExchangePrice;
-                    }
-                }
+            try {
+                if ($currency->is_cryptocurrency == 'no') {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
 
+                    if (!empty($conversionRate)) {
+                        $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
+                    }
+                } else {
+                    // get exchange rate
+                    $client = new Client();
+                    $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey);
+                    $conversionRate = $res->getBody();
+                    $conversionRate = json_decode($conversionRate, true);
+
+                    $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
+                    $currency->exchange_rate = $usdExchangePrice;
+                }
+            }catch (\Exception $e){
+
+            }
                 $currency->save();
             }
         }
@@ -67,28 +67,27 @@ trait CurrencyExchange
         foreach ($currencies as $currency) {
 
             $currency = Currency::findOrFail($currency->id);
-            if ($currencyApiKey!='00') {
-                if ($currency->is_cryptocurrency == 'no') {
-                    // get exchange rate
-                    $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey);
-                    $conversionRate = $res->getBody();
-                    $conversionRate = json_decode($conversionRate, true);
+            if ($currency->is_cryptocurrency == 'no') {
+                // get exchange rate
+                $client = new Client();
+                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey);
+                $conversionRate = $res->getBody();
+                $conversionRate = json_decode($conversionRate, true);
 
-                    if (!empty($conversionRate)) {
-                        $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
-                    }
-                } else {
-                    // get exchange rate
-                    $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey);
-                    $conversionRate = $res->getBody();
-                    $conversionRate = json_decode($conversionRate, true);
-
-                    $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
-                    $currency->exchange_rate = $usdExchangePrice;
+                if (!empty($conversionRate)) {
+                    $currency->exchange_rate = $conversionRate[strtoupper($setting->currency->currency_code) . '_' . $currency->currency_code];
                 }
+            } else {
+                // get exchange rate
+                $client = new Client();
+                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $setting->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey);
+                $conversionRate = $res->getBody();
+                $conversionRate = json_decode($conversionRate, true);
+
+                $usdExchangePrice = $conversionRate[strtoupper($setting->currency->currency_code) . '_USD'];
+                $currency->exchange_rate = $usdExchangePrice;
             }
+
             $currency->save();
         }
     }

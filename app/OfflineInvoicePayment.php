@@ -2,10 +2,17 @@
 
 namespace App;
 
+use App\Observers\OfflineInvoicePaymentObserver;
 use Illuminate\Database\Eloquent\Model;
 
-class OfflineInvoicePayment extends Model
+class OfflineInvoicePayment extends BaseModel
 {
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(OfflineInvoicePaymentObserver::class);
+    }
+
     public function invoice()
     {
         return $this->belongsTo(Invoice::class, 'invoice_id');

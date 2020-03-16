@@ -17,6 +17,7 @@ use App\TicketTagList;
 use App\TicketType;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -39,11 +40,16 @@ class ManageTicketsController extends AdminBaseController
 
     public function index()
     {
-        $this->startDate = Carbon::now()->subWeek(1)->timezone($this->global->timezone)->format('m/d/Y');
-        $this->endDate = Carbon::now()->timezone($this->global->timezone)->format('m/d/Y');
-        $this->channels = TicketChannel::all();
-        $this->groups = TicketGroup::all();
-        $this->types = TicketType::all();
+        $startDate = Carbon::now()->subWeek(1)->timezone($this->global->timezone);
+        $endDate   = Carbon::now()->timezone($this->global->timezone);
+
+        $this->startDate = $startDate->format('m/d/Y');
+        $this->endDate   = $endDate->format('m/d/Y');
+        $this->channels  = TicketChannel::all();
+        $this->groups    = TicketGroup::all();
+        $this->types     = TicketType::all();
+
+        $this->chartData = $this->getGraphData($startDate->format('Y-m-d'), $endDate->format('Y-m-d'));
 
         return view('admin.tickets.index', $this->data);
     }
@@ -246,7 +252,7 @@ class ManageTicketsController extends AdminBaseController
         //log search
         $this->logSearchEntry($ticket->id, 'Ticket: ' . $ticket->subject, 'admin.tickets.edit', 'ticket');
 
-        return Reply::dataOnly(['ticketReplyID' => $reply->id]);
+        return Reply::redirect(route('admin.tickets.index'), __('messages.ticketAddSuccess'));
 
         //        return Reply::redirect(route('admin.tickets.index'), __('messages.ticketAddSuccess'));
     }
@@ -265,10 +271,10 @@ class ManageTicketsController extends AdminBaseController
     {
         $ticket = Ticket::findOrFail($id);
         $ticket->status = $request->status;
-        $ticket->agent_id = $request->agent_id;
-        $ticket->type_id = $request->type_id;
-        $ticket->priority = $request->priority;
-        $ticket->channel_id = $request->channel_id;
+        // $ticket->agent_id = $request->agent_id;
+        // $ticket->type_id = $request->type_id;
+        // $ticket->priority = $request->priority;
+        // $ticket->channel_id = $request->channel_id;
         $ticket->save();
 
         $lastMessage = null;
@@ -283,22 +289,22 @@ class ManageTicketsController extends AdminBaseController
 
             $this->fileSave($request, $reply->id);
             // save tags
-            $tags = $request->tags;
-            if ($tags) {
-                TicketTag::where('ticket_id', $ticket->id)->delete();
+            // $tags = $request->tags;
+            // if ($tags) {
+            //     TicketTag::where('ticket_id', $ticket->id)->delete();
 
-                foreach ($tags as $tag) {
-                    $tag = TicketTagList::firstOrCreate([
-                        'tag_name' => $tag
-                    ]);
+            //     foreach ($tags as $tag) {
+            //         $tag = TicketTagList::firstOrCreate([
+            //             'tag_name' => $tag
+            //         ]);
 
 
-                    TicketTag::create([
-                        'tag_id' => $tag->id,
-                        'ticket_id' => $ticket->id
-                    ]);
-                }
-            }
+            //         TicketTag::create([
+            //             'tag_id' => $tag->id,
+            //             'ticket_id' => $ticket->id
+            //         ]);
+            //     }
+            // }
 
             $global = $this->global;
 
@@ -348,8 +354,8 @@ class ManageTicketsController extends AdminBaseController
                 return '<div class="btn-group m-r-10">
                 <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline  dropdown-toggle waves-effect waves-light" type="button">Action <span class="caret"></span></button>
                 <ul role="menu" class="dropdown-menu">
-                  <li><a href="' . route("admin.tickets.edit", $row->id) . '" ><i class="fa fa-pencil"></i> Edit</a></li>
-                  <li><a href="javascript:;" class="sa-params" data-ticket-id="' . $row->id . '"><i class="fa fa-times"></i> Delete</a></li>
+                  <li><a href="' . route("admin.tickets.edit", $row->id) . '" ><i class="fa fa-eye"></i> '.__('app.view').'</a></li>
+                  <li><a href="javascript:;" class="sa-params" data-ticket-id="' . $row->id . '"><i class="fa fa-times"></i> '.__('app.delete').'</a></li>
                 </ul>
               </div>
               ';
@@ -386,6 +392,34 @@ class ManageTicketsController extends AdminBaseController
             ->removeColumn('updated_at')
             ->removeColumn('deleted_at')
             ->make(true);
+    }
+
+    public function updateOtherData(Request $request, $id)
+    {
+        $ticket = Ticket::findOrFail($id);
+        $ticket->agent_id = $request->agent_id;
+        $ticket->type_id = $request->type_id;
+        $ticket->priority = $request->priority;
+        $ticket->channel_id = $request->channel_id;
+        $ticket->save();
+
+        $tags = $request->tags;
+        if ($tags) {
+            TicketTag::where('ticket_id', $ticket->id)->delete();
+
+            foreach ($tags as $tag) {
+                $tag = TicketTagList::firstOrCreate([
+                    'tag_name' => $tag
+                ]);
+
+
+                TicketTag::create([
+                    'tag_id' => $tag->id,
+                    'ticket_id' => $ticket->id
+                ]);
+            }
+        }
+        return Reply::success(__('messages.updateSuccess'));
     }
 
     public function destroy($id)
@@ -626,65 +660,13 @@ class ManageTicketsController extends AdminBaseController
     {
         if ($request->hasFile('file')) {
             foreach ($request->file as $fileData) {
-                $storage = config('filesystems.default');
                 $file = new TicketFile();
                 $file->user_id = $this->user->id;
                 $file->ticket_reply_id = $ticketReplyID;
-                switch ($storage) {
-                    case 'local':
-                        $fileData->storeAs('user-uploads/ticket-files/' . $ticketReplyID, $fileData->hashName());
-                        break;
-                    case 's3':
-                        Storage::disk('s3')->putFileAs('ticket-files/' . $ticketReplyID, $fileData, $fileData->getClientOriginalName(), 'public');
-                        break;
-                    case 'google':
-                        $dir = '/';
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                        $dir = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', 'ticket-files')
-                            ->first();
-
-                        if (!$dir) {
-                            Storage::cloud()->makeDirectory('ticket-files');
-                        }
-
-                        $directory = $dir['path'];
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                        $directory = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', $ticketReplyID)
-                            ->first();
-
-                        if (!$directory) {
-                            Storage::cloud()->makeDirectory($dir['path'] . '/' . $ticketReplyID);
-                            $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                            $directory = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', $ticketReplyID)
-                                ->first();
-                        }
-
-                        Storage::cloud()->putFileAs($directory['basename'], $fileData, $fileData->getClientOriginalName());
-
-                        $file->google_url = Storage::cloud()->url($directory['path'] . '/' . $fileData->getClientOriginalName());
-
-                        break;
-                    case 'dropbox':
-                        Storage::disk('dropbox')->putFileAs('ticket-files/' . $ticketReplyID . '/', $fileData, $fileData->getClientOriginalName());
-                        $dropbox = new Client(['headers' => ['Authorization' => "Bearer " . config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                        $res = $dropbox->request(
-                            'POST',
-                            'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                            [\GuzzleHttp\RequestOptions::JSON => ["path" => '/ticket-files/' . $ticketReplyID . '/' . $fileData->getClientOriginalName()]]
-                        );
-                        $dropboxResult = $res->getBody();
-                        $dropboxResult = json_decode($dropboxResult, true);
-                        $file->dropbox_link = $dropboxResult['url'];
-                        break;
-                }
-
+                $filename = Files::uploadLocalOrS3($fileData,'ticket-files/'.$ticketReplyID);
                 $file->filename = $fileData->getClientOriginalName();
-                $file->hashname = $fileData->hashName();
+                $file->hashname = $filename;
+
                 $file->size = $fileData->getSize();
                 $file->save();
             }

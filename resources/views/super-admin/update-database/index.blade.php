@@ -21,8 +21,8 @@
 @section('content')
 
     <div class="row">
-
         @include('vendor.froiden-envato.update.update_blade')
+
 
         <div class="col-md-12">
             <div class="panel panel-inverse">
@@ -39,6 +39,7 @@
                             <hr>
                             <!--row-->
                         @include('vendor.froiden-envato.update.changelog')
+                        @include('vendor.froiden-envato.update.plugins')
                         <!--/row-->
 
                             <div class="clearfix"></div>

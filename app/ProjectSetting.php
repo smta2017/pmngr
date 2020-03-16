@@ -6,7 +6,7 @@ use App\Observers\ProjectSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectSetting extends Model
+class ProjectSetting extends BaseModel
 {
     protected static function boot()
     {

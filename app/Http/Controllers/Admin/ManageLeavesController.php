@@ -138,12 +138,6 @@ class ManageLeavesController extends AdminBaseController
         $leave->status = $request->status;
         $leave->save();
 
-        if ($oldStatus != $request->status) {
-            //      Send notification to user
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($leave->user_id);
-            $notifyUser->notify(new LeaveStatusUpdate($leave));
-        }
-
         return Reply::redirect(route('admin.leaves.index'), __('messages.leaveAssignSuccess'));
     }
 
@@ -167,15 +161,6 @@ class ManageLeavesController extends AdminBaseController
             $leave->reject_reason = $request->reason;
         }
         $leave->save();
-
-        //      Send notification to user
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($leave->user_id);
-
-        if ($request->action == 'approved') {
-            $notifyUser->notify(new LeaveStatusApprove($leave));
-        } else {
-            $notifyUser->notify(new LeaveStatusReject($leave));
-        }
 
         return Reply::success(__('messages.leaveStatusUpdate'));
     }
@@ -213,7 +198,7 @@ class ManageLeavesController extends AdminBaseController
             $endDt = 'DATE(leaves.`leave_date`) <= ' . '"' . $endDate . '"';
         }
 
-        $leavesList = Leave::select('leaves.id', 'users.name', 'leaves.leave_date', 'leaves.status', 'leave_types.type_name', 'leave_types.color')
+        $leavesList = Leave::select('leaves.id', 'users.name', 'leaves.leave_date', 'leaves.status', 'leave_types.type_name', 'leave_types.color', 'leaves.duration')
             ->where('leaves.status', '<>', 'rejected')
             ->whereRaw($startDt)
             ->whereRaw($endDt)
@@ -238,7 +223,13 @@ class ManageLeavesController extends AdminBaseController
                 return '<div class="label label-' . $label . '">' . $row->status . '</div>';
             })
             ->addColumn('leave_type', function ($row) {
-                return '<div class="label-' . $row->color . ' label">' . $row->type_name . '</div>';
+                $type = '<div class="label-'.$row->color.' label">'.$row->type_name.'</div>';
+
+                if ($row->duration == 'half day') {
+                    $type.= ' <div class="label-inverse label">'.__('modules.leaves.halfDay').'</div>';
+                }
+
+                return $type;
             })
             ->addColumn('action', function ($row) {
                 if ($row->status == 'pending') {

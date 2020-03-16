@@ -35,12 +35,7 @@ trait SuperAdminSmtpSettings{
 
         Config::set('app.name', $globalSetting->company_name);
 
-        if(is_null($globalSetting->logo)){
-            Config::set('app.logo', asset('worksuite-logo.png'));
-        }
-        else{
-            Config::set('app.logo', asset('user-uploads/app-logo/'.$globalSetting->logo));
-        }
+        Config::set('app.logo', $globalSetting->logo_url);
 
         (new MailServiceProvider(app()))->register();
     }

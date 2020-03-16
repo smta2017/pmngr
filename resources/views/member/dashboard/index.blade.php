@@ -9,9 +9,33 @@
         <!-- /.page title -->
         <!-- .breadcrumb -->
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <span id="timer-section">
+                @if(!is_null($timer))
+                    <div class="nav navbar-top-links navbar-right pull-right m-t-10">
+                        <a class="btn btn-rounded btn-default stop-timer-modal" href="javascript:;" data-timer-id="{{ $timer->id }}">
+                            <i class="ti-alarm-clock"></i>
+                            <span id="active-timer">{{ $timer->timer }}</span>
+                            <label class="label label-danger">@lang("app.stop")</label></a>
+                    </div>
+                @else
+                    <div class="nav navbar-top-links navbar-right pull-right m-t-10">
+                        <a class="btn btn-outline btn-inverse timer-modal" href="javascript:;">@lang("modules.timeLogs.startTimer") <i class="fa fa-check-circle text-success"></i></a>
+                    </div>
+                @endif
+            </span>
+            @if(isset($activeTimerCount) && $user->can('view_timelogs'))
+            <span id="timer-section">
+                <div class="nav navbar-top-links navbar-right m-t-10 m-r-10">
+                    <a class="btn btn-rounded btn-default active-timer-modal" href="javascript:;">@lang("modules.projects.activeTimers")
+                        <span class="label label-danger" id="activeCurrentTimerCount">@if($activeTimerCount > 0) {{ $activeTimerCount }} @else 0 @endif</span>
+                    </a>
+                </div>
+            </span>
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
-                <li class="active">{{ __($pageTitle) }}</li>
+                <li class="active">{{ $pageTitle }}</li>
             </ol>
         </div>
         <!-- /.breadcrumb -->
@@ -31,7 +55,7 @@
 
         @media (min-width: 769px) {
             #wrapper .panel-wrapper{
-                height: 500px;
+                height: 530px;
                 overflow-y: auto;
             }
         }
@@ -41,7 +65,8 @@
 
 @section('content')
 
-    <div class="row dashboard-stats">
+<div class="white-box">
+    <div class="row dashboard-stats front-dashboard">
         @if(in_array('projects',$modules))
         <div class="col-md-3 col-sm-6">
             <a href="{{ route('member.projects.index') }}">
@@ -119,6 +144,7 @@
             </a>
         </div>
         @endif
+
     </div>
     <!-- .row -->
 
@@ -126,11 +152,16 @@
 
         @if(in_array('attendance',$modules))
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('app.menu.attendance')</div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
+
+                        <input type="hidden" id="current-latitude">
+                        <input type="hidden" id="current-longitude">
+
                         @if (!isset($noClockIn))
+
                             @if(!$checkTodayHoliday)
                                 @if($todayTotalClockin < $maxAttandenceInDay)
                                     <div class="col-xs-6">
@@ -147,11 +178,7 @@
                                         @endif
                                     </div>
                                     <div class="col-xs-6">
-                                        @if(!is_null($currenntClockIn))
-                                            {{ $currenntClockIn->clock_in_ip ?? request()->ip() }}
-                                        @else
-                                            {{ request()->ip() }}
-                                        @endif
+                                        {{ $currenntClockIn->clock_in_ip ?? request()->ip() }}
                                     </div>
 
                                     @if(!is_null($currenntClockIn) && !is_null($currenntClockIn->clock_out_time))
@@ -208,7 +235,7 @@
 
         @if(in_array('tasks',$modules))
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('modules.dashboard.overdueTasks')</div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
@@ -222,13 +249,28 @@
                                 <li class="list-group-item row" data-role="task">
                                     <div class="col-xs-8">
                                         {!! ($key+1).'. <a href="javascript:;" data-task-id="'.$task->id.'" class="show-task-detail">'.ucfirst($task->heading).'</a>' !!}
+                                        @if(!is_null($task->project_id) && !is_null($task->project))
+                                            <a href="{{ route('member.projects.show', $task->project_id) }}"
+                                                class="text-danger">{{ ucwords($task->project->project_name) }}</a>
+                                        @endif
                                     </div>
                                     <label class="label label-danger pull-right col-xs-4">{{ $task->due_date->format($global->date_format) }}</label>
                                 </li>
                                 @endif
                             @empty
                                 <li class="list-group-item" data-role="task">
-                                    @lang('messages.noOpenTasks')
+                                    <div  class="text-center">
+                                        <div class="empty-space" style="height: 200px;">
+                                            <div class="empty-space-inner">
+                                                <div class="icon" style="font-size:20px"><i
+                                                            class="fa fa-tasks"></i>
+                                                </div>
+                                                <div class="title m-b-15">@lang("messages.noOpenTasks")
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </li>
                             @endforelse
                         </ul>
@@ -244,17 +286,61 @@
 
         @if(in_array('projects',$modules))
         <div class="col-md-6" id="project-timeline">
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('modules.dashboard.projectActivityTimeline')</div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
                         <div class="steamline">
-                            @foreach($projectActivities as $activity)
+                            @forelse($projectActivities as $activity)
                                 <div class="sl-item">
                                     <div class="sl-left"><i class="fa fa-circle text-info"></i>
                                     </div>
                                     <div class="sl-right">
                                         <div><h6><a href="{{ route('member.projects.show', $activity->project_id) }}" class="text-danger">{{ ucwords($activity->project_name) }}:</a> {{ $activity->activity }}</h6> <span class="sl-date">{{ $activity->created_at->timezone($global->timezone)->diffForHumans() }}</span></div>
+                                    </div>
+                                </div>
+                                @empty
+                                <div class="text-center">
+                                    <div class="empty-space" style="height: 200px;">
+                                        <div class="empty-space-inner">
+                                            <div class="icon" style="font-size:20px"><i
+                                                        class="fa fa-history"></i>
+                                            </div>
+                                            <div class="title m-b-15">@lang("messages.noProjectActivity")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @if(in_array('notices',$modules) && $user->can('view_notice'))
+        <div class="col-md-6" id="notices-timeline">
+            <div class="panel panel-inverse">
+                <div class="panel-heading">@lang('modules.module.noticeBoard')</div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="steamline">
+                            @foreach($notices as $notice)
+                                <div class="sl-item">
+                                    <div class="sl-left"><i class="fa fa-circle text-info"></i>
+                                    </div>
+                                    <div class="sl-right">
+                                        <div>
+                                            <h6>
+                                                <a href="javascript:showNoticeModal({{ $notice->id }});" class="text-danger">
+                                                    {{ ucwords($notice->heading) }}
+                                                </a>
+                                            </h6>
+                                            <span class="sl-date">
+                                                {{ $notice->created_at->timezone($global->timezone)->diffForHumans() }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             @endforeach
@@ -265,32 +351,9 @@
         </div>
         @endif
 
-        @if(in_array('notices',$modules) && $user->can('view_notice'))
-            <div class="col-md-6" id="project-timeline">
-                <div class="panel panel-default">
-                    <div class="panel-heading">@lang('modules.notices.notice')</div>
-                    <div class="panel-wrapper collapse in">
-                        <div class="panel-body">
-                            <div class="steamline">
-                                @foreach($notices as $notice)
-                                    <div class="sl-item">
-                                        <div class="sl-left"><i class="fa fa-circle text-info"></i>
-                                        </div>
-                                        <div class="sl-right">
-                                            <div><h6><a href="javascript:;" data-notice-id="{{ $notice->id }}" class="text-danger noticeShow">{{ ucwords($notice->heading) }}</a></h6> <span class="sl-date">{{ $notice->created_at->timezone($global->timezone)->diffForHumans() }}</span></div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
-
         @if(in_array('employees',$modules))
         <div class="col-md-6">
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('modules.dashboard.userActivityTimeline')</div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
@@ -298,12 +361,16 @@
                             @forelse($userActivities as $key=>$activity)
                                 <div class="sl-item">
                                     <div class="sl-left">
-                                        {!!  ($activity->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$activity->user->image).'"
-                                                                    alt="user" class="img-circle">' : '<img src="'.asset('default-profile-2.png').'"
-                                                                    alt="user" class="img-circle">' !!}
+                                        <img src="{{ $activity->user->image_url}}" alt="user" class="img-circle">'
                                     </div>
                                     <div class="sl-right">
-                                        <div class="m-l-40"><a href="{{ route('member.employees.show', $activity->user_id) }}" class="text-success">{{ ucwords($activity->user->name) }}</a> <span  class="sl-date">{{ $activity->created_at->timezone($global->timezone)->diffForHumans() }}</span>
+                                        <div class="m-l-40">
+                                            @if($user->can('view_employees'))
+                                                <a href="{{ route('member.employees.show', $activity->user_id) }}" class="text-success">{{ ucwords($activity->user->name) }}</a>
+                                            @else
+                                                {{ ucwords($activity->user->name) }}
+                                            @endif
+                                            <span  class="sl-date">{{ $activity->created_at->timezone($global->timezone)->diffForHumans() }}</span>
                                             <p>{!! ucfirst($activity->activity) !!}</p>
                                         </div>
                                     </div>
@@ -312,7 +379,18 @@
                                     <hr>
                                 @endif
                             @empty
-                                <div>@lang('messages.noActivityByThisUser')</div>
+                                <div class="text-center">
+                                    <div class="empty-space" style="height: 200px;">
+                                        <div class="empty-space-inner">
+                                            <div class="icon" style="font-size:20px"><i
+                                                        class="fa fa-history"></i>
+                                            </div>
+                                            <div class="title m-b-15">@lang("messages.noActivityByThisUser")
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             @endforelse
                         </div>
                     </div>
@@ -324,55 +402,60 @@
 
 
     </div>
-    {{--Ajax Modal--}}
-    <div class="modal fade bs-modal-md in" id="noticeDetailModal" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog modal-lg" id="modal-data-application">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <span class="caption-subject font-red-sunglo bold uppercase" id="modelHeading"></span>
-                </div>
-                <div class="modal-body">
-                    Loading...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    {{--Ajax Modal Ends--}}
+</div>
 
-    {{--Ajax Modal--}}
-    <div class="modal fade bs-modal-md in"  id="subTaskModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md" id="modal-data-application">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <span class="caption-subject font-red-sunglo bold uppercase" id="subTaskModelHeading">Sub Task e</span>
-                </div>
-                <div class="modal-body">
-                    Loading...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn blue">Save changes</button>
-                </div>
+{{--Timer Modal--}}
+<div class="modal fade bs-modal-lg in" id="projectTimerModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" id="modal-data-application">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <span class="caption-subject font-red-sunglo bold uppercase" id="modelHeading"></span>
             </div>
-            <!-- /.modal-content -->
+            <div class="modal-body">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn blue">Save changes</button>
+            </div>
         </div>
-        <!-- /.modal-dialog -->.
+        <!-- /.modal-content -->
     </div>
-    {{--Ajax Modal Ends--}}
+    <!-- /.modal-dialog -->
+</div>
+{{--Timer Modal Ends--}}
+
+{{--Ajax Modal--}}
+<div class="modal fade bs-modal-md in"  id="subTaskModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" id="modal-data-application">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <span class="caption-subject font-red-sunglo bold uppercase" id="subTaskModelHeading">Sub Task e</span>
+            </div>
+            <div class="modal-body">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn blue">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->.
+</div>
+{{--Ajax Modal Ends--}}
 @endsection
 
 @push('footer-script')
 <script>
     $('#clock-in').click(function () {
         var workingFrom = $('#working_from').val();
+
+        var currentLatitude = document.getElementById("current-latitude").value;
+        var currentLongitude = document.getElementById("current-longitude").value;
 
         var token = "{{ csrf_token() }}";
 
@@ -381,6 +464,8 @@
             type: "POST",
             data: {
                 working_from: workingFrom,
+                currentLatitude: currentLatitude,
+                currentLongitude: currentLongitude,
                 _token: token
             },
             success: function (response) {
@@ -395,11 +480,15 @@
     $('#clock-out').click(function () {
 
         var token = "{{ csrf_token() }}";
+        var currentLatitude = document.getElementById("current-latitude").value;
+        var currentLongitude = document.getElementById("current-longitude").value;
 
         $.easyAjax({
             url: '{{route('member.attendances.update', $currenntClockIn->id)}}',
             type: "PUT",
             data: {
+                currentLatitude: currentLatitude,
+                currentLongitude: currentLongitude,
                 _token: token
             },
             success: function (response) {
@@ -411,31 +500,54 @@
     })
     @endif
 
-    $('body').on('click', '.noticeShow', function () {
-        var noticeId = $(this).data('notice-id');
-        var url = "{{ route('member.notices.show',':id') }}";
-        url = url.replace(':id', noticeId);
-        $('#modelHeading').html('Notice');
-        $.ajaxModal('#noticeDetailModal', url);
-    });
+    function showNoticeModal(id) {
+        var url = '{{ route('member.notices.show', ':id') }}';
+        url = url.replace(':id', id);
+        $.ajaxModal('#projectTimerModal', url);
+    }
 
     $('.show-task-detail').click(function () {
-        $(".right-sidebar").slideDown(50).addClass("shw-rside");
+            $(".right-sidebar").slideDown(50).addClass("shw-rside");
 
-        var id = $(this).data('task-id');
-        var url = "{{ route('admin.all-tasks.show',':id') }}";
-        url = url.replace(':id', id);
+            var id = $(this).data('task-id');
+            var url = "{{ route('member.all-tasks.show',':id') }}";
+            url = url.replace(':id', id);
 
-        $.easyAjax({
-            type: 'GET',
-            url: url,
-            success: function (response) {
-                if (response.status == "success") {
-                    $('#right-sidebar-content').html(response.view);
+            $.easyAjax({
+                type: 'GET',
+                url: url,
+                success: function (response) {
+                    if (response.status == "success") {
+                        $('#right-sidebar-content').html(response.view);
+                    }
                 }
-            }
-        });
-    })
+            });
+        })
 
 </script>
+
+@if ($attendanceSettings->radius_check == 'yes')
+<script>
+    var currentLatitude = document.getElementById("current-latitude");
+    var currentLongitude = document.getElementById("current-longitude");
+    var x = document.getElementById("current-latitude");
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+           // x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        // x.innerHTML = "Latitude: " + position.coords.latitude +
+        // "<br>Longitude: " + position.coords.longitude;
+
+        currentLatitude.value = position.coords.latitude;
+        currentLongitude.value = position.coords.longitude;
+    }
+    getLocation();
+</script>
+@endif
+
 @endpush

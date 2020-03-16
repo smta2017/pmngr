@@ -148,7 +148,7 @@
 .error-box{background:url(../plugins/images/error-bg.jpg) center center no-repeat #fff!important;}
 
 .login-register{
-    background: url(../login-bg.jpg) center center/cover no-repeat!important;
+    background: url(../img/login-bg.jpg) center center/cover no-repeat!important;
 }
 
 .form-material .form-control, .form-material .form-control.focus, .form-material .form-control:focus{
@@ -832,11 +832,4 @@ body {
 .dashboard-settings li:first-child, .dashboard-settings li:last-child {
     float: none;
     width: 100%;
-}
-div.dataTables_wrapper div.dataTables_paginate{
-    text-align: left !important;
-}
-
-div.dataTables_wrapper div.dataTables_filter{
-    text-align: left !important;
 }

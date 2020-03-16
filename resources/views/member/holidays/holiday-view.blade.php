@@ -8,7 +8,7 @@
                     </li>
                 @endforeach
             </ul>
-            <div class="tab-content" style="padding-top: 0;">
+            <div class="tab-content p-0" >
                 @foreach($months as $month)
                     <div id="{{$month}}" class="tab-pane @if($month == $currentMonth) active @endif">
                         <div class="panel panel-info block4">

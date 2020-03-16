@@ -19,29 +19,30 @@
 @endsection
 
 @push('head-script')
-    <style>
-        .col-in {
-            padding: 0 20px !important;
+<style>
+    .col-in {
+        padding: 0 20px !important;
 
+    }
+
+    .fc-event{
+        font-size: 10px !important;
+    }
+
+    @media (min-width: 769px) {
+        .panel-wrapper{
+            height: 530px;
+            overflow-y: auto;
         }
+    }
 
-        .fc-event{
-            font-size: 10px !important;
-        }
-
-        @media (min-width: 769px) {
-            .panel-wrapper{
-                height: 500px;
-                overflow-y: auto;
-            }
-        }
-
-    </style>
+</style>
 @endpush
 
 @section('content')
+<div class="white-box">
 
-    <div class="row dashboard-stats">
+    <div class="row dashboard-stats front-dashboard">
         @if(in_array('projects',$modules))
         <div class="col-md-3 col-sm-6">
             <div class="white-box">
@@ -120,7 +121,7 @@
 
         @if(in_array('projects',$modules))
         <div class="col-md-6" id="project-timeline">
-            <div class="panel panel-default">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang("modules.dashboard.projectActivityTimeline")</div>
                 <div class="panel-wrapper collapse in">
                     <div class="panel-body">
@@ -142,5 +143,5 @@
         @endif
 
     </div>
-
+</div>
 @endsection

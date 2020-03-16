@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
             \URL::forceScheme('https');
         }
         Schema::defaultStringLength(191);
-        Cashier::useCurrency(strtolower(config('services.currency.name')), config('services.currency.symbol'));
+
     }
 
     /**
@@ -29,6 +29,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        Cashier::ignoreMigrations();
     }
 }

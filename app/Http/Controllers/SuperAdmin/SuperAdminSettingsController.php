@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\GlobalCurrency;
 use App\GlobalSetting;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\SuperAdmin\Settings\UpdateGlobalSettings;
 use App\Package;
@@ -48,6 +49,7 @@ class SuperAdminSettingsController extends SuperAdminBaseController
         $setting->company_phone = $request->input('company_phone');
         $setting->website = $request->input('website');
         $setting->address = $request->input('address');
+
         $setting->currency_id = $request->input('currency_id');
         $setting->timezone = $request->input('timezone');
         $setting->locale = $request->input('locale');
@@ -65,23 +67,25 @@ class SuperAdminSettingsController extends SuperAdminBaseController
 
             $packages = Package::all();
             foreach ($packages as $package) {
-                if ($package->annual_price != 0 && $package->monthly_price != 0) {
-                    $package->annual_price = $package->annual_price * $currency->exchange_rate;
-                    $package->monthly_price = $package->monthly_price * $currency->exchange_rate;
-                    $package->currency_id = $request->input('currency_id');
-                    $package->save();
-                }
+                $package->annual_price = $package->annual_price * $currency->exchange_rate;
+                $package->monthly_price = $package->monthly_price * $currency->exchange_rate;
+                $package->currency_id = $request->input('currency_id');
+                $package->save();
             }
         }
 
-        //        $setting->google_map_key = $request->input('google_map_key');
+        // $setting->google_map_key = $request->input('google_map_key');
         $setting->google_recaptcha_key = $request->input('google_recaptcha_key');
         $setting->google_recaptcha_secret = $request->input('google_recaptcha_secret');
 
         if ($request->hasFile('logo')) {
-            $setting->logo = $request->logo->hashName();
-            $request->logo->store('user-uploads/app-logo');
+            $setting->logo = Files::upload($request->logo, 'app-logo');
         }
+
+        if ($request->hasFile('logo_front')) {
+            $setting->logo_front = Files::upload($request->logo_front, 'app-logo');
+        }
+
         $setting->last_updated_by = $this->user->id;
 
         if ($request->hasFile('login_background')) {

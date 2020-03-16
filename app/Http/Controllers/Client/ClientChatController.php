@@ -47,7 +47,7 @@ class ClientChatController extends ClientBaseController
 
         $this->userList = $this->userListLatest();
 
-        $userID = Input::get('userID');
+        $userID = request()->get('userID');
         $id     = $userID;
         $name   = '';
 
@@ -121,10 +121,6 @@ class ClientChatController extends ClientBaseController
         $allocatedModel->to              = $userID;
         $allocatedModel->save();
 
-        // Notify User
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($allocatedModel->user_id);
-        $notifyUser->notify(new NewChat($allocatedModel));
-
         $this->userLists = $this->userListLatest();
 
         $this->userID = $userID;
@@ -147,7 +143,7 @@ class ClientChatController extends ClientBaseController
 
     public function getUserSearch()
     {
-        $term = Input::get('term');
+        $term = request()->get('term');
         $this->userLists = $this->userListLatest($term);
 
         $users = '';

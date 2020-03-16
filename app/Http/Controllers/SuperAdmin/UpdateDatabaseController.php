@@ -10,36 +10,28 @@ use Illuminate\Support\Facades\File;
 
 class UpdateDatabaseController extends SuperAdminBaseController
 {
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageTitle = __('app.menu.updates');
         $this->pageIcon = 'ti-reload';
     }
 
-    public function index(){
-        // show new update notice
-        $client = new Client();
-        $res = $client->request('GET', config('froiden_envato.updater_file_path'), ['verify' => false]);
-        $lastVersion = $res->getBody();
-        $lastVersion = json_decode($lastVersion, true);
-
-        if ( $lastVersion['version'] > File::get(public_path().'/version.txt') ){
-            $this->lastVersion = $lastVersion['version'];
-            $this->updateInfo = $lastVersion['description'];
-        }
-        $this->updateInfo = $lastVersion['description'];
-
-        $this->worksuiteVersion = File::get(public_path().'/version.txt');
-        $laravel = app();
-        $this->laravelVersion = $laravel::VERSION;
+    public function index()
+    {
         return view('super-admin.update-database.index', $this->data);
     }
 
-    public function store(Request $request) {
-        $filename_tmp = config('froiden_envato.tmp_path');
-        // $request->file->store($filename_tmp);
-        $request->file->storeAs('user-uploads', $request->file->getClientOriginalName());
-        File::move('user-uploads/'.$request->file->getClientOriginalName(), $filename_tmp.'/'.$request->file->getClientOriginalName());
+    public function store(Request $request)
+    {
+
+        config(['filesystems.default' => 'storage']);
+        $path = storage_path('app') . '/Modules/'.$request->file->getClientOriginalName();
+        if(file_exists($path)){
+            File::delete($path);
+        }
+
+        $request->file->storeAs('/', $request->file->getClientOriginalName());
     }
 
     public function manual()
@@ -53,16 +45,15 @@ class UpdateDatabaseController extends SuperAdminBaseController
             $this->lastVersion = $lastVersion['version'];
             $this->updateInfo = $lastVersion['description'];
         }
-        
+
         $domain = \request()->getHost();
         $purchaseCode = $this->global->purchase_code;
         $fullUrl = urlencode(url()->full());
-        $envatoItemId = config('app.envato_item_id');
+        $envatoItemId = config('froiden_envato.envato_item_id');
 
-        $this->linkParameter = "domain=".$domain."&purchaseCode=".$purchaseCode."&appUrl=".$fullUrl."&itemId=".$envatoItemId;
-       
+        $this->linkParameter = "domain=" . $domain . "&purchaseCode=" . $purchaseCode . "&appUrl=" . $fullUrl . "&itemId=" . $envatoItemId;
+
         $this->encryptedDownloadLink = $this->encryptDownloadLink($this->linkParameter);
-        // return $this->decryptedDownloadLink = $this->decryptDownloadLink($this->encryptedDownloadLink);
 
         $this->updateFilePath = config('froiden_envato.tmp_path');
         return view('super-admin.update-database.manual', $this->data);
@@ -98,14 +89,12 @@ class UpdateDatabaseController extends SuperAdminBaseController
 
     public function install(Request $request)
     {
-        File::put(public_path().'/install-version.txt', 'complete');
+        File::put(public_path() . '/install-version.txt', 'complete');
 
         $filePath = $request->filePath;
         $zip = Zip::open($filePath);
 
         // extract whole archive
         $zip->extract(base_path());
-
     }
-
 }

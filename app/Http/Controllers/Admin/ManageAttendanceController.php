@@ -17,12 +17,13 @@ use Yajra\DataTables\Facades\DataTables;
 class ManageAttendanceController extends AdminBaseController
 {
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageTitle = 'app.menu.attendance';
         $this->pageIcon = 'icon-clock';
         $this->middleware(function ($request, $next) {
-            if(!in_array('attendance',$this->user->modules)){
+            if (!in_array('attendance', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);
@@ -49,9 +50,9 @@ class ManageAttendanceController extends AdminBaseController
         $this->employees = User::allEmployees();
         $this->userId = User::first()->id;
 
-        $this->totalWorkingDays = $this->startDate->diffInDaysFiltered(function(Carbon $date) use ($openDays){
-            foreach($openDays as $day){
-                if($date->dayOfWeek == $day){
+        $this->totalWorkingDays = $this->startDate->diffInDaysFiltered(function (Carbon $date) use ($openDays) {
+            foreach ($openDays as $day) {
+                if ($date->dayOfWeek == $day) {
                     return $date;
                 }
             }
@@ -86,13 +87,12 @@ class ManageAttendanceController extends AdminBaseController
         $clockIn = Carbon::createFromFormat($this->global->time_format, $request->clock_in_time, $this->global->timezone);
         $clockIn->setTimezone('UTC');
         $clockIn = $clockIn->format('H:i:s');
-        if($request->clock_out_time != ''){
+        if ($request->clock_out_time != '') {
             $clockOut = Carbon::createFromFormat($this->global->time_format, $request->clock_out_time, $this->global->timezone);
             $clockOut->setTimezone('UTC');
             $clockOut = $clockOut->format('H:i:s');
-            $clockOut = $date.' '.$clockOut;
-        }
-        else{
+            $clockOut = $date . ' ' . $clockOut;
+        } else {
             $clockOut = null;
         }
 
@@ -103,10 +103,10 @@ class ManageAttendanceController extends AdminBaseController
 
         $clockInCount = Attendance::getTotalUserClockIn($date, $request->user_id);
 
-        if(!is_null($attendance)){
+        if (!is_null($attendance)) {
             $attendance->update([
                 'user_id' => $request->user_id,
-                'clock_in_time' => $date.' '.$clockIn,
+                'clock_in_time' => $date . ' ' . $clockIn,
                 'clock_in_ip' => $request->clock_in_ip,
                 'clock_out_time' => $clockOut,
                 'clock_out_ip' => $request->clock_out_ip,
@@ -114,14 +114,13 @@ class ManageAttendanceController extends AdminBaseController
                 'late' => $request->late,
                 'half_day' => $request->half_day
             ]);
-        }else{
+        } else {
 
             // Check maximum attendance in a day
-            if($clockInCount < $this->attendanceSettings->clockin_in_day)
-            {
+            if ($clockInCount < $this->attendanceSettings->clockin_in_day) {
                 Attendance::create([
                     'user_id' => $request->user_id,
-                    'clock_in_time' => $date.' '.$clockIn,
+                    'clock_in_time' => $date . ' ' . $clockIn,
                     'clock_in_ip' => $request->clock_in_ip,
                     'clock_out_time' => $clockOut,
                     'clock_out_ip' => $request->clock_out_ip,
@@ -129,8 +128,7 @@ class ManageAttendanceController extends AdminBaseController
                     'late' => $request->late,
                     'half_day' => $request->half_day
                 ]);
-            }
-            else{
+            } else {
                 return Reply::error(__('messages.maxColckIn'));
             }
         }
@@ -181,6 +179,7 @@ class ManageAttendanceController extends AdminBaseController
     {
         $attendance = Attendance::findOrFail($id);
         $date = Carbon::createFromFormat($this->global->date_format, $request->attendance_date)->format('Y-m-d');
+
         $clockIn = Carbon::createFromFormat($this->global->time_format, $request->clock_in_time, $this->global->timezone);
         $clockIn->setTimezone('UTC');
         $clockIn = $clockIn->format('H:i:s');
@@ -199,12 +198,11 @@ class ManageAttendanceController extends AdminBaseController
         $attendance->clock_out_time = $clockOut;
         $attendance->clock_out_ip = $request->clock_out_ip;
         $attendance->working_from = $request->working_from;
-        $attendance->late = ($request->has('late'))? 'yes' : 'no';
-        $attendance->half_day = ($request->has('half_day'))? 'yes' : 'no';
+        $attendance->late = ($request->has('late')) ? 'yes' : 'no';
+        $attendance->half_day = ($request->has('half_day')) ? 'yes' : 'no';
         $attendance->save();
 
         return Reply::success(__('messages.attendanceSaveSuccess'));
-
     }
     /**
      * Remove the specified resource from storage.
@@ -218,7 +216,8 @@ class ManageAttendanceController extends AdminBaseController
         return Reply::success(__('messages.attendanceDelete'));
     }
 
-    public function data(Request $request){
+    public function data(Request $request)
+    {
 
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $attendances = Attendance::attendanceByDate($date);
@@ -243,15 +242,19 @@ class ManageAttendanceController extends AdminBaseController
             ->make();
     }
 
-    public function refreshCount($startDate = null, $endDate = null, $userId = null){
+    public function refreshCount(Request $request, $startDate = null, $endDate = null, $userId = null)
+    {
 
         $openDays = json_decode($this->attendanceSettings->office_open_days);
-        $startDate = Carbon::createFromFormat('!Y-m-d', $startDate);
-        $endDate = Carbon::createFromFormat('!Y-m-d', $endDate)->addDay(1); //addDay(1) is hack to include end date
+        // $startDate = Carbon::createFromFormat('!Y-m-d', $startDate);
+        // $endDate = Carbon::createFromFormat('!Y-m-d', $endDate)->addDay(1); //addDay(1) is hack to include end date
+        $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate);
+        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->addDay(1); //addDay(1) is hack to include end date
+        $userId = $request->userId;
 
-        $totalWorkingDays = $startDate->diffInDaysFiltered(function(Carbon $date) use ($openDays){
-            foreach($openDays as $day){
-                if($date->dayOfWeek == $day){
+        $totalWorkingDays = $startDate->diffInDaysFiltered(function (Carbon $date) use ($openDays) {
+            foreach ($openDays as $day) {
+                if ($date->dayOfWeek == $day) {
                     return $date;
                 }
             }
@@ -263,14 +266,17 @@ class ManageAttendanceController extends AdminBaseController
         $holidays = Count(Holiday::getHolidayByDates($startDate->format('Y-m-d'), $endDate->format('Y-m-d')));
 
         return Reply::dataOnly(['daysPresent' => $daysPresent, 'daysLate' => $daysLate, 'halfDays' => $halfDays, 'totalWorkingDays' => $totalWorkingDays, 'absentDays' => $daysAbsent, 'holidays' => $holidays]);
-
     }
 
-    public function employeeData($startDate = null, $endDate = null, $userId = null){
+    public function employeeData(Request $request, $startDate = null, $endDate = null, $userId = null)
+    {
         $ant = []; // Array For attendance Data indexed by similar date
         $dateWiseData = []; // Array For Combine Data
 
-        $attendances = Attendance::userAttendanceByDate($startDate, $endDate, $userId);// Getting Attendance Data
+        $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->startOfDay();
+        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->endOfDay()->addDay(1);
+
+        $attendances = Attendance::userAttendanceByDate($startDate, $endDate, $userId); // Getting Attendance Data
         $holidays = Holiday::getHolidayByDates($startDate, $endDate); // Getting Holiday Data
 
         // Getting Leaves Data
@@ -285,51 +291,53 @@ class ManageAttendanceController extends AdminBaseController
         $holidayArray = $holidayData->toArray();
 
         // Set Date as index for same date clock-ins
-        foreach($attendances as $attand){
+        foreach ($attendances as $attand) {
             $ant[$attand->clock_in_date][] = $attand; // Set attendance Data indexed by similar date
         }
 
-        $endDate = Carbon::parse($endDate)->timezone($this->global->timezone);
-        $startDate = Carbon::parse($startDate)->timezone($this->global->timezone)->subDay();
+        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->timezone($this->global->timezone);
+        $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->timezone($this->global->timezone)->subDay();
 
         // Set All Data in a single Array
-        for($date = $endDate; $date->diffInDays($startDate) > 0; $date->subDay()){
+        for ($date = $endDate; $date->diffInDays($startDate) > 0; $date->subDay()) {
 
             // Set default array for record
             $dateWiseData[$date->toDateString()] = [
-                'holiday' =>false,
-                'attendance' =>false,
-                'leave' =>false
+                'holiday' => false,
+                'attendance' => false,
+                'leave' => false
             ];
 
             // Set Holiday Data
-            if(array_key_exists($date->toDateString(), $holidayArray)){
+            if (array_key_exists($date->toDateString(), $holidayArray)) {
                 $dateWiseData[$date->toDateString()]['holiday'] = $holidayData[$date->toDateString()];
             }
 
             // Set Attendance Data
-            if(array_key_exists($date->toDateString(), $ant)){
+            if (array_key_exists($date->toDateString(), $ant)) {
                 $dateWiseData[$date->toDateString()]['attendance'] = $ant[$date->toDateString()];
             }
 
             // Set Leave Data
-            if(array_key_exists($date->toDateString(), $leavesDates)){
+            if (array_key_exists($date->toDateString(), $leavesDates)) {
                 $dateWiseData[$date->toDateString()]['leave'] = $leavesDates[$date->toDateString()];
             }
         }
 
         // Getting View data
-        $view = view('admin.attendance.user_attendance',['dateWiseData' => $dateWiseData,'global' => $this->global])->render();
+        $view = view('admin.attendance.user_attendance', ['dateWiseData' => $dateWiseData, 'global' => $this->global])->render();
 
         return Reply::dataOnly(['status' => 'success', 'data' => $view]);
     }
 
-    public function attendanceByDate(){
+    public function attendanceByDate()
+    {
         return view('admin.attendance.by_date', $this->data);
     }
 
 
-    public function byDateData(Request $request){
+    public function byDateData(Request $request)
+    {
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $attendances = Attendance::attendanceDate($date)->get();
 
@@ -351,7 +359,8 @@ class ManageAttendanceController extends AdminBaseController
             ->make();
     }
 
-    public function dateAttendanceCount(Request $request){
+    public function dateAttendanceCount(Request $request)
+    {
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $checkHoliday = Holiday::checkHolidayByDate($date);
         $totalPresent = 0;
@@ -360,11 +369,10 @@ class ManageAttendanceController extends AdminBaseController
         $holidayReason  = '';
         $totalEmployees = count(User::allEmployees());
 
-        if(!$checkHoliday){
+        if (!$checkHoliday) {
             $totalPresent = Attendance::where(DB::raw('DATE(`clock_in_time`)'), '=', $date)->count();
-            $totalAbsent = ($totalEmployees-$totalPresent);
-        }
-        else{
+            $totalAbsent = ($totalEmployees - $totalPresent);
+        } else {
             $holiday = 1;
             $holidayReason = $checkHoliday->occassion;
         }
@@ -372,22 +380,25 @@ class ManageAttendanceController extends AdminBaseController
         return Reply::dataOnly(['status' => 'success', 'totalEmployees' => $totalEmployees, 'totalPresent' => $totalPresent, 'totalAbsent' => $totalAbsent, 'holiday' => $holiday, 'holidayReason' => $holidayReason]);
     }
 
-    public function checkHoliday(Request $request){
+    public function checkHoliday(Request $request)
+    {
         $date = Carbon::createFromFormat($this->global->date_format, $request->date)->format('Y-m-d');
         $checkHoliday = Holiday::checkHolidayByDate($date);
         return Reply::dataOnly(['status' => 'success', 'holiday' => $checkHoliday]);
     }
 
     // Attendance Detail Show
-    public function attendanceDetail(Request $request){
+    public function attendanceDetail(Request $request)
+    {
 
         // Getting Attendance Data By User And Date
         $this->attendances =  Attendance::attedanceByUserAndDate($request->date, $request->userID);
         return view('admin.attendance.attendance-detail', $this->data)->render();
     }
 
-    public function export($startDate = null, $endDate = null, $employee = null) {
-       //
+    public function export($startDate = null, $endDate = null, $employee = null)
+    {
+        //
     }
 
     public function summary()
@@ -408,9 +419,9 @@ class ManageAttendanceController extends AdminBaseController
                     ->whereRaw('YEAR(attendances.clock_in_time) = ?', [$request->year]);
             }]
         )->join('role_user', 'role_user.user_id', '=', 'users.id')
-        ->join('roles', 'roles.id', '=', 'role_user.role_id')
-        ->select('users.id', 'users.name', 'users.email', 'users.created_at')
-        ->where('roles.name', '<>', 'client')->groupBy('users.id');
+            ->join('roles', 'roles.id', '=', 'role_user.role_id')
+            ->select('users.id', 'users.name', 'users.email', 'users.created_at')
+            ->where('roles.name', '<>', 'client')->groupBy('users.id');
 
         if ($request->userId == '0') {
             $employees = $employees->get();
@@ -424,13 +435,13 @@ class ManageAttendanceController extends AdminBaseController
 
         $this->daysInMonth = cal_days_in_month(CAL_GREGORIAN, $request->month, $request->year);
         $now = Carbon::now()->timezone($this->global->timezone);
-        $requestedDate = Carbon::parse(Carbon::parse('01-'.$request->month.'-'.$request->year))->endOfMonth();
+        $requestedDate = Carbon::parse(Carbon::parse('01-' . $request->month . '-' . $request->year))->endOfMonth();
 
         foreach ($employees as $employee) {
-            
-            
+
+
             $dataTillToday = array_fill(1, $now->copy()->format('d'), 'Absent');
-            
+
             $dataFromTomorrow = [];
             if (($now->copy()->addDay()->format('d') != $this->daysInMonth) && !$requestedDate->isPast()) {
                 $dataFromTomorrow = array_fill($now->copy()->addDay()->format('d'), ($this->daysInMonth - $now->copy()->format('d')), '-');
@@ -440,24 +451,21 @@ class ManageAttendanceController extends AdminBaseController
             $final[$employee->id . '#' . $employee->name] = array_replace($dataTillToday, $dataFromTomorrow);
 
             foreach ($employee->attendance as $attendance) {
-                $final[$employee->id . '#' . $employee->name][Carbon::parse($attendance->clock_in_time)->timezone($this->global->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="'.$attendance->id.'"><i class="fa fa-check text-success"></i></a>';
+                $final[$employee->id . '#' . $employee->name][Carbon::parse($attendance->clock_in_time)->timezone($this->global->timezone)->day] = '<a href="javascript:;" class="view-attendance" data-attendance-id="' . $attendance->id . '"><i class="fa fa-check text-success"></i></a>';
             }
-            
-            $image = ($employee->image) ? '<img src="' . asset('user-uploads/avatar/' . $employee->image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ';
-            $final[$employee->id . '#' . $employee->name][] = '<a class="userData" id="userID'.$employee->id.'" data-employee-id="'.$employee->id.'"  href="' . route('admin.employees.show', $employee->id) . '">' . $image . ' ' . ucwords($employee->name) . '</a>';
 
-            foreach($this->holidays as $holiday) {
+            $image = '<img src="' . $employee->image_url . '" alt="user" class="img-circle" width="30" height="30"> ';
+            $final[$employee->id . '#' . $employee->name][] = '<a class="userData" id="userID' . $employee->id . '" data-employee-id="' . $employee->id . '"  href="' . route('admin.employees.show', $employee->id) . '">' . $image . ' ' . ucwords($employee->name) . '</a>';
+
+            foreach ($this->holidays as $holiday) {
                 $final[$employee->id . '#' . $employee->name][$holiday->date->day] = 'Holiday';
             }
-
         }
 
 
         $this->employeeAttendence = $final;
 
-  
+
         $view = view('admin.attendance.summary_data', $this->data)->render();
         return Reply::dataOnly(['status' => 'success', 'data' => $view]);
     }
@@ -466,7 +474,7 @@ class ManageAttendanceController extends AdminBaseController
     {
         $attendance = Attendance::find($id);
         $this->attendanceActivity = Attendance::userAttendanceByDate($attendance->clock_in_time->format('Y-m-d'), $attendance->clock_in_time->format('Y-m-d'), $attendance->user_id);
-        
+
         $this->firstClockIn = Attendance::where(DB::raw('DATE(attendances.clock_in_time)'), $attendance->clock_in_time->format('Y-m-d'))
             ->where('user_id', $attendance->user_id)->orderBy('id', 'asc')->first();
         $this->lastClockOut = Attendance::where(DB::raw('DATE(attendances.clock_in_time)'), $attendance->clock_in_time->format('Y-m-d'))
@@ -485,14 +493,14 @@ class ManageAttendanceController extends AdminBaseController
         }
 
         $this->totalTime = $this->endTime->diff($this->startTime, true)->format('%h.%i');
-        
+
 
         return view('admin.attendance.attendance_info', $this->data);
     }
 
-    public function mark(Request $request, $userid,$day,$month,$year)
+    public function mark(Request $request, $userid, $day, $month, $year)
     {
-        $this->date = Carbon::createFromFormat('d-m-Y', $day.'-'.$month.'-'.$year)->format($this->global->date_format);
+        $this->date = Carbon::createFromFormat('d-m-Y', $day . '-' . $month . '-' . $year)->format('Y-m-d');
         $this->row = Attendance::attendanceByUserDate($userid, $this->date);
         $this->clock_in = 0;
         $this->total_clock_in = Attendance::where('user_id', $userid)
@@ -506,7 +514,7 @@ class ManageAttendanceController extends AdminBaseController
 
     public function storeMark(StoreAttendance $request)
     {
-        $date = Carbon::createFromFormat($this->global->date_format, $request->attendance_date)->format('Y-m-d');
+        $date = Carbon::parse($request->attendance_date)->format('Y-m-d');
         $clockIn = Carbon::createFromFormat($this->global->time_format, $request->clock_in_time, $this->global->timezone);
         $clockIn->setTimezone('UTC');
         $clockIn = $clockIn->format('H:i:s');
@@ -534,8 +542,8 @@ class ManageAttendanceController extends AdminBaseController
                 'clock_out_time' => $clockOut,
                 'clock_out_ip' => $request->clock_out_ip,
                 'working_from' => $request->working_from,
-                'late' => ($request->has('late'))? 'yes' : 'no',
-                'half_day' => ($request->has('half_day'))? 'yes' : 'no'
+                'late' => ($request->has('late')) ? 'yes' : 'no',
+                'half_day' => ($request->has('half_day')) ? 'yes' : 'no'
             ]);
         } else {
 
@@ -548,8 +556,8 @@ class ManageAttendanceController extends AdminBaseController
                     'clock_out_time' => $clockOut,
                     'clock_out_ip' => $request->clock_out_ip,
                     'working_from' => $request->working_from,
-                    'late' => ($request->has('late'))? 'yes' : 'no',
-                    'half_day' => ($request->has('half_day'))? 'yes' : 'no'
+                    'late' => ($request->has('late')) ? 'yes' : 'no',
+                    'half_day' => ($request->has('half_day')) ? 'yes' : 'no'
                 ]);
             } else {
                 return Reply::error(__('messages.maxColckIn'));
@@ -558,5 +566,4 @@ class ManageAttendanceController extends AdminBaseController
 
         return Reply::success(__('messages.attendanceSaveSuccess'));
     }
-
 }

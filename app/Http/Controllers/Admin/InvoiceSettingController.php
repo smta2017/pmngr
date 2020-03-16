@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\UpdateInvoiceSetting;
 use App\InvoiceSetting;
@@ -32,6 +33,10 @@ class InvoiceSettingController extends AdminBaseController
         $setting->invoice_terms  = $request->invoice_terms;
         $setting->gst_number     = $request->gst_number;
         $setting->show_gst       = $request->has('show_gst') ? 'yes' : 'no';
+        if ($request->hasFile('logo')) {
+            Files::deleteFile($setting->logo,'app-logo');
+            $setting->logo = Files::upload($request->logo, 'app-logo');
+        }
         $setting->save();
 
         return Reply::success(__('messages.settingsUpdated'));

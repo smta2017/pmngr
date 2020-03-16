@@ -28,26 +28,25 @@
 
 
 
-    <div class="white-box">
-        <div class="row m-b-10">
-            <h2>@lang('app.filterResults')</h2>
+    @section('filter-section')
+        <div class="row">
             {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+                    <h5 class="box-title">@lang('app.selectDateRange')</h5>
 
                     <div class="input-daterange input-group" id="date-range">
                         <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                               value="{{ $fromDate->format('Y-m-d') }}"/>
+                               value="{{ $fromDate->format($global->date_format) }}"/>
                         <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
                         <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                               value="{{ $toDate->format('Y-m-d') }}"/>
+                               value="{{ $toDate->format($global->date_format) }}"/>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <h5 class="box-title m-t-30">@lang('modules.financeReport.showAmountIn') (@lang('modules.invoices.currency'))</h5>
+            <div class="col-md-12">
+                <h5 class="box-title m-t-20">@lang('modules.financeReport.showAmountIn') (@lang('modules.invoices.currency'))</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -71,13 +70,12 @@
             {!! Form::close() !!}
 
         </div>
-    </div>
+    @endsection
 
 
     <div class="row">
         <div class="col-lg-12">
             <div class="white-box">
-                <h3 class="box-title">@lang('modules.financeReport.chartTitle')</h3>
                 <div id="morris-bar-chart"></div>
                 <h6><span class="text-danger">@lang('app.note'):</span> @lang('modules.financeReport.noteText')
             </div>

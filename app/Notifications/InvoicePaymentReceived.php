@@ -72,7 +72,7 @@ class InvoicePaymentReceived extends Notification
             ->greeting(__('email.hello').' '.ucwords($notifiable->name).'!')
             ->line(__('email.invoices.paymentReceived').':- ')
             ->line($this->invoiceSetting->invoice_prefix . ' #' . $this->invoice->id)
-            ->action(__('email.loginDashboard'), $url)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 

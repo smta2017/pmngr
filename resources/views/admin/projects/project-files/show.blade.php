@@ -85,7 +85,7 @@
 
                                         <div class="row m-b-20 hide" id="file-link">
                                             {!! Form::open(['id'=>'file-external-link','class'=>'ajax-form','method'=>'POST']) !!}
-                                                
+
 
                                                 {!! Form::hidden('project_id', $project->id) !!}
 
@@ -128,43 +128,19 @@
                                                                     {{ $file->filename }}
                                                                 </div>
                                                                 <div class="col-md-3">
-                                                                    @if($file->external_link != '')
-                                                                        <a target="_blank" href="{{ $file->external_link }}"
-                                                                           data-toggle="tooltip" data-original-title="View"
-                                                                           class="btn btn-info btn-circle"><i
-                                                                                    class="fa fa-search"></i></a>
-                                                                    @elseif(config('filesystems.default') == 'local')
-                                                                        <a target="_blank" href="{{ asset('user-uploads/project-files/'.$project->id.'/'.$file->hashname) }}"
+                                                                        <a target="_blank" href="{{ $file->file_url }}"
                                                                            data-toggle="tooltip" data-original-title="View"
                                                                            class="btn btn-info btn-circle"><i
                                                                                     class="fa fa-search"></i></a>
 
-                                                                    @elseif(config('filesystems.default') == 's3')
-                                                                        <a target="_blank" href="{{ $url.'project-files/'.$project->id.'/'.$file->filename }}"
-                                                                           data-toggle="tooltip" data-original-title="View"
-                                                                           class="btn btn-info btn-circle"><i
-                                                                                    class="fa fa-search"></i></a>
-                                                                    @elseif(config('filesystems.default') == 'google')
-                                                                        <a target="_blank" href="{{ $file->google_url }}"
-                                                                           data-toggle="tooltip" data-original-title="View"
-                                                                           class="btn btn-info btn-circle"><i
-                                                                                    class="fa fa-search"></i></a>
-                                                                    @elseif(config('filesystems.default') == 'dropbox')
-                                                                        <a target="_blank" href="{{ $file->dropbox_link }}"
-                                                                           data-toggle="tooltip" data-original-title="View"
-                                                                           class="btn btn-info btn-circle"><i
-                                                                                    class="fa fa-search"></i></a>
-                                                                    @endif
-                                                                    
                                                                     @if(is_null($file->external_link))
-                                                                    &nbsp;&nbsp;
+                                                                    &nbsp;&nbsp
                                                                     <a href="{{ route('admin.files.download', $file->id) }}"
                                                                        data-toggle="tooltip" data-original-title="Download"
                                                                        class="btn btn-inverse btn-circle"><i
                                                                                 class="fa fa-download"></i></a>
                                                                     @endif
                                                                     &nbsp;&nbsp;
-
                                                                     <a href="javascript:;" data-toggle="tooltip"
                                                                        data-original-title="Delete"
                                                                        data-file-id="{{ $file->id }}"

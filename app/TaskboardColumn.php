@@ -6,7 +6,7 @@ use App\Observers\TaskBoardColumnObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskboardColumn extends Model
+class TaskboardColumn extends BaseModel
 {
     protected $fillable = ['column_name', 'slug', 'label_color', 'priority'];
 

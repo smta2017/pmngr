@@ -8,7 +8,25 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a class="btn btn-default btn-outline btn-sm"
+                href="{{ route('admin.all-invoices.download', $invoice->id) }}"> <span><i class="fa fa-file-pdf-o"></i> @lang('modules.invoices.downloadPdf')</span> </a>
+
+            <button type="button" onclick="showPayments()" class="btn btn-info btn-sm">
+                @lang('app.view') @lang('app.menu.payments')
+            </button>
+            <button type="button" data-clipboard-text="{{ route('front.invoice', [md5($invoice->id)]) }}" class="btn btn-success btn-sm btn-copy">
+                <i class="fa fa-copy"></i> 
+                <span id="copy_payment_text">
+                    @lang('modules.invoices.copyPaymentLink')
+                </span>
+            </button>
+            @if ($invoice->credit_notes->count() > 0)
+                <a href="javascript:;" onclick="showAppliedCredits('{{ route('admin.all-invoices.applied-credits', $invoice->id) }}')" class="btn btn-info  btn-sm">
+                    @lang('app.appliedCredits')
+                </a>    
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang("app.menu.home")</a></li>
                 <li><a href="{{ route('admin.all-invoices.index') }}">@lang("app.menu.invoices")</a></li>
@@ -34,41 +52,27 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('modules.payments.totalAmount')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $invoice->currency->currency_symbol}} {{ $invoice->total }}</span></li>
-                </ul>
+        <div class="col-md-12 m-t-20">
+            <div class="white-box">
+                <div class="col-md-4 text-center">
+                    <h4><span class="text-dark">{{ $invoice->currency->currency_symbol}}{{ $invoice->total }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalAmount')</span></h4>
+                </div>
+                
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-success">{{ $invoice->currency->currency_symbol.' '.$invoice->amountPaid() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalPaid')</span></h4>
+                </div>
+                
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-danger">{{ $invoice->currency->currency_symbol.' '.$invoice->amountDue() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalDue')</span></h4>
+                </div>
+                
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="white-box bg-success">
-                <h3 class="box-title text-white">@lang('modules.payments.totalPaid')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right">
-                        <span class="counter text-white">
-                            {{ $invoice->currency->currency_symbol.' '.$invoice->amountPaid() }}
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-danger">
-                <h3 class="box-title text-white">@lang('modules.payments.totalDue')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right">
-                        <span class="counter text-white">
-                            {{ $invoice->currency->currency_symbol.' '.$invoice->amountDue() }}
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+    </div>
+
+    <div class="row">
+   
         <div class="col-md-12">
             @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissable">
@@ -88,20 +92,7 @@
 
 
             <div class="white-box printableArea ribbon-wrapper">
-                <button type="button" onclick="showPayments()" class="btn btn-info pull-right">
-                    @lang('app.view') @lang('app.menu.payments')
-                </button>
-                <button type="button" data-clipboard-text="{{ route('front.invoice', [md5($invoice->id)]) }}" class="btn btn-success pull-right m-r-10 btn-copy">
-                    <i class="fa fa-copy"></i> 
-                    <span id="copy_payment_text">
-                        @lang('modules.invoices.copyPaymentLink')
-                    </span>
-                </button>
-                @if ($invoice->credit_notes->count() > 0)
-                    <a href="javascript:;" onclick="showAppliedCredits('{{ route('admin.all-invoices.applied-credits', $invoice->id) }}')" class="btn btn-info pull-right m-r-5">
-                        @lang('app.appliedCredits')
-                    </a>    
-                @endif        
+                  
                 <div class="clearfix"></div>
                 <div class="ribbon-content ">
                     @if($invoice->credit_note)
@@ -242,12 +233,7 @@
                             @endif
                             <div class="clearfix"></div>
 
-                            <hr>
-                            <div class="text-right">
-
-                                <a class="btn btn-default btn-outline"
-                                   href="{{ route('admin.all-invoices.download', $invoice->id) }}"> <span><i class="fa fa-file-pdf-o"></i> @lang('modules.invoices.downloadPdf')</span> </a>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>

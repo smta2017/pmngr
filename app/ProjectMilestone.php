@@ -6,7 +6,7 @@ use App\Observers\ProjectMilsetoneObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class ProjectMilestone extends Model
+class ProjectMilestone extends BaseModel
 {
 
     protected static function boot()

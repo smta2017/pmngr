@@ -1,3 +1,4 @@
+@section('other-section')
 <ul class="nav tabs-vertical">
     <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'admin.settings.index') active @endif">
         <a href="{{ route('admin.settings.index') }}">@lang('app.menu.accountSettings')</a></li>
@@ -61,10 +62,7 @@
             <a href="{{ route('admin.message-settings.index') }}">@lang('app.menu.messageSettings')</a></li>
     @endif
 
-    @if($company->status != 'license_expired')
-        <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'admin.storage-settings.index') active @endif">
-            <a href="{{ route('admin.storage-settings.index') }}">@lang('app.menu.storageSettings')</a></li>
-    @endif
+
 
     @if(in_array('leads',$user->modules))
         <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'admin.lead-source-settings.index') active @endif">
@@ -123,3 +121,4 @@
 
     }
 </script>
+@endsection

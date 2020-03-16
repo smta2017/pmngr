@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Holiday
  * @package App\Models
  */
-class LogTimeFor extends Model
+class LogTimeFor extends BaseModel
 {
     // Don't forget to fill this array
     protected $fillable = [];

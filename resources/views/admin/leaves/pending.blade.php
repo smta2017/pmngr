@@ -4,11 +4,21 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ $pageTitle }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ $pageTitle }} <span class="text-warning b-l p-l-10 m-l-5">{{ count($pendingLeaves)}}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.leaves.pendingLeaves')</span></h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.leave.all-leaves') }}" class="btn btn-sm btn-info waves-effect waves-light btn-outline">
+                <i class="fa fa-list"></i> @lang('app.all') @lang('app.menu.leaves')
+            </a>
+
+            <a href="{{ route('admin.leaves.index') }}" class="btn btn-sm btn-primary waves-effect waves-light m-l-10 btn-outline">
+                    <i class="fa fa-calendar"></i> @lang('modules.leaves.calendarView')
+            </a>
+            
+            <a href="{{ route('admin.leaves.create') }}" class="btn btn-sm btn-success waves-effect waves-light m-l-10 btn-outline">
+            <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')</a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ $pageTitle }}</li>
@@ -20,87 +30,54 @@
 
 @section('content')
 
-    <div class="row m-b-20">
-
-        <div class="col-md-3">
-            <div class="white-box p-t-10 p-b-10 bg-warning">
-                <h3 class="box-title text-white">@lang('modules.leaves.pendingLeaves')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-logout text-white"></i></li>
-                    <li class="text-right"><span id="pendingLeaves" class="counter text-white">{{ count($pendingLeaves) }}</span></li>
-                </ul>
-            </div>
-        </div>
-        
-    </div>
-
-    <div class="row m-b-20">
-        <div class="col-md-9">
-            <a href="{{ route('admin.leave.all-leaves') }}" class="btn btn-sm btn-info waves-effect waves-light">
-                        <i class="fa fa-list"></i> @lang('app.all') @lang('app.menu.leaves')
-            </a>
-
-            <a href="{{ route('admin.leaves.index') }}" class="btn btn-sm btn-inverse waves-effect waves-light m-l-10">
-                    <i class="fa fa-calendar"></i> @lang('modules.leaves.calendarView')
-            </a>
-            
-            <a href="{{ route('admin.leaves.create') }}" class="btn btn-sm btn-success waves-effect waves-light m-l-10">
-            <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')</a>
-        </div>
-    </div>
-
     <div class="row">
 
         <div class="col-md-12">
-            <h4>@lang('modules.leaves.pendingLeaves')</h4>
 
-            <div class="row">
-            @forelse($pendingLeaves as $key=>$pendingLeave)
-                <div class="col-md-3 m-b-15">
-                    <div class="panel panel-default">
-                        <div class="panel-wrapper collapse in">
-                            <div class="panel-body">
-                                <h5 class="font-normal">{{ $pendingLeave->type->type_name }} @lang('modules.leaves.leaveRequest')</h5>
-                                <div class="m-b-15">
-                                    <img src="{{ $pendingLeave->user->image_url }}" alt="user" class="img-circle" width="30"> 
-                                    <span class="m-l-5"><a href="{{ route('admin.employees.show', $pendingLeave->user_id) }}" >{{  ucwords($pendingLeave->user->name) }}</a></span>
-                                </div>
-                                @php
-                                    $leavesRemaining = ($allowedLeaves-$pendingLeave->leaves_taken_count);
-                                    $percentLeavesRemaining = ($leavesRemaining/$allowedLeaves) * 100;
-                                @endphp
-                                <div class="text-center bg-light p-t-20 p-b-20 m-l-n-25 m-r-n-25">
-                                    {{ $pendingLeave->leave_date->format($global->date_format) }} ({{ $pendingLeave->leave_date->format('l') }})
-                                    <div class="progress m-l-30 m-r-30 m-t-15">
-                                        <div class="progress-bar progress-bar-info" aria-valuenow="{{ $percentLeavesRemaining }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentLeavesRemaining }}%" role="progressbar"> <span class="sr-only">{{ $percentLeavesRemaining }}% Complete</span> </div>
-                                    </div>
-
-                                    <div class="m-l-30 m-r-30 m-t-15">
-                                        {{ ($leavesRemaining) }} @lang('modules.leaves.remainingLeaves')
-                                    </div>
+            <div class="white-box">
+                <div class="row">
+                    @forelse($pendingLeaves as $key=>$pendingLeave)
+                        <div class="col-md-3 m-b-25">
+                            <div class=" pending-leaves  p-10">
+                            <h5 class="font-normal">{{ $pendingLeave->type->type_name }} @lang('modules.leaves.leaveRequest')</h5>
+                            <div class="m-b-15">
+                                <img src="{{ $pendingLeave->user->image_url }}" alt="user" class="img-circle" width="30" height="30" height="30" height="30"> 
+                                <span class="m-l-5"><a href="{{ route('admin.employees.show', $pendingLeave->user_id) }}" >{{  ucwords($pendingLeave->user->name) }}</a></span>
+                            </div>
+                            @php
+                                $leavesRemaining = ($allowedLeaves-$pendingLeave->leaves_taken_count);
+                                $percentLeavesRemaining = ($leavesRemaining/$allowedLeaves) * 100;
+                            @endphp
+                            <div class="text-center bg-light p-t-20 p-b-20 m-l-n-25 m-r-n-25">
+                                {{ $pendingLeave->leave_date->format($global->date_format) }} ({{ $pendingLeave->leave_date->format('l') }})
+                                <div class="progress m-l-30 m-r-30 m-t-15">
+                                    <div class="progress-bar progress-bar-info" aria-valuenow="{{ $percentLeavesRemaining }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ $percentLeavesRemaining }}%" role="progressbar"> <span class="sr-only">{{ $percentLeavesRemaining }}% Complete</span> </div>
                                 </div>
 
-                                <div class="p-t-10">
-                                    <h6 class="font-normal">@lang('app.reason')</h6>
-                                    <div class="p-b-15" style="height: 80px; overflow-y: auto;">{{ $pendingLeave->reason }}</div>
+                                <div class="m-l-30 m-r-30 m-t-15">
+                                    {{ ($leavesRemaining) }} @lang('modules.leaves.remainingLeaves')
+                                </div>
+                            </div>
 
-                                    <div class="p-t-20 text-center m-l-n-25 m-r-n-25 b-t">
-                                        <a href="javascript:;" data-leave-id="{{ $pendingLeave->id }}" data-leave-action="approved" class="btn btn-success btn-rounded m-r-5 leave-action"><i class="fa fa-check"></i> @lang('app.accept')</a>
+                            <div class="p-t-10">
+                                <h6 class="font-normal">@lang('app.reason')</h6>
+                                <div class="p-b-15 font-12" style="height: 80px; overflow-y: auto;">{{ $pendingLeave->reason }}</div>
 
-                                        <a href="javascript:;" data-leave-id="{{ $pendingLeave->id }}" data-leave-action="rejected" class="btn btn-danger btn-rounded leave-action-reject"><i class="fa fa-times"></i> @lang('app.reject')</a>
+                                <div class="p-t-20 text-center m-l-n-25 m-r-n-25">
+                                    <a href="javascript:;" data-leave-id="{{ $pendingLeave->id }}" data-leave-action="approved" class="btn btn-success btn-rounded m-r-5 leave-action"><i class="fa fa-check"></i> @lang('app.accept')</a>
 
-                                    </div>
+                                    <a href="javascript:;" data-leave-id="{{ $pendingLeave->id }}" data-leave-action="rejected" class="btn btn-danger btn-rounded leave-action-reject"><i class="fa fa-times"></i> @lang('app.reject')</a>
 
                                 </div>
-                                
+
+                            </div>
                             </div>
                         </div>
-                    </div>
+                    @empty
+                        @lang('messages.noPendingLeaves')
+                    @endforelse
+                
                 </div>
-            @empty
-                @lang('messages.noPendingLeaves')
-            @endforelse
-            
             </div>
         </div>
  

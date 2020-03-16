@@ -14,7 +14,14 @@ return [
 
     'name' => 'Worksuite',
     'envato_item_id' => 23263417,
-
+    /*
+      |--------------------------------------------------------------------------
+      | Seeding
+      |--------------------------------------------------------------------------
+      | This tells if the data is seeding  (php artisan db:seed)
+      |
+      */
+    'seeding' => false,
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -185,7 +192,7 @@ return [
 
         Intervention\Image\ImageServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class,
+        \Trebol\Entrust\EntrustServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
         Barryvdh\Debugbar\ServiceProvider::class,
@@ -195,10 +202,10 @@ return [
         Maatwebsite\Excel\ExcelServiceProvider::class,
 
         ZanySoft\Zip\ZipServiceProvider::class,
-        BC\Laravel\DropboxDriver\ServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
         NotificationChannels\OneSignal\OneSignalServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        Froiden\RestAPI\Providers\ApiServiceProvider::class
     ],
 
     /*
@@ -252,11 +259,12 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
-        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Entrust'   => Trebol\Entrust\EntrustFacade::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Zip' => ZanySoft\Zip\ZipFacade::class,
+        "ApiRoute" => Froiden\RestAPI\Facades\ApiRoute::class
 
     ],
 

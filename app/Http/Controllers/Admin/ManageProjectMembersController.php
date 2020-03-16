@@ -154,9 +154,6 @@ class ManageProjectMembersController extends AdminBaseController
                     $member->save();
 
                     if($project->publish_status == 'published') {
-                        $notifyUser = User::find($user->user_id);
-                        $notifyUser->notify(new NewProjectMember($member));
-
                         $this->logProjectActivity($request->project_id, ucwords($member->user->name) . __('messages.isAddedAsProjectMember'));
                     }
                 }

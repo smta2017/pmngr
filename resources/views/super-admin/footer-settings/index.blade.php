@@ -30,7 +30,11 @@
             <div class="panel">
 
                 <div class="vtabs customvtab p-t-10">
-                    @include('sections.front_setting_menu')
+                    @if($global->front_design == 1)
+                        @include('sections.saas.footer_page_setting_menu')
+                    @else
+                        @include('sections.front_setting_menu')
+                    @endif
 
                     <div class="tab-content">
                         <div id="vhome3" class="tab-pane active">

@@ -23,6 +23,7 @@ class CreateGlobalSettingsTable extends Migration
             $table->string('website')->nullable();
             $table->integer('last_updated_by')->unsigned()->nullable();
             $table->foreign('last_updated_by')->references('id')->on('users')->onDelete('set null')->onUpdate('cascade');
+            $table->boolean('front_design')->default(1);
             $table->timestamps();
         });
     }

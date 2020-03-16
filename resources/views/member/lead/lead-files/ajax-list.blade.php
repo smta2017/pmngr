@@ -5,28 +5,11 @@
                 {{ $file->filename }}
             </div>
             <div class="col-md-3">
-                @if(config('filesystems.default') == 'local')
-                    <a target="_blank" href="{{ asset('user-uploads/lead-files/'.$lead->id.'/'.$file->filename) }}"
+                    <a target="_blank" href="{{ $file->file_url }}"
                        data-toggle="tooltip" data-original-title="View"
                        class="btn btn-info btn-circle"><i
                                 class="fa fa-search"></i></a>
 
-                @elseif(config('filesystems.default') == 's3')
-                    <a target="_blank" href="{{ $url.'lead-files/'.$lead->id.'/'.$file->filename }}"
-                       data-toggle="tooltip" data-original-title="View"
-                       class="btn btn-info btn-circle"><i
-                                class="fa fa-search"></i></a>
-                @elseif(config('filesystems.default') == 'google')
-                    <a target="_blank" href="{{ $file->google_url }}"
-                       data-toggle="tooltip" data-original-title="View"
-                       class="btn btn-info btn-circle"><i
-                                class="fa fa-search"></i></a>
-                @elseif(config('filesystems.default') == 'dropbox')
-                    <a target="_blank" href="{{ $file->dropbox_link }}"
-                       data-toggle="tooltip" data-original-title="View"
-                       class="btn btn-info btn-circle"><i
-                                class="fa fa-search"></i></a>
-                @endif
 
                 <a href="{{ route('member.lead-files.download', $file->id) }}"
                    data-toggle="tooltip" data-original-title="Download"

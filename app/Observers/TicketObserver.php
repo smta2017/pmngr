@@ -2,11 +2,22 @@
 
 namespace App\Observers;
 
+use App\Notifications\NewTicket;
 use App\Ticket;
 use App\UniversalSearch;
+use App\User;
+use Illuminate\Support\Facades\Notification;
 
 class TicketObserver
 {
+
+    public function created(Ticket $ticket)
+    {
+        if (!isRunningInConsoleOrSeeding()) {
+            //send admin notification
+            Notification::send(User::allAdmins(), new NewTicket($ticket));
+        }
+    }
 
     public function saving(Ticket $ticket)
     {

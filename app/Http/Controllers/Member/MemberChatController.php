@@ -34,7 +34,7 @@ class MemberChatController extends MemberBaseController
     {
         $this->userList = $this->userListLatest();
 
-        $userID = Input::get('userID');
+        $userID = request()->get('userID');
         $id     = $userID;
         $name   = '';
 
@@ -108,10 +108,6 @@ class MemberChatController extends MemberBaseController
         $allocatedModel->to              = $userID;
         $allocatedModel->save();
 
-        // Notify User
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($allocatedModel->user_id);
-        $notifyUser->notify(new NewChat($allocatedModel));
-
         $this->userLists = $this->userListLatest();
 
         $this->userID = $userID;
@@ -134,7 +130,7 @@ class MemberChatController extends MemberBaseController
 
     public function getUserSearch()
     {
-        $term = Input::get('term');
+        $term = request()->get('term');
         $this->userLists = $this->userListLatest($term);
 
         $users = '';

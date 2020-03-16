@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Observers\ClientContactObserver;
 
-class ClientContact extends Model
+class ClientContact extends BaseModel
 {
     protected static function boot()
     {

@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <span class="text-info text-uppercase font-bold">@lang('modules.tickets.ticket') # {{ (is_null($lastTicket)) ? "1" : ($lastTicket->id+1) }}</span>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('member.tickets.index') }}">{{ __($pageTitle) }}</a></li>
@@ -35,9 +37,8 @@
     <div class="form-body">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-default">
-                    <div class="panel-heading text-right">@lang('modules.tickets.ticket')
-                        # {{ (is_null($lastTicket)) ? "1" : ($lastTicket->id+1) }}</div>
+                <div class="panel panel-inverse">
+                   
 
                     <div class="panel-wrapper collapse in">
                         <div class="panel-body">

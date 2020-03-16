@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\EmailNotificationSetting;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Notifications\TestSlack;
 use App\SlackSetting;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class SlackSettingController extends AdminBaseController
 {
@@ -25,19 +25,17 @@ class SlackSettingController extends AdminBaseController
     }
 
     public function update(Request $request, $id){
+
         $setting = SlackSetting::first();
         $setting->slack_webhook = $request->slack_webhook;
 
         if(isset($request->removeImage) && $request->removeImage == 'on'){
-            if($setting->slack_logo){ // Remove stored Image
-                File::delete('user-uploads/slack-logo/'.$setting->slack_logo);
-            }
-
+            Files::deleteFile($request->slack_logo,'slack-logo');
             $setting->slack_logo = null; // Remove image from database
         }
+
         elseif ($request->hasFile('slack_logo')) {
-            $setting->slack_logo = $request->slack_logo->hashName();
-            $request->slack_logo->store('user-uploads/slack-logo');
+            $setting->slack_logo = Files::upload($request->slack_logo, 'slack-logo');
         }
 
         $setting->save();

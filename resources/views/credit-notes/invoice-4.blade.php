@@ -410,13 +410,7 @@
             </div>
 
             <div class="logo">
-                @if(!is_null($global->logo))
-                    <img src="{{ public_path().'/user-uploads/app-logo/'.$global->logo }}" alt="home" class="dark-logo"/>
-                @elseif(!is_null($superadmin->logo))
-                    <img src="{{ public_path().'/user-uploads/app-logo/'.$superadmin->logo }}" alt="home" class="dark-logo"/>
-                @else
-                    <img src="{{ public_path().'/worksuite-logo.png' }}" />
-                @endif
+                <img src="{{ $global->logo_url }}" alt="home" class="dark-logo"/>
             </div>
         </section>
 
@@ -488,8 +482,8 @@
                     <th>#</th> <!-- Dummy cell for the row number and row commands -->
                     <th>@lang("modules.credit-notes.item")</th>
                     <th>@lang("modules.credit-notes.qty")</th>
-                    <th>@lang("modules.credit-notes.unitPrice")</th>
-                    <th>@lang("modules.credit-notes.price")</th>
+                    <th>@lang("modules.credit-notes.unitPrice") ({!! htmlentities($creditNote->currency->currency_code)  !!})</th>
+                    <th>@lang("modules.credit-notes.price") ({!! htmlentities($creditNote->currency->currency_code)  !!})</th>
                 </tr>
 
                 <?php $count = 0; ?>
@@ -499,8 +493,8 @@
                             <td>{{ ++$count }}</td> <!-- Don't remove this column as it's needed for the row commands -->
                             <td>{{ ucfirst($item->item_name) }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$item->unit_price, 2, '.', '') }}</td>
-                            <td>{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$item->amount, 2, '.', '') }}</td>
+                            <td>{{ number_format((float)$item->unit_price, 2, '.', '') }}</td>
+                            <td>{{ number_format((float)$item->amount, 2, '.', '') }}</td>
                         </tr>
                     @endif
                 @endforeach
@@ -514,35 +508,35 @@
             <table cellpadding="0" cellspacing="0">
                 <tr>
                     <th>@lang("modules.credit-note.subTotal"):</th>
-                    <td>{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->sub_total, 2, '.', '') }}</td>
+                    <td>{{ number_format((float)$creditNote->sub_total, 2, '.', '') }}</td>
                 </tr>
                 @if($discount != 0 && $discount != '')
                 <tr data-iterate="tax">
                     <th>@lang("modules.credit-note.discount"):</th>
-                    <td>-{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$discount, 2, '.', '') }}</td>
+                    <td>-{{ number_format((float)$discount, 2, '.', '') }}</td>
                 </tr>
                 @endif
                 @foreach($taxes as $key=>$tax)
                     <tr data-iterate="tax">
                         <th>{{ strtoupper($key) }}:</th>
-                        <td>{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$tax, 2, '.', '') }}</td>
+                        <td>{{ number_format((float)$tax, 2, '.', '') }}</td>
                     </tr>
                 @endforeach
                 <tr class="amount-total">
                     <!-- {amount_total_label} -->
-                    <td colspan="2">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->total, 2, '.', '') }}</td>
+                    <td colspan="2">{{ number_format((float)$creditNote->total, 2, '.', '') }}</td>
                 </tr>
                 <tr>
                     <th>
                         @lang("modules.credit-notes.creditAmountUsed"):</th>
                     <td>
-                        {!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->creditAmountUsed(), 2, '.', '') }}</td>
+                        {{ number_format((float)$creditNote->creditAmountUsed(), 2, '.', '') }}</td>
                 </tr>
                 <tr>
                     <th>
                         @lang("modules.credit-notes.creditAmountRemaining"):</th>
                     <td>
-                        {!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->creditAmountRemaining(), 2, '.', '') }}</td>
+                        {{ number_format((float)$creditNote->creditAmountRemaining(), 2, '.', '') }}</td>
                 </tr>
             </table>
 
@@ -553,7 +547,7 @@
 
         <section id="terms">
 
-            <div class="notes">Here {!! htmlentities($creditNote->currency->currency_symbol)  !!} refers to {!! $creditNote->currency->currency_code  !!}
+            <div class="notes">
                 @if(!is_null($creditNote->note))
                     <br> {!! nl2br($creditNote->note) !!}
                 @endif

@@ -24,7 +24,7 @@ class PaymentRequest extends FormRequest
     public function rules()
     {
         return [
-            'stripeToken' => 'required',
+            'payment_method' => 'required',
             'plan_id' => 'required|exists:packages,id',
             'stripeEmail' => 'required|email|exists:companies,company_email'
         ];

@@ -30,7 +30,7 @@
                     <img src="logo-default.png"
                          alt=""/>
                 @else
-                    <img src="{{ asset('user-uploads/app-logo/'.$logo) }}"
+                    <img src="{{ asset_url('app-logo/'.$logo) }}"
                          alt=""/>
                 @endif
             </td>

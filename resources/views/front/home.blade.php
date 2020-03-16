@@ -35,7 +35,7 @@
         |‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒‒
         !-->
     @if(!empty($packages))
-        
+        @include('front.section.pricing')
     @endif
 
     <!--
@@ -49,15 +49,6 @@
     <script>
         var maxHeight = -1;
         $(document).ready(function() {
-
-
-
-
-//            console.log(Math.round(maxHeight));
-//            $('.boxed').each(function() {
-//                console.log(Math.round(maxHeight));
-//                $(this).height(Math.round(maxHeight));
-//            });
 
             var promise1 = new Promise(function(resolve, reject) {
 
@@ -89,7 +80,7 @@
         }
 
         $('#save-form').click(function () {
-            
+
             @if(!is_null($global->google_recaptcha_key))
                 if(grecaptcha.getResponse().length == 0){
                     alert('Please click the reCAPTCHA checkbox');

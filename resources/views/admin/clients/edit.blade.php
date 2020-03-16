@@ -29,12 +29,37 @@
         <div class="col-md-12">
 
             <div class="panel panel-inverse">
-                <div class="panel-heading"> @lang('modules.client.updateTitle')</div>
+                <div class="panel-heading"> @lang('modules.client.updateTitle')
+                    [ {{ $userDetail->name }} ]
+                    @php($class = ($userDetail->status == 'active') ? 'label-custom' : 'label-danger')
+                    <span class="label {{$class}}">{{ucfirst($userDetail->status)}}</span>
+                </div>
                 <div class="panel-wrapper collapse in" aria-expanded="true">
                     <div class="panel-body">
                         {!! Form::open(['id'=>'updateClient','class'=>'ajax-form','method'=>'PUT']) !!}
                         <div class="form-body">
-                            <h3 class="box-title">@lang('modules.client.companyDetails')</h3>
+
+                            <h3 class="box-title ">@lang('modules.client.clientDetails')</h3>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6 ">
+                                    <div class="form-group">
+                                        <label>@lang('modules.client.clientName')</label>
+                                        <input type="text" name="name" id="name" class="form-control" value="{{ $userDetail->name }}">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>@lang('modules.client.clientEmail')</label>
+                                        <input type="email" name="email" id="email" class="form-control" value="{{ $userDetail->email }}">
+                                        <span class="help-block">@lang('modules.client.emailNote')</span>
+                                    </div>
+                                </div>
+                                <!--/span-->
+                            </div>
+
+                            <h3 class="box-title m-t-20">@lang('modules.client.companyDetails')</h3>
                             <hr>
                             <div class="row">
                                 <div class="col-md-6">
@@ -64,48 +89,9 @@
 
                             </div>
                             <!--/row-->
-
-                            <h3 class="box-title m-t-40">@lang('modules.client.clientDetails')</h3>
+                            <h3 class="box-title m-t-20">@lang('modules.client.clientOtherDetails')</h3>
                             <hr>
-                            <div class="row">
-                                <div class="col-md-6 ">
-                                    <div class="form-group">
-                                        <label>@lang('modules.client.clientName')</label>
-                                        <input type="text" name="name" id="name" class="form-control" value="{{ $userDetail->name }}">
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>@lang('modules.client.clientEmail')</label>
-                                        <input type="email" name="email" id="email" class="form-control" value="{{ $userDetail->email }}">
-                                        <span class="help-block">@lang('modules.client.emailNote')</span>
-                                    </div>
-                                </div>
-                                <!--/span-->
-                            </div>
-                            <div class="row">
-                                
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>@lang('modules.client.mobile')</label>
-                                        <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ $userDetail->mobile }}">
-                                    </div>
-                                </div>
-                                <!--/span-->
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>@lang('app.status')</label>
-                                        <select name="status" id="status" class="form-control">
-                                            <option @if($userDetail->status == 'active') selected
-                                                    @endif value="active">@lang('app.active')</option>
-                                            <option @if($userDetail->status == 'deactive') selected
-                                                    @endif value="deactive">@lang('app.deactive')</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
                             <!--/row-->
 
                             <div class="row">
@@ -145,10 +131,29 @@
                             <!--/row-->
                             <!--row gst number-->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="gst_number">@lang('app.gstNumber')</label>
                                         <input type="text" id="gst_number" name="gst_number" class="form-control" value="{{ $clientDetail->gst_number ?? '' }}">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>@lang('modules.client.mobile')</label>
+                                        <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ $userDetail->mobile }}">
+                                    </div>
+                                </div>
+                                <!--/span-->
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>@lang('app.status')</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option @if($userDetail->status == 'active') selected
+                                                    @endif value="active">@lang('app.active')</option>
+                                            <option @if($userDetail->status == 'deactive') selected
+                                                    @endif value="deactive">@lang('app.deactive')</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -241,7 +246,7 @@
         weekStart:'{{ $global->week_start }}',
         format: '{{ $global->date_picker_format }}',
     });
-    
+
     $('#save-form').click(function () {
         $.easyAjax({
             url: '{{route('admin.clients.update', [$clientDetail->id])}}',

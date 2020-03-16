@@ -6,7 +6,7 @@ use App\Observers\TicketAgentGroupObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketAgentGroups extends Model
+class TicketAgentGroups extends BaseModel
 {
     protected static function boot()
     {

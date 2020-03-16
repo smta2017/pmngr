@@ -6,7 +6,7 @@ use App\Observers\TicketReplyTemplateObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketReplyTemplate extends Model
+class TicketReplyTemplate extends BaseModel
 {
     protected static function boot()
     {

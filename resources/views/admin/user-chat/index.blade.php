@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:;" id="new-chat" class="btn btn-success btn-outline btn-sm"><i class="icon-note"></i> @lang("modules.messages.startConversation")</a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang("app.menu.home")</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -23,12 +25,11 @@
 <link rel="stylesheet" href="{{ asset('plugins/bower_components/bootstrap-select/bootstrap-select.min.css') }}">
 @endpush
 
-@section('content')
+@section('other-section')
+<div class="row">
+    <div class="col-md-12">
+        <div class="chat-main-box">
 
-    <div class="row">
-        <div class="col-md-12">
-
-            <div class="chat-main-box">
 
                 <!-- .chat-left-panel -->
                 <div class="chat-left-aside">
@@ -36,18 +37,18 @@
                     <div class="chat-left-inner">
 
                         <div class="form-material"><input class="form-control p-20" id="userSearch" type="text"
-                                                          placeholder="@lang("modules.messages.searchContact")"></div>
+                                                        placeholder="@lang("modules.messages.searchContact")"></div>
                         <ul class="chatonline style-none userList">
                             @forelse($userList as $users)
-                                <li id="dp_{{$users->id}}">
+                                <li id="dp_{{$users->id}}" class="bg-white">
                                     <a href="javascript:void(0)" id="dpa_{{$users->id}}"
-                                       onclick="getChatData('{{$users->id}}', '{{$users->name}}')">
+                                    onclick="getChatData('{{$users->id}}', '{{$users->name}}')">
                                         @if(is_null($users->image))
-                                            <img src="{{ asset('default-profile-2.png') }}" alt="user-img"
+                                            <img src="{{ asset('img/default-profile-2.png') }}" alt="user-img"
                                                  class="img-circle">
                                         @else
-                                            <img src="{{ asset('user-uploads/avatar/'.$users->image) }}" alt="user-img"
-                                                 class="img-circle">
+                                            <img src="{{ asset_url('avatar/' . $users->image) }}" alt="user-img"
+                                                class="img-circle">
                                         @endif
                                         <span @if($users->message_seen == 'no' && $users->user_one != $user->id) class="font-bold" @endif> {{$users->name}}
                                             <small class="text-simple"> @if($users->last_message){{  \Carbon\Carbon::parse($users->last_message)->diffForHumans()}} @endif
@@ -75,15 +76,24 @@
                         </ul>
                     </div>
                 </div>
-                <!-- .chat-left-panel -->
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@section('content')
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <div class="chat-main-box">
+
                 <!-- .chat-right-panel -->
                 <div class="chat-right-aside">
                     <div class="chat-main-header">
                         <div class="p-20 b-b row">
-                            <h3 class="box-title col-md-9">@lang("app.menu.messages")</h3>
-                            <span class="col-md-3 text-right m-t-10"><a href="javascript:;" id="new-chat"
-                                                             class="btn btn-success btn-outline btn-sm"><i
-                                            class="icon-note"></i> @lang("modules.messages.startConversation")</a></span>
+                            {{-- <h3 class="box-title col-md-9">@lang("app.menu.messages")</h3> --}}
                         </div>
                     </div>
                     <div class="chat-box ">
@@ -99,7 +109,7 @@
                                 <input id="dpName" value="{{$dpName}}" type="hidden"/>
 
                                 <div class="custom-send">
-                                    <button id="submitBtn" class="btn btn-danger btn-rounded" type="button">@lang("modules.messages.send")
+                                    <button id="submitBtn" class="btn btn-info btn-rounded" type="button">@lang("modules.messages.send")
                                     </button>
                                 </div>
                                 <div id="errorMessage"></div>
@@ -207,7 +217,7 @@
     window.setInterval(function(){
         getChatData(dpButtonID, dpName);
         /// call your function here
-    }, 5000);
+    }, 30000);
 
     $('#submitTexts').keypress(function (e) {
 
@@ -229,10 +239,10 @@
         var dpID = $('#dpID').val();
         //checking fields blank
         if (submitText == "" || submitText == undefined || submitText == null) {
-            $('#errorMessage').html('<div class="alert alert-danger"><p>@lang('messages.fieldBlank')</p></div>');
+            $('#errorMessage').html('<span class="text-danger"><p>@lang('messages.fieldBlank')</p></span>');
             return;
         } else if (dpID == '' || submitText == undefined) {
-            $('#errorMessage').html('<div class="alert alert-danger"><p>@lang('messages.noUser ')</p></div>');
+            $('#errorMessage').html('<span class="text-danger"><p>@lang('messages.noUser')</p></span>');
             return;
         } else {
 

@@ -255,7 +255,7 @@ if ($url_f_open != "1" && $url_f_open != 'On') {
         </thead>
         <tbody>
         <tr>
-            <td>PHP 7.1.3+</td>
+            <td>PHP 7.2.5+</td>
             <td><?php echo $requirement1; ?></td>
         </tr>
         <tr>

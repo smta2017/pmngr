@@ -303,8 +303,8 @@
                 <th class="no">#</th>
                 <th class="desc">@lang("modules.invoices.item")</th>
                 <th class="qty">@lang("modules.invoices.qty")</th>
-                <th class="qty">@lang("modules.invoices.unitPrice")</th>
-                <th class="unit">@lang("modules.invoices.price")</th>
+                <th class="qty">@lang("modules.invoices.unitPrice") ({!! htmlentities($estimate->currency->currency_code)  !!})</th>
+                <th class="unit">@lang("modules.invoices.price") ({!! htmlentities($estimate->currency->currency_code)  !!})</th>
             </tr>
             </thead>
             <tbody>
@@ -319,8 +319,8 @@
                             @endif
                         </td>
                         <td class="qty"><h3>{{ $item->quantity }}</h3></td>
-                        <td class="qty"><h3>{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
-                        <td class="unit">{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$item->amount, 2, '.', '') }}</td>
+                        <td class="qty"><h3>{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
+                        <td class="unit">{{ number_format((float)$item->amount, 2, '.', '') }}</td>
                     </tr>
                 @endif
             @endforeach
@@ -329,7 +329,7 @@
                 <td class="qty">&nbsp;</td>
                 <td class="qty">&nbsp;</td>
                 <td class="desc">@lang("modules.invoices.subTotal")</td>
-                <td class="unit">{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$estimate->sub_total, 2, '.', '') }}</td>
+                <td class="unit">{{ number_format((float)$estimate->sub_total, 2, '.', '') }}</td>
             </tr>
             @if($discount != 0 && $discount != '')
                 <tr style="page-break-inside: avoid;" class="discount">
@@ -337,7 +337,7 @@
                     <td class="qty">&nbsp;</td>
                     <td class="qty">&nbsp;</td>
                     <td class="desc">@lang("modules.invoices.discount")</td>
-                    <td class="unit">-{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$discount, 2, '.', '') }}</td>
+                    <td class="unit">-{{ number_format((float)$discount, 2, '.', '') }}</td>
                 </tr>
             @endif
             @foreach($taxes as $key=>$tax)
@@ -346,21 +346,20 @@
                     <td class="qty">&nbsp;</td>
                     <td class="qty">&nbsp;</td>
                     <td class="desc">{{ strtoupper($key) }}</td>
-                    <td class="unit">{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$tax, 2, '.', '') }}</td>
+                    <td class="unit">{{ number_format((float)$tax, 2, '.', '') }}</td>
                 </tr>
             @endforeach
             </tbody>
             <tfoot>
             <tr dontbreak="true">
                 <td colspan="4">@lang("modules.invoices.total")</td>
-                <td style="text-align: center">{!! htmlentities($estimate->currency->currency_symbol)  !!}{{ number_format((float)$estimate->total, 2, '.', '') }}</td>
+                <td style="text-align: center">{{ number_format((float)$estimate->total, 2, '.', '') }}</td>
             </tr>
             </tfoot>
         </table>
         <p>&nbsp;</p>
         <hr>
         <p id="notes">
-            @lang("app.note"): Here {!! htmlentities($estimate->currency->currency_symbol)  !!} refers to {!! $estimate->currency->currency_code  !!}<br>
             @if(!is_null($estimate->note))
                 {!! nl2br($estimate->note) !!}<br>
             @endif

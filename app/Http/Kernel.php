@@ -63,9 +63,9 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
 
-        'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
-        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
-        'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
+        'role' => \Trebol\Entrust\Middleware\EntrustRole::class,
+        'permission' => \Trebol\Entrust\Middleware\EntrustPermission::class,
+        'ability' => \Trebol\Entrust\Middleware\EntrustAbility::class,
         'cors' => \Barryvdh\Cors\HandleCors::class,
         'super-admin' => SuperAdmin::class,
         'check-install' => CheckInstaller::class,

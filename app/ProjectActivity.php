@@ -6,7 +6,7 @@ use App\Observers\ProjectActivityObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectActivity extends Model
+class ProjectActivity extends BaseModel
 {
     protected $table = 'project_activity';
 

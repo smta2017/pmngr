@@ -4,11 +4,18 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}
+                <span class="text-warning b-l p-l-10 m-l-5" id="pendingLeaves">{{ count($pendingLeaves) }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.leaves.pendingLeaves')</span>
+            </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_leave'))
+                <a href="{{ route('member.leaves-dashboard.create') }}" class="btn btn-sm btn-success btn-outline waves-effect waves-light">
+                    <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')
+                </a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -54,15 +61,7 @@
         </div>
         @endif
 
-        <div class="col-md-3">
-            <div class="white-box p-t-10 p-b-10 bg-warning">
-                <h3 class="box-title text-white">@lang('modules.leaves.pendingLeaves')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-logout text-white"></i></li>
-                    <li class="text-right"><span id="pendingLeaves" class="counter text-white">{{ count($pendingLeaves) }}</span></li>
-                </ul>
-            </div>
-        </div>
+ 
 
     </div>
 
@@ -72,14 +71,7 @@
                 <div class="row">
                     <h3 class="box-title col-md-3">@lang('app.menu.leaves')</h3>
 
-                    @if($user->can('add_leave'))
-                    <div class="col-md-9">
-                        <a href="{{ route('member.leaves-dashboard.create') }}" class="btn btn-sm btn-success waves-effect waves-light  pull-right">
-                            <i class="ti-plus"></i> @lang('modules.leaves.assignLeave')
-                        </a>
-
-                    </div>
-                    @endif
+                   
 
                 </div>
 

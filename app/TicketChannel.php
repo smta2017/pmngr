@@ -6,7 +6,7 @@ use App\Observers\TicketChannelObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketChannel extends Model
+class TicketChannel extends BaseModel
 {
     protected static function boot()
     {

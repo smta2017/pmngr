@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Invoice extends Model
+class Invoice extends BaseModel
 {
     use Notifiable;
 

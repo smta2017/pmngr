@@ -58,8 +58,9 @@
 
                                         <div class="form-group">
                                             <label for="company_name">@lang('modules.pushSettings.oneSignalRestApiKey')</label>
-                                            <input type="text" class="form-control" id="onesignal_rest_api_key"
+                                            <input type="password" class="form-control" id="onesignal_rest_api_key"
                                                    name="onesignal_rest_api_key" value="{{ $pushSettings->onesignal_rest_api_key }}">
+                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                         </div>
 
                                         <div class="form-group">
@@ -85,7 +86,7 @@
                                                         <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.slackSettings.uploadSlackLogo')) }}"
                                                              alt=""/>
                                                     @else
-                                                        <img src="{{ asset('user-uploads/notification-logo/'.$pushSettings->notification_logo) }}"
+                                                        <img src="{{ asset_url('notification-logo/'.$pushSettings->notification_logo) }}"
                                                              alt=""/>
                                                     @endif
                                                 </div>
@@ -124,8 +125,7 @@
                                         </button>
                                         <button type="button" id="send-test-notification"
                                                 class="btn btn-primary waves-effect waves-light">@lang('modules.slackSettings.sendTestNotification')</button>
-                                        <button type="reset"
-                                                class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                     </div>
 
                                     {!! Form::close() !!}
@@ -172,7 +172,7 @@
                     img = '<img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.slackSettings.uploadSlackLogo')) }}" alt=""/>';
                 }
                 else{
-                    img = '<img src="{{ asset('user-uploads/notification-logo/'.$pushSettings->notification_logo) }}" alt=""/>'
+                    img = '<img src="{{ asset_url('notification-logo/'.$pushSettings->notification_logo) }}" alt=""/>'
                 }
                 $('.thumbnail').html(img);
 

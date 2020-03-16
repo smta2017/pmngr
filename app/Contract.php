@@ -6,7 +6,7 @@ use App\Observers\ContractObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class Contract extends Model
+class Contract extends BaseModel
 {
     protected $dates = [
         'start_date',

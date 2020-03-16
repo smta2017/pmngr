@@ -12,7 +12,7 @@
             @if($key % 2 == 0)
                 <div class="row gap-y align-items-center">
                     <div class="col-12  col-md-5 text-center">
-                        <img @if($value->image)src="{{ asset('front-uploads/feature/'.$value->image) }}" @else src="{{ asset('front/img-3.png') }}" @endif alt="..." class="shadow-4">
+                        <img @if($value->image)src="{{ asset_url('front/feature/'.$value->image) }}" @else src="{{ asset('front/img-3.png') }}" @endif alt="..." class="shadow-4">
                     </div>
 
                     <div class="col-12 offset-md-1  col-md-6">
@@ -28,7 +28,7 @@
                     </div>
 
                     <div class="col-12 offset-md-1 col-md-5 text-center">
-                        <img @if($value->image)src="{{ asset('front-uploads/feature/'.$value->image) }}" @else src="{{ asset('front/img-4.png') }}" @endif alt="..." class="shadow-4">
+                        <img @if($value->image)src="{{ asset_url('front/feature/'.$value->image) }}" @else src="{{ asset('front/img-4.png') }}" @endif alt="..." class="shadow-4">
                     </div>
                 </div>
             @endif

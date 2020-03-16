@@ -72,8 +72,7 @@
                         <div class="ribbon ribbon-bookmark ribbon-danger">@lang('modules.invoices.unpaid')</div>
                     @endif
 
-                    <h3><b>@lang('app.invoice')</b> <span class="pull-right">{{ $invoice->invoice_number }}</span></h3>
-                    <hr>
+                    <h3><span class="pull-right">{{ $invoice->invoice_number }}</span></h3>
                     <div class="row">
                         <div class="col-md-12">
 
@@ -407,7 +406,7 @@
     @if($credentials->stripe_status == 'active')
         var handler = StripeCheckout.configure({
             key: '{{ $credentials->stripe_client_id }}',
-            image: '{{ is_null($global->logo) ? asset('worksuite-logo.png') : asset('user-uploads/app-logo/'.$global->logo) }}',
+            image: '{{ $global->logo_url }}',
             locale: 'auto',
             token: function(token) {
                 // You can access the token ID with `token.id`.

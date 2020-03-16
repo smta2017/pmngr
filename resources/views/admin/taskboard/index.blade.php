@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:;" id="toggle-filter" class="btn btn-sm btn-inverse btn-outline toggle-filter"><i class="fa fa-sliders"></i></a>
+            <a href="javascript:;" id="add-column" class="btn btn-success btn-outline btn-sm"><i class="fa fa-plus"></i> @lang('modules.tasks.addBoardColumn')</a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -29,15 +32,8 @@
 
     <div class="row">
         <div class="white-box">
-            <div class="row">
-                <div class="col-md-5">
-                    <a href="{{ route('admin.all-tasks.index') }}" class="btn btn-info btn-outline"><i class="fa fa-arrow-left"></i> @lang('modules.tasks.tasksTable')</a>
-                    <a href="javascript:;" id="add-column" class="btn btn-success btn-outline"><i class="fa fa-plus"></i> @lang('modules.tasks.addBoardColumn')</a>
-                    <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger toggle-filter"><i
-                                class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                </div>
-            </div>
-            <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
+            
+            <div class="row" style="display: none; " id="ticket-filters">
                 <div class="col-md-12">
                     <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
                 </div>
@@ -155,10 +151,10 @@
 
     </div>
 
-    <div class="container-scroll">
+    <div class="container-scroll  white-box">
 
-    <div class="row container-row">
-    </div>
+        <div class="row container-row">
+        </div>
     <!-- .row -->
     </div>
 
@@ -277,7 +273,7 @@
     })
 
     $('.toggle-filter').click(function () {
-        $('#ticket-filters').toggle('slide');
+        $('#ticket-filters').slideToggle();
     })
 
     function loadData () {

@@ -65,9 +65,9 @@ class NewUser extends Notification implements ShouldQueue
             ->subject(__('email.newUser.subject').' '.config('app.name').'!')
             ->greeting(__('email.hello').' '.ucwords($notifiable->name).'!')
             ->line(__('email.newUser.text'))
-            ->line('Email:- '.$notifiable->email)
-            ->line('Password:- '.$this->password)
-            ->action(__('email.loginDashboard'), url('/'))
+            ->line('Email: '.$notifiable->email)
+            ->line('Password:  '.$this->password)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 
@@ -94,13 +94,13 @@ class NewUser extends Notification implements ShouldQueue
         if(count($notifiable->employee) > 0 && !is_null($notifiable->employee[0]->slack_username)){
             return (new SlackMessage())
                 ->from(config('app.name'))
-                ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+                ->image($slack->slack_logo_url)
                 ->to('@' . $notifiable->employee[0]->slack_username)
                 ->content('Welcome to ' . config('app.name') . '! Your account has been created successfully.');
         }
         return (new SlackMessage())
             ->from(config('app.name'))
-            ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+            ->image($slack->slack_logo_url)
             ->content('This is a redirected notification. Add slack username for *'.ucwords($notifiable->name).'*');
     }
 

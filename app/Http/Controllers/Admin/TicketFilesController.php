@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\EmployeeDocs;
-//use App\Helper\Files;
 use App\Helper\Files;
 use App\Helper\Reply;
-use App\Http\Requests\EmployeeDocs\CreateRequest;
-use App\TaskFile;
 use App\TicketFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class TicketFilesController extends AdminBaseController
@@ -132,52 +127,10 @@ class TicketFilesController extends AdminBaseController
                 $file->ticket_reply_id = $request->ticket_reply_id;
                 switch($storage) {
                     case 'local':
-                        $fileData->storeAs('user-uploads/ticket-files/'.$request->ticket_reply_id, $fileData->hashName());
+                        $fileData->image->store('ticket-files/'.$request->ticket_reply_id, $fileData->hashName());
                         break;
                     case 's3':
                         Storage::disk('s3')->putFileAs('ticket-files/'.$request->ticket_reply_id, $fileData, $fileData->getClientOriginalName(), 'public');
-                        break;
-                    case 'google':
-                        $dir = '/';
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                        $dir = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', 'ticket-files')
-                            ->first();
-
-                        if(!$dir) {
-                            Storage::cloud()->makeDirectory('ticket-files');
-                        }
-
-                        $directory = $dir['path'];
-                        $recursive = false;
-                        $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                        $directory = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', $request->ticket_reply_id)
-                            ->first();
-
-                        if ( ! $directory) {
-                            Storage::cloud()->makeDirectory($dir['path'].'/'.$request->ticket_reply_id);
-                            $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                            $directory = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', $request->ticket_reply_id)
-                                ->first();
-                        }
-
-                        Storage::cloud()->putFileAs($directory['basename'], $fileData, $fileData->getClientOriginalName());
-
-                        $file->google_url = Storage::cloud()->url($directory['path'].'/'.$fileData->getClientOriginalName());
-
-                        break;
-                    case 'dropbox':
-                        Storage::disk('dropbox')->putFileAs('ticket-files/'.$request->ticket_reply_id.'/', $fileData, $fileData->getClientOriginalName());
-                        $dropbox = new Client(['headers' => ['Authorization' => "Bearer ".config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                        $res = $dropbox->request('POST', 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                            [\GuzzleHttp\RequestOptions::JSON => ["path" => '/ticket-files/'.$request->ticket_reply_id.'/'.$fileData->getClientOriginalName()]]
-                        );
-                        $dropboxResult = $res->getBody();
-                        $dropboxResult = json_decode($dropboxResult, true);
-                        $file->dropbox_link = $dropboxResult['url'];
                         break;
                 }
 

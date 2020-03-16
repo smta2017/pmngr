@@ -8,7 +8,13 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_events'))
+                <a href="#" data-toggle="modal" data-target="#my-event" class="btn btn-sm btn-success btn-outline waves-effect waves-light">
+                    <i class="ti-plus"></i> @lang('modules.events.addEvent')
+                </a>
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -35,19 +41,6 @@
         <div class="col-md-12">
             <div class="white-box">
 
-                @if($user->can('add_events'))
-                    <div class="row">
-                        <h3 class="box-title col-md-3">@lang('app.menu.Events')</h3>
-
-                        <div class="col-md-9">
-                            <a href="#" data-toggle="modal" data-target="#my-event" class="btn btn-sm btn-success waves-effect waves-light  pull-right">
-                                <i class="ti-plus"></i> @lang('modules.events.addEvent')
-                            </a>
-
-                        </div>
-
-                    </div>
-                @endif
 
                 <div id="calendar"></div>
             </div>

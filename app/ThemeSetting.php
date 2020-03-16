@@ -6,7 +6,7 @@ use App\Observers\ThemeSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ThemeSetting extends Model
+class ThemeSetting extends BaseModel
 {
     protected static function boot()
     {

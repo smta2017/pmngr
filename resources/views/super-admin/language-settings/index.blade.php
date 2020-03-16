@@ -30,55 +30,50 @@
             <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('app.language') @lang('app.menu.settings')</div>
 
-                <div class="vtabs customvtab m-t-10">
+                <div class="p-10 m-t-10">
                     @include('sections.super_admin_setting_menu')
 
-                    <div class="tab-content">
-                        <div id="vhome3" class="tab-pane active">
-                            <div class="row">
-                                <div class="col-sm-12 col-xs-12">
-                                    <a href="{{ route('super-admin.language-settings.create') }}" class="btn btn-outline btn-success btn-sm m-b-30">@lang('app.add') @lang('app.language')  <i class="fa fa-plus" aria-hidden="true"></i></a>
-                                    <a href="{{ url('/translations') }}" target="_blank" class="btn btn-sm m-b-30 btn-warning"><i class="ti-settings"></i> Translate</a>
-                                </div>
-                            </div>
-                            <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>@lang('app.language') @lang('app.name')</th>
-                                    <th>@lang('app.language_code')</th>
-                                    <th>@lang('app.status')</th>
-                                    <th class="text-nowrap">@lang('app.action')</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($languages as $language)
-                                    <tr id="languageRow{{ $language->id }}">
-                                        <td>{{ ucwords($language->language_name) }}</td>
-                                        <td>{{ strtoupper($language->language_code) }}</td>
-                                        <td>
-                                            <div class="switchery-demo">
-                                                <input type="checkbox"
-                                                       @if($language->status == 'enabled') checked
-                                                       @endif class="js-switch change-language-setting"
-                                                       data-color="#99d683"
-                                                       data-setting-id="{{ $language->id }}"/>
-                                            </div>
-                                        </td>
-                                        <td class="text-nowrap">
-                                            <a href="{{ route('super-admin.language-settings.edit', [$language->id]) }}" class="btn btn-info btn-circle"
-                                               data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <a href="{{ route('super-admin.language-settings.create') }}" class="btn btn-outline btn-success btn-sm m-b-30">@lang('app.add') @lang('app.language')  <i class="fa fa-plus" aria-hidden="true"></i></a>
+                            <a href="{{ url('/translations') }}" target="_blank" class="btn btn-sm m-b-30 btn-warning"><i class="ti-settings"></i> Translate</a>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>@lang('app.language') @lang('app.name')</th>
+                                <th>@lang('app.language_code')</th>
+                                <th>@lang('app.status')</th>
+                                <th class="text-nowrap">@lang('app.action')</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($languages as $language)
+                                <tr id="languageRow{{ $language->id }}">
+                                    <td>{{ ucwords($language->language_name) }}</td>
+                                    <td>{{ strtoupper($language->language_code) }}</td>
+                                    <td>
+                                        <div class="switchery-demo">
+                                            <input type="checkbox"
+                                                   @if($language->status == 'enabled') checked
+                                                   @endif class="js-switch change-language-setting"
+                                                   data-color="#99d683"
+                                                   data-setting-id="{{ $language->id }}"/>
+                                        </div>
+                                    </td>
+                                    <td class="text-nowrap">
+                                        <a href="{{ route('super-admin.language-settings.edit', [$language->id]) }}" class="btn btn-info btn-circle"
+                                           data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 
-                                            <a href="javascript:;" class="btn btn-danger btn-circle sa-params"
-                                               data-toggle="tooltip" data-language-id="{{ $language->id }}" data-original-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                         <div class="clearfix"></div>
-                        </div>
+                                        <a href="javascript:;" class="btn btn-danger btn-circle sa-params"
+                                           data-toggle="tooltip" data-language-id="{{ $language->id }}" data-original-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>

@@ -104,29 +104,31 @@ return array (
   'notAnAuthorisedDevice' => 'This is not an authorised device for clock-in or clock-out',
   'notAnValidLocation' => 'This is not an valid location for clock-in or clock-out',
   'superAdminUpdated' => 'Super Admin info updated successfully.',
-  'welcome' => 
+  'noFaqCreated' => 'Seems like no faq has been created by the admin',
+  'noModules' => 'No modules has been installed.',
+  'welcome' =>
   array (
     'message' => 'Welcome to the setup wizard',
     'title' => 'Welcome to the installer',
   ),
   'title' => 'Laravel installer',
-  'requirements' => 
+  'requirements' =>
   array (
     'title' => 'formalities',
   ),
-  'permissions' => 
+  'permissions' =>
   array (
     'title' => 'Permissions',
   ),
   'next' => 'Following',
   'finish' => 'Install',
-  'final' => 
+  'final' =>
   array (
     'title' => 'Finalized.',
     'finished' => 'The application has been installed successfully!',
     'exit' => 'Click here to exit.',
   ),
-  'environment' => 
+  'environment' =>
   array (
     'errors' => 'It is not possible to create the .env file, please try manually.',
     'save' => 'Save .env file',
@@ -202,12 +204,14 @@ return array (
   'fieldBlank' => 'Field cannot be blank.',
   'attendanceDelete' => 'Attendance deleted successfully.',
   'defaultRoleCantDelete' => 'Default role can not be deleted.',
+    'defaultRolesCantDelete' => 'Admin, Client and Employee roles are default roles and  Default roles can not be deleted.',
   'importSuccess' => 'File imported successfully.',
   'taxAdded' => 'Tax added successfully.',
-  'faviconNote' => 'Go to https://www.favicon-generator.org/ and generate favicons.
+  'faviconNote' => 'Go to <a href="https://www.favicon-generator.org/">https://www.favicon-generator.org</a> and generate favicons.
 
 After that upload the favicons to public/favicon directory.',
   'LeadDeleted' => 'Lead deleted successfully.',
+  'noLeadAgentAdded' => 'No Leads Added.',
   'LeadUpdated' => 'Lead updated successfully.',
   'LeadAddedUpdated' => 'Lead added successfully.',
   'leadSourceAddSuccess' => 'Lead source added successfully.',
@@ -254,7 +258,7 @@ After that upload the favicons to public/favicon directory.',
   'currencyConvertApiKeyUrl' => 'Get API key by this url',
   'currencyConvertKeyUpdated' => 'Currency convert API key updated successfully',
   'timerAlreadyRunning' => 'Timer is already running.',
-  'namedCompanyRegistered' => 
+  'namedCompanyRegistered' =>
   array (
     '' => 'named company registered.',
   ),
@@ -263,8 +267,9 @@ After that upload the favicons to public/favicon directory.',
   'planPurchaseByCompany' => 'Plan purchased by company',
   'planUpdatedByCompany' => 'Plan updated by company',
   'planUpdatedBy' => 'Plan updated by',
-  'addCurrencyNote' => 'Add currency covert key for  add or edit currency and Update exchange rate.',
-  'feature' => 
+  'signUpThankYou' => 'Thank you for signing up. Please verify your email to get started',
+  'addCurrencyNote' => 'Add currency converter key to add or edit currency and Update exchange rate.',
+  'feature' =>
   array (
     'addedSuccess' => 'Feature added successfully.',
     'updatedSuccess' => 'Feature updated successfully.',
@@ -334,4 +339,33 @@ After that upload the favicons to public/favicon directory.',
   'noLeadAgent' => 'No lead agent found.',
   'gdprUpdated' => 'GDPR setting successfully updated',
   'offlinePackageChangeRequest' => 'New offline package request',
-);
+
+  'testimonial' =>
+      array (
+          'addedSuccess' => 'Testimonial added successfully.',
+          'updatedSuccess' => 'Testimonial updated successfully.',
+          'deletedSuccess' => 'Testimonial deleted successfully.',
+      ),
+  'frontClient' =>
+      array (
+          'addedSuccess' => 'Front Client added successfully.',
+          'updatedSuccess' => 'Front Client updated successfully.',
+          'deletedSuccess' => 'Front Client deleted successfully.',
+      ),
+  'frontFaq' =>
+      array (
+          'addedSuccess' => 'Front faq added successfully.',
+          'updatedSuccess' => 'Front faq updated successfully.',
+          'deletedSuccess' => 'Front faq deleted successfully.',
+      ),
+  'ratingShouldBe' => 'Rating should be 1 - 5',
+  'frontOldNewTheme' => 'Enable/Disable front theme new or old.',
+    'noDepartment' => 'Seems like no department exist in the database. Create your first department',
+    'noDesignation' => 'Seems like no designation exist in the database. Create your first designation',
+    'loginAgain' => 'You will have to login again to see the changes.',
+    'newInvoiceCreated' => 'New invoice created.',
+    'newEstimateReceived' => 'New Estimate Received.',
+    'newEstimateTotal' => 'Estimate of :total is generated.',
+    'noPaymentGatewayEnabled' => 'Superadmin has not enabled any payment gateway. Ask superadmin to enable payment gateway
+                           to see Buy button',
+  );

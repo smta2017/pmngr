@@ -4,11 +4,15 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}
+                <span class="text-info b-l p-l-10 m-l-5">{{ $totalProducts }}</span> <span class="font-12 text-muted m-l-5">@lang('app.total') @lang('app.menu.products')</span>
+            </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.products.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.addNew') @lang('app.menu.products') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -28,30 +32,9 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('app.total') @lang('app.menu.products')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-basket text-white"></i></li>
-                    <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $totalProducts }}</span></li>
-                </ul>
-            </div>
-        </div>
-
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.products.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.addNew') @lang('app.menu.products') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm pull-right"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
+       
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="products-table">

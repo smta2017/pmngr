@@ -1,8 +1,12 @@
+@section('other-section')
+
 <ul class="nav tabs-vertical">
-    <li class="tab">
-        <a href="{{ route('super-admin.settings.index') }}" class="text-danger"><i class="ti-arrow-left"></i> @lang('app.menu.settings')</a></li>
+    <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.theme-settings') active @endif">
+        <a href="{{ route('super-admin.theme-settings') }}">@lang('app.front') @lang('app.theme') @lang('app.menu.settings')</a></li>
+
     <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.front-settings.index') active @endif">
         <a href="{{ route('super-admin.front-settings.index') }}">@lang('app.front') @lang('app.menu.settings')</a></li>
+
     <li class="tab @if(isset($type) && $type == 'image') active @endif">
         <a href="{{ route('super-admin.feature-settings.index') }}?type=image">@lang('app.featureWithImage')</a></li>
 
@@ -50,3 +54,4 @@
 
     }
 </script>
+@endsection

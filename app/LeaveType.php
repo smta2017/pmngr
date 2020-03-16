@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class LeaveType extends Model
+class LeaveType extends BaseModel
 {
     protected static function boot()
     {

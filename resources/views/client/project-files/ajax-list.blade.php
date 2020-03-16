@@ -6,25 +6,16 @@
             </div>
             <div class="col-md-3">
                 <a target="_blank"
-                @if(!is_null($file->external_link))
-                   href="{{ $file->external_link }}"
-                   @elseif(!is_null($file->dropbox_link))
-                   href="{{ $file->dropbox_link }}"
-                   @else
-                   href="{{ asset('user-uploads/project-files/'.$project->id.'/'.$file->hashname) }}"
-                   @endif
+                   href="{{ $file->file_url }}"
+
                    data-toggle="tooltip" data-original-title="View"
                    class="btn btn-info btn-circle"><i
                             class="fa fa-search"></i></a>
 
-                @if(is_null($file->external_link))
-                &nbsp;&nbsp;
+                 @if(is_null($file->external_link))
+                &nbsp;&nbsp
                 <a
-                        @if(!is_null($file->dropbox_link))
-                        href="{{ str_replace('dl=0', 'dl=1', $file->dropbox_link) }}"
-                        @else
                         href="{{ route('client.files.download', $file->id) }}"
-                        @endif
 
                         data-toggle="tooltip" data-original-title="Download" class="btn btn-inverse btn-circle"><i class="fa fa-download"></i></a>
                 @if($file->user_id == $user->id)

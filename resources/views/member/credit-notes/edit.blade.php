@@ -64,29 +64,26 @@
                                     </div>
 
                                 </div>
-
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('app.project')</label>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <select class="select2 form-control" data-placeholder="Choose Project"
-                                                        name="project_id">
-                                                    @foreach($projects as $project)
-                                                        <option
-                                                                @if($creditNote->project_id == $project->id) selected
-                                                                @endif
-                                                                value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
-                                                    @endforeach
-                                                </select>
+                                @if(in_array('projects', $modules))
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">@lang('app.project')</label>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <select class="select2 form-control" data-placeholder="Choose Project"
+                                                            name="project_id">
+                                                        @foreach($projects as $project)
+                                                            <option
+                                                                    @if($creditNote->project_id == $project->id) selected
+                                                                    @endif
+                                                                    value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">@lang('modules.credit-notes.currency')</label>
@@ -115,7 +112,7 @@
                                                 <div class="input-icon">
                                                     <input type="text" class="form-control" name="issue_date"
                                                            id="issue_date"
-                                                           value="{{ $creditNote->issue_date->format('m/d/Y') }}">
+                                                           value="{{ $creditNote->issue_date->format($global->date_format) }}">
                                                 </div>
                                             </div>
                                         </div>
@@ -129,7 +126,7 @@
 
                                         <div class="input-icon">
                                             <input type="text" class="form-control" name="due_date" id="due_date"
-                                                   value="{{ $creditNote->due_date->format('m/d/Y') }}">
+                                                   value="{{ $creditNote->due_date->format($global->date_format) }}">
                                         </div>
                                     </div>
 
@@ -459,7 +456,7 @@
         }
 
         $.easyAjax({
-            url: '{{route('admin.all-credit-notes.update', $creditNote->id)}}',
+            url: '{{route('member.all-credit-notes.update', $creditNote->id)}}',
             container: '#updatePayments',
             type: "POST",
             redirect: true,
@@ -680,7 +677,7 @@
         event.preventDefault();
         var id = $(this).data('pk');
         $.easyAjax({
-            url:'{{ route('admin.all-credit-notes.update-item') }}',
+            url:'{{ route('member.all-credit-notes.update-item') }}',
             type: "GET",
             data: { id: id },
             success: function(response) {

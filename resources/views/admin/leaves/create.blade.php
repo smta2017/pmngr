@@ -54,7 +54,7 @@
 
                                 <div class="col-md-12 ">
                                     <div class="form-group">
-                                        <label class="control-label">@lang('modules.leaves.leaveType') 
+                                        <label class="control-label">@lang('modules.leaves.leaveType')
                                             <a href="javascript:;"
                                             id="addLeaveType" class="btn btn-sm btn-outline btn-success"><i class="fa fa-plus"></i> @lang('modules.leaves.addLeaveType')</a>
                                         </label>
@@ -145,7 +145,7 @@
                             <button type="submit" id="save-form-2" class="btn btn-success"><i class="fa fa-check"></i>
                                 @lang('app.save')
                             </button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

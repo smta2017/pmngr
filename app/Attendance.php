@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Builder;
 
-class Attendance extends Model
+class Attendance extends BaseModel
 {
     protected $dates = ['clock_in_time', 'clock_out_time'];
     protected $appends = ['clock_in_date'];

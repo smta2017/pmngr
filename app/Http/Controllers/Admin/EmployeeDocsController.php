@@ -8,7 +8,6 @@ use App\Http\Requests\EmployeeDocs\CreateRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Response;
 
 class EmployeeDocsController extends AdminBaseController
 {
@@ -137,52 +136,10 @@ class EmployeeDocsController extends AdminBaseController
                     $file->user_id = $request->user_id;
                     switch($storage) {
                         case 'local':
-                            $value->storeAs('user-uploads/employee-docs/'.$request->user_id, $value->hashName());
+                            $value->image->store('employee-docs/'.$request->user_id, $value->hashName());
                             break;
                         case 's3':
                             Storage::disk('s3')->putFileAs('employee-docs/'.$request->user_id, $value, $value->hashName(), 'public');
-                            break;
-                        case 'google':
-                            $dir = '/';
-                            $recursive = false;
-                            $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                            $dir = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', 'employee-docs')
-                                ->first();
-
-                            if(!$dir) {
-                                Storage::cloud()->makeDirectory('employee-docs');
-                            }
-
-                            $directory = $dir['path'];
-                            $recursive = false;
-                            $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                            $directory = $contents->where('type', '=', 'dir')
-                                ->where('filename', '=', $request->user_id)
-                                ->first();
-
-                            if ( ! $directory) {
-                                Storage::cloud()->makeDirectory($dir['path'].'/'.$request->user_id);
-                                $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                                $directory = $contents->where('type', '=', 'dir')
-                                    ->where('filename', '=', $request->user_id)
-                                    ->first();
-                            }
-
-                            Storage::cloud()->putFileAs($directory['basename'], $value, $value->hashName());
-
-                            $file->google_url = Storage::cloud()->url($directory['path'].'/'.$value->hashName());
-
-                            break;
-                        case 'dropbox':
-                            Storage::disk('dropbox')->putFileAs('employee-docs/'.$request->user_id.'/', $value, $value->hashName());
-                            $dropbox = new Client(['headers' => ['Authorization' => "Bearer ".config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                            $res = $dropbox->request('POST', 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                                [\GuzzleHttp\RequestOptions::JSON => ["path" => '/employee-docs/'.$request->user_id.'/'.$value->hashName()]]
-                            );
-                            $dropboxResult = $res->getBody();
-                            $dropboxResult = json_decode($dropboxResult, true);
-                            $file->dropbox_link = $dropboxResult['url'];
                             break;
                     }
 
@@ -252,16 +209,10 @@ class EmployeeDocsController extends AdminBaseController
 
         switch($storage) {
             case 'local':
-                File::delete('user-uploads/employee-docs/'.$file->user_id.'/'.$file->filename);
+                File::delete('user-uploads/employee-docs/'.$file->user_id.'/'.$file->hashname);
                 break;
             case 's3':
-                Storage::disk('s3')->delete('employee-docs/'.$file->user_id.'/'.$file->filename);
-                break;
-            case 'google':
-                Storage::disk('google')->delete('employee-docs/'.$file->user_id.'/'.$file->filename);
-                break;
-            case 'dropbox':
-                Storage::disk('dropbox')->delete('employee-docs/'.$file->user_id.'/'.$file->filename);
+                Storage::disk('s3')->delete('employee-docs/'.$file->user_id.'/'.$file->hashname);
                 break;
         }
 
@@ -281,60 +232,7 @@ class EmployeeDocsController extends AdminBaseController
      */
     public function download($id) {
         $file = EmployeeDocs::findOrFail($id);
-        $storage = config('filesystems.default');
-        switch($storage) {
-            case 'local':
-                return response()->download('user-uploads/employee-docs/'.$file->user_id.'/'.$file->hashname, $file->filename);
-                break;
-            case 's3':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $fs = Storage::getDriver();
-                $stream = $fs->readStream('employee-docs/'.$file->user_id.'/'.$file->filename);
-                return Response::stream(function() use($stream) {
-                    fpassthru($stream);
-                }, 200, [
-                    "Content-Type" => $ext,
-                    "Content-Length" => $file->size,
-                    "Content-disposition" => "attachment; filename=\"" .basename($file->filename) . "\"",
-                ]);
-                break;
-            case 'google':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $dir = '/';
-                $recursive = false; // Get subdirectories also?
-                $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                $directory = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', 'employee-docs')
-                    ->first();
-
-                $direct = $directory['path'];
-                $recursive = false;
-                $contents = collect(Storage::cloud()->listContents($direct, $recursive));
-                $directo = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', $file->user_id)
-                    ->first();
-
-                $readStream = Storage::cloud()->getDriver()->readStream($directo['path']);
-                return response()->stream(function () use ($readStream) {
-                    fpassthru($readStream);
-                }, 200, [
-                    'Content-Type' => $ext,
-                    'Content-disposition' => 'attachment; filename="'.$file->filename.'"',
-                ]);
-                break;
-            case 'dropbox':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $fs = Storage::getDriver();
-                $stream = $fs->readStream('employee-docs/'.$file->user_id.'/'.$file->filename);
-                return Response::stream(function() use($stream) {
-                    fpassthru($stream);
-                }, 200, [
-                    "Content-Type" => $ext,
-                    "Content-Length" => $file->size,
-                    "Content-disposition" => "attachment; filename=\"" .basename($file->filename) . "\"",
-                ]);
-                break;
-        }
+        return download_local_s3($file, 'employee-docs/' . $file->user_id . '/' . $file->hashname);
 
     }
 

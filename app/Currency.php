@@ -6,7 +6,7 @@ use App\Observers\CurrencyObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Currency extends Model
+class Currency extends BaseModel
 {
     protected static function boot()
     {

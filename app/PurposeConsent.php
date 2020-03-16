@@ -6,7 +6,7 @@ use App\Observers\PurposeConsentObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class PurposeConsent extends Model
+class PurposeConsent extends BaseModel
 {
     protected $table = 'purpose_consent';
     protected $fillable = ['name', 'description'];

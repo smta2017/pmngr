@@ -1,10 +1,6 @@
 <!DOCTYPE html>
-<!--
-   This is a starter template page. Use this page to start your new project from
-   scratch. This page gets rid of all links and provides the needed markup only.
-   -->
-<html lang="en" dir="@lang('app.htmldirection')">
 
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,11 +27,13 @@
     <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     <meta name="theme-color" content="#ffffff">
 
-    <title> Super Admin Panel | {{ __($pageTitle) }}</title>
+    <title> @lang('app.superAdminPanel') | {{ __($pageTitle) }}</title>
     <!-- Bootstrap Core CSS -->
-    <link href="/bootstrap/dist/css/@lang('app.bootstrapfile')" rel="stylesheet">
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css'>
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css'>
+    <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel='stylesheet prefetch'
+          href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css'>
+    <link rel='stylesheet prefetch'
+          href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/css/bootstrap-select.min.css'>
 
     <!-- This is Sidebar menu CSS -->
     <link href="{{ asset('plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.css') }}" rel="stylesheet">
@@ -44,20 +42,22 @@
     <link href="{{ asset('plugins/bower_components/sweetalert/sweetalert.css') }}" rel="stylesheet">
 
     <!-- This is a Animation CSS -->
-    <link href="{{ asset('css/animate.css') }}" rel="stylesheet"> @stack('head-script')
+    <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
 
-    <!-- This is a Custom CSS -->
-    <link href="/css/@lang('app.cssfile')" rel="stylesheet">
+    @stack('head-script')
+
+            <!-- This is a Custom CSS -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- color CSS you can use different color css from css/colors folder -->
     <!-- We have chosen the skin-blue (default.css) for this starter
        page. However, you can choose any other skin from folder css / colors .
        -->
     <link href="{{ asset('css/colors/default.css') }}" id="theme" rel="stylesheet">
     <link href="{{ asset('plugins/froiden-helper/helper.css') }}" rel="stylesheet">
-    <!-- <link href="{{ asset('css/custom.css') }}" rel="stylesheet">  -->
-    <link href="/css/@lang('app.csscustom')" rel="stylesheet">
-    <link href="{{ asset('css/admin-custom.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/magnific-popup.css') }}">
+    <link href="{{ asset('css/custom-new.css') }}" rel="stylesheet">
 
+    <link href="{{ asset('css/rounded.css') }}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,294 +66,236 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <style>
-        .sidebar .notify {
-            margin: 0 !important;
-        }
 
-        .sidebar .notify .heartbit {
-            top: -23px !important;
-            right: -15px !important;
-        }
-
-        .sidebar .notify .point {
-            top: -13px !important;
-        }
-    </style>
-
-@if($pushSetting->status == 'active')
-<link rel="manifest" href="{{ asset('manifest.json') }}" />
-<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
-<script>
-    var OneSignal = window.OneSignal || [];
-    OneSignal.push(function() {
-        OneSignal.init({
-            appId: "{{ $pushSetting->onesignal_app_id }}",
-            autoRegister: false,
-            notifyButton: {
-                enable: false,
-            },
-            promptOptions: {
-                /* actionMessage limited to 90 characters */
-                actionMessage: "We'd like to show you notifications for the latest news and updates.",
-                /* acceptButtonText limited to 15 characters */
-                acceptButtonText: "ALLOW",
-                /* cancelButtonText limited to 15 characters */
-                cancelButtonText: "NO THANKS"
-            }
-        });
-        OneSignal.on('subscriptionChange', function (isSubscribed) {
-            console.log("The user's subscription state is now:", isSubscribed);
-        });
-
-        
-        if (Notification.permission === "granted") {
-            // Automatically subscribe user if deleted cookies and browser shows "Allow"
-            OneSignal.getUserId()
-                .then(function(userId) {
-                    if (!userId) {
-                        OneSignal.registerForPushNotifications();
+    @if($pushSetting->status == 'active')
+        <link rel="manifest" href="{{ asset('manifest.json') }}" />
+        <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
+        <script>
+            var OneSignal = window.OneSignal || [];
+            OneSignal.push(function() {
+                OneSignal.init({
+                    appId: "{{ $pushSetting->onesignal_app_id }}",
+                    autoRegister: false,
+                    notifyButton: {
+                        enable: false,
+                    },
+                    promptOptions: {
+                        /* actionMessage limited to 90 characters */
+                        actionMessage: "We'd like to show you notifications for the latest news and updates.",
+                        /* acceptButtonText limited to 15 characters */
+                        acceptButtonText: "ALLOW",
+                        /* cancelButtonText limited to 15 characters */
+                        cancelButtonText: "NO THANKS"
                     }
-                    else{
-                        let db_onesignal_id = '{{ $user->onesignal_player_id }}';
-
-                        if((db_onesignal_id == null || db_onesignal_id !== userId) && userId !== null){ //update onesignal ID if it is new
-                            updateOnesignalPlayerId(userId);
-                        }
-                    }
-                })
-        } else {
-            OneSignal.isPushNotificationsEnabled(function(isEnabled) {
-                if (isEnabled){
-                    console.log("Push notifications are enabled! - 2    ");
-                    // console.log("unsubscribe");
-                    // OneSignal.setSubscription(false);
-                }
-                else{
-                    console.log("Push notifications are not enabled yet. - 2");    
-                    // OneSignal.showHttpPrompt();
-                    // OneSignal.registerForPushNotifications({
-                    //         modalPrompt: true
-                    // });
-                }
-
-                OneSignal.getUserId(function(userId) {
-                    console.log("OneSignal User ID:", userId);
-                    // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316    
-                    let db_onesignal_id = '{{ $user->onesignal_player_id }}';
-                    console.log('database id : '+db_onesignal_id);
-                    
-                    if((db_onesignal_id == null || db_onesignal_id !== userId) && userId !== null){ //update onesignal ID if it is new
-                       updateOnesignalPlayerId(userId);
-                    }
-
-
+                });
+                OneSignal.on('subscriptionChange', function (isSubscribed) {
+                    console.log("The user's subscription state is now:", isSubscribed);
                 });
 
 
-                OneSignal.showHttpPrompt();
+                if (Notification.permission === "granted") {
+                    // Automatically subscribe user if deleted cookies and browser shows "Allow"
+                    OneSignal.getUserId()
+                        .then(function(userId) {
+                            if (!userId) {
+                                OneSignal.registerForPushNotifications();
+                            }
+                            else{
+                                let db_onesignal_id = '{{ $user->onesignal_player_id }}';
+
+                                if((db_onesignal_id == null || db_onesignal_id !== userId) && userId !== null){ //update onesignal ID if it is new
+                                    updateOnesignalPlayerId(userId);
+                                }
+                            }
+                        })
+                } else {
+                    OneSignal.isPushNotificationsEnabled(function(isEnabled) {
+                        if (isEnabled){
+                            console.log("Push notifications are enabled! - 2    ");
+                            // console.log("unsubscribe");
+                            // OneSignal.setSubscription(false);
+                        }
+                        else{
+                            console.log("Push notifications are not enabled yet. - 2");
+                            // OneSignal.showHttpPrompt();
+                            // OneSignal.registerForPushNotifications({
+                            //         modalPrompt: true
+                            // });
+                        }
+
+                        OneSignal.getUserId(function(userId) {
+                            console.log("OneSignal User ID:", userId);
+                            // (Output) OneSignal User ID: 270a35cd-4dda-4b3f-b04e-41d7463a2316
+                            let db_onesignal_id = '{{ $user->onesignal_player_id }}';
+                            console.log('database id : '+db_onesignal_id);
+
+                            if((db_onesignal_id == null || db_onesignal_id !== userId) && userId !== null){ //update onesignal ID if it is new
+                            updateOnesignalPlayerId(userId);
+                            }
+
+
+                        });
+
+
+                        OneSignal.showHttpPrompt();
+                    });
+
+                }
             });
-                
+        </script>
+    @endif
+
+    <style>
+        .sidebar .notify  {
+        margin: 0 !important;
         }
-    });
-</script>
-@endif
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+        .sidebar .notify .heartbit {
+        top: -23px !important;
+        right: -15px !important;
+        }
+        .sidebar .notify .point {
+        top: -13px !important;
+        }
+        .top-notifications .message-center .user-img{
+             margin: 0 0 0 0 !important;
+         }
+    </style>
 
-    gtag('config', 'UA-387908-39');
-    </script>
+
 </head>
-
 <body class="fix-sidebar">
-    <!-- Preloader -->
-    <div class="preloader">
-        <div class="cssload-speeding-wheel"></div>
-    </div>
-    <div id="wrapper">
-        <!-- Top Navigation -->
-        <nav class="navbar navbar-default navbar-static-top m-b-0">
-            <div class="navbar-header">
-                <!-- Toggle icon for mobile view -->
-                <a class="navbar-toggle hidden-sm hidden-md hidden-lg " href="javascript:void(0)" data-toggle="collapse" data-target=".navbar-collapse"><i class="ti-menu"></i></a>
-
-                <div class="top-left-part">
-                    <!-- Logo -->
-                    <a class="logo hidden-xs hidden-sm text-center" href="{{ route('super-admin.dashboard') }}">
-                    @if(is_null($global->logo))
-                            <!--This is dark logo icon-->
-                    <img src="{{ asset('worksuite-logo.png') }}" alt="home" class=" admin-logo"/>
-                    @else
-                        <img src="{{ asset('user-uploads/app-logo/'.$global->logo) }}" alt="home" />
-                    @endif
-                </a>
-
-                    <div class="admin-panel-name hidden-xs">@lang('app.superAdminPanel')</div>
-                </div>
-                <!-- /Logo -->
-                <!-- Search input and Toggle icon -->
-                <ul class="nav navbar-top-links navbar-left hidden-xs">
-                    <li><a href="javascript:void(0)" class="open-close hidden-xs waves-effect waves-light"><i
-                                class="icon-arrow-left-circle ti-menu"></i></a></li>
-                    
-                    @if(isset($missingItems) && $missingItems > 0)
-                        <li style="width: 230px; padding: 10px; border-radius: 3px" class="bg-white m-t-5">
-                            @if($global->google_recaptcha_key == '')
-                            <div>
-                                <a class="text-uppercase" href="{{ route('super-admin.settings.index') }}"><small>@lang('app.add') @lang('modules.accountSettings.google_recaptcha_key') <i class="fa fa-arrow-right"></i></small></a>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{$configCompletePercent}}" aria-valuemin="0"
-                                        aria-valuemax="100" style="width:{{$configCompletePercent}}%;"> <span class="sr-only">{{$configCompletePercent}}% Complete</span></div>
-                                </div>
-                            </div>
-                            @elseif($global->currency_converter_key == '')
-                            <div>
-                                <a class="text-uppercase" href="{{ route('super-admin.currency.index') }}"><small>@lang('app.add') @lang('modules.accountSettings.currencyConverterKey') <i class="fa fa-arrow-right"></i></small></a>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{$configCompletePercent}}" aria-valuemin="0"
-                                        aria-valuemax="100" style="width:{{$configCompletePercent}}%;"> <span class="sr-only">{{$configCompletePercent}}% Complete</span></div>
-                                </div>
-                            </div>
-                            @elseif($smtpSetting->mail_from_email == 'from@email.com')
-                            <div>
-                                <a class="text-uppercase" href="{{ route('super-admin.email-settings.index') }}"><small>@lang('app.add') @lang('app.email') @lang('app.menu.settings') <i class="fa fa-arrow-right"></i></small></a>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{$configCompletePercent}}" aria-valuemin="0"
-                                        aria-valuemax="100" style="width:{{$configCompletePercent}}%;"> <span class="sr-only">{{$configCompletePercent}}% Complete</span></div>
-                                </div>
-                            </div>
-                            @endif
-
-                        </li>
-                    @endif
-                </ul>
-                <!-- This is the message dropdown -->
-                <ul class="nav navbar-top-links navbar-right pull-right">
-
-                    <!-- .Task dropdown -->
-                    <li class="dropdown" id="top-notification-dropdown">
-                        <a class="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="#">
-                        <i class="icon-bell"></i>
-                        @if(count($user->unreadNotifications) > 0)
-                            <div class="notify"><span class="heartbit"></span><span class="point"></span></div>
-                        @endif
-                    </a>
-                        <ul class="dropdown-menu mailbox animated slideInDown">
-                            <li>
-                                <div class="drop-title">@lang('app.newNotifications') <span id="top-notification-count">{{ count($user->unreadNotifications) }}</span>
-                                </div>
-                            </li>
-                            @foreach ($user->unreadNotifications as $notification)
-
-                                @include('notifications.superadmin.'.snake_case(class_basename($notification->type)))
-
-                            @endforeach @if(count($user->unreadNotifications) > 0)
-                            <li>
-                                <a class="text-center" id="mark-notification-read" href="javascript:;"> @lang('app.markRead') <i class="fa fa-check"></i> </a>
-                            </li>
-                            @endif
-                        </ul>
-                    </li>
-                    <!-- /.Task dropdown -->
-
-                    <!-- /.dropdown -->
-
-
-                    <li class="dropdown">
-                        <a href="{{ route('logout') }}" title="Logout" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();"><i class="fa fa-power-off"></i> @lang('app.logout')
-                    </a>
-                    </li>
-
-                </ul>
-            </div>
-            <!-- /.navbar-header -->
-            <!-- /.navbar-top-links -->
-            <!-- /.navbar-static-side -->
-        </nav>
-        <!-- End Top Navigation -->
-        <!-- Left navbar-header -->
+<!-- Preloader -->
+<div class="preloader">
+    <div class="cssload-speeding-wheel"></div>
+</div>
+<div id="wrapper">
+    <!-- Left navbar-header -->
     @include('sections.super_admin_left_sidebar')
-        <!-- Left navbar-header end -->
-        <!-- Page Content -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
+            <!-- Left navbar-header end -->
+    <!-- Page Content -->
+    <div id="page-wrapper" class="row">
+        <div class="container-fluid">
+
+            @if (!empty($__env->yieldContent('filter-section')))
+                <div class="col-md-3 filter-section">
+                    <h5><i class="fa fa-sliders"></i> @lang('app.filterResults')</h5>
+                    <h5 class="pull-right hidden-sm hidden-md hidden-xs">
+                        <button class="btn btn-default btn-xs btn-circle btn-outline filter-section-close" ><i class="fa fa-chevron-left"></i></button>
+                    </h5>
+                    @yield('filter-section')
+                </div>
+             @endif
+
+             @if (!empty($__env->yieldContent('other-section')))
+                <div class="col-md-3 filter-section">
+                    @yield('other-section')
+                </div>
+             @endif
+
+
+            <div class="
+            @if (!empty($__env->yieldContent('filter-section')) || !empty($__env->yieldContent('other-section')))
+            col-md-9
+            @else
+            col-md-12
+            @endif
+            data-section">
+                <button class="btn btn-default btn-xs btn-circle btn-outline m-t-5 filter-section-show hidden-sm hidden-md" style="display:none"><i class="fa fa-chevron-right"></i></button>
+                @if (!empty($__env->yieldContent('filter-section')) || !empty($__env->yieldContent('other-section')))
+                    <div class="row hidden-md hidden-lg">
+                        <div class="col-xs-12 p-l-25 m-t-10">
+                            <button class="btn btn-inverse btn-outline" id="mobile-filter-toggle"><i class="fa fa-sliders"></i></button>
+                        </div>
+                    </div>
+                @endif
+
                 @yield('page-title')
 
-                <!-- .row -->
-                @yield('content') {{--
-    @include('sections.right_sidebar')--}}
-            </div>
-            <!-- /.container-fluid -->
-            <footer class="footer text-center"> {{ \Carbon\Carbon::now()->year }} &copy; {{ $global->company_name }} </footer>
-        </div>
-        <!-- /#page-wrapper -->
-    </div>
-    <!-- /#wrapper -->
+                        <!-- .row -->
+                @yield('content')
 
-     {{--Timer Modal--}}
-    <div class="modal fade bs-modal-md in" id="projectTimerModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md" id="modal-data-application">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <span class="caption-subject font-red-sunglo bold uppercase" id="modelHeading"></span>
-                </div>
-                <div class="modal-body">
-                    Loading...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn blue">Save changes</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    {{--Timer Modal Ends--}} {{--sticky note modal--}}
-    <div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                Loading ...
+                @include('sections.right_sidebar')
+
             </div>
         </div>
+        <!-- /.container-fluid -->
     </div>
-    {{--sticky note modal ends--}}
+    <!-- /#page-wrapper -->
+</div>
+<!-- /#wrapper -->
 
+{{--sticky note modal--}}
+<div id="responsive-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            Loading ...
+        </div>
+    </div>
+</div>
 
-    <!-- jQuery -->
-    <script src="{{ asset('plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<div class="modal fade bs-modal-md in" id="projectTimerModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md" id="modal-data-application">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <span class="caption-subject font-red-sunglo bold uppercase" id="modelHeading"></span>
+            </div>
+            <div class="modal-body">
+                Loading...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn blue">Save changes</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{{--sticky note modal ends--}}
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
-    <script src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js'></script>
+<!-- jQuery -->
+<script src="{{ asset('plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-    <!-- Sidebar menu plugin JavaScript -->
-    <script src="{{ asset('plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js') }}"></script>
-    <!--Slimscroll JavaScript For custom scroll-->
-    <script src="{{ asset('js/jquery.slimscroll.js') }}"></script>
-    <!--Wave Effects -->
-    <script src="{{ asset('js/waves.js') }}"></script>
-    <!-- Custom Theme JavaScript -->
-    <script src="{{ asset('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
-    <script src="{{ asset('js/custom.min.js') }}"></script>
-    <script src="{{ asset('js/jasny-bootstrap.js') }}"></script>
-    <script src="{{ asset('plugins/froiden-helper/helper.js') }}"></script>
-    <script src="{{ asset('plugins/bower_components/toast-master/js/jquery.toast.js') }}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ asset('bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script src='//cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.2/js/bootstrap-select.min.js'></script>
 
-    {{--sticky note script--}}
-    <script src="{{ asset('js/cbpFWTabs.js') }}"></script>
-    <script src="{{ asset('plugins/bower_components/icheck/icheck.min.js') }}"></script>
-    <script src="{{ asset('plugins/bower_components/icheck/icheck.init.js') }}"></script>
+<!-- Sidebar menu plugin JavaScript -->
+<script src="{{ asset('plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js') }}"></script>
+<!--Slimscroll JavaScript For custom scroll-->
+<script src="{{ asset('js/jquery.slimscroll.js') }}"></script>
+<!--Wave Effects -->
+<script src="{{ asset('js/waves.js') }}"></script>
+<!-- Custom Theme JavaScript -->
+<script src="{{ asset('plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/jasny-bootstrap.js') }}"></script>
+<script src="{{ asset('plugins/froiden-helper/helper.js') }}"></script>
+<script src="{{ asset('plugins/bower_components/toast-master/js/jquery.toast.js') }}"></script>
 
-    <script>
-        function addOrEditStickyNote(id)
+{{--sticky note script--}}
+<script src="{{ asset('js/cbpFWTabs.js') }}"></script>
+<script src="{{ asset('plugins/bower_components/icheck/icheck.min.js') }}"></script>
+<script src="{{ asset('plugins/bower_components/icheck/icheck.init.js') }}"></script>
+<script src="{{ asset('js/jquery.magnific-popup.min.js') }}"></script>
+<script src="{{ asset('js/jquery.magnific-popup-init.js') }}"></script>
+
+<script>
+
+    $('body').on('click', '.timer-modal', function(){
+        var url = '{{ route('admin.all-time-logs.show-active-timer')}}';
+        $('#modelHeading').html('Active Timer');
+        $.ajaxModal('#projectTimerModal',url);
+    });
+
+    $('.datepicker, #start-date, #end-date').on('click', function(e) {
+        e.preventDefault();
+        $(this).attr("autocomplete", "off");
+    });
+
+    function addOrEditStickyNote(id)
     {
         var url = '';
         var method = 'POST';
@@ -445,9 +387,9 @@
                 var token = "{{ csrf_token() }}";
 
                 $.easyAjax({
-                    type: 'DELETE',
+                    type: 'POST',
                     url: url,
-                    data: {'_token': token},
+                    data: {'_token': token, '_method': 'DELETE'},
                     success: function (response) {
                         $('#stickyBox_'+id).hide('slow');
                         $("#responsive-modal").modal('hide');
@@ -477,12 +419,12 @@
             }
         });
     }
+</script>
 
-    </script>
 
-
-    <script>
-        $('#mark-notification-read').click(function () {
+<script>
+    $('.mark-notification-read').click(function () {
+        console.log('hello from read notification');
         var token = '{{ csrf_token() }}';
         $.easyAjax({
             type: 'POST',
@@ -491,7 +433,7 @@
             success: function (data) {
                 if (data.status == 'success') {
                     $('.top-notifications').remove();
-                    $('#top-notification-count').html('0');
+                    $('.top-notification-count').html('0');
                     $('#top-notification-dropdown .notify').remove();
                 }
             }
@@ -525,7 +467,7 @@
             }
         });
     });
-    
+
 //    sticky notes script
     var stickyNoteOpen = $('#open-sticky-bar');
     var stickyNoteClose = $('#close-sticky-bar');
@@ -561,9 +503,10 @@
         $(".right-sidebar").slideDown(50).removeClass("shw-rside");
     })
 
+
     function updateOnesignalPlayerId(userId) {
         $.easyAjax({
-            url: '{{ route("super-admin.profile.updateOneSignalId") }}',
+            url: '{{ route("member.profile.updateOneSignalId") }}',
             type: 'POST',
             data:{'userId':userId, '_token':'{{ csrf_token() }}'},
             success: function (response) {
@@ -571,9 +514,74 @@
         })
     }
 
-    </script>
-    @stack('footer-script')
+    $('.table-responsive').on('show.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "inherit" );
+    });
+
+    $('.table-responsive').on('hide.bs.dropdown', function () {
+        $('.table-responsive').css( "overflow", "auto" );
+    })
+
+    $('#mobile-filter-toggle').click(function () {
+        $('.filter-section').toggle();
+    })
+
+    $('#sticky-note-toggle').click(function () {
+        $('#footer-sticky-notes').toggle();
+        $('#sticky-note-toggle').hide();
+    })
+
+    $(document).ready(function () {
+        //Side menu active hack
+        setTimeout(function(){
+            var getActiveMenu = $('#side-menu  li.active li a.active').length;
+        // console.log(getActiveMenu);
+            if(getActiveMenu > 0) {
+                $('#side-menu  li.active li a.active').parent().parent().parent().find('a:first').addClass('active');
+            }
+
+         }, 200);
+
+    })
+
+    $('body').on('click', '.toggle-password', function() {
+        var $selector = $(this).parent().find('input');
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var $type = $selector.attr("type") === "password" ? "text" : "password";
+        $selector.attr("type", $type);
+    });
+    var currentUrl = '{{ request()->route()->getName() }}';
+    $('body').on('click', '.filter-section-close', function() {
+        localStorage.setItem('filter-'+currentUrl, 'hide');
+
+        $('.filter-section').toggle();
+        $('.filter-section-show').toggle();
+        $('.data-section').toggleClass("col-md-9 col-md-12")
+    });
+
+    $('body').on('click', '.filter-section-show', function() {
+        localStorage.setItem('filter-'+currentUrl, 'show');
+
+        $('.filter-section-show').toggle();
+        $('.data-section').toggleClass("col-md-9 col-md-12")
+        $('.filter-section').toggle();
+    });
+
+    var currentUrl = '{{ request()->route()->getName() }}';
+    var checkCurrentUrl = localStorage.getItem('filter-'+currentUrl);
+    if (checkCurrentUrl == "hide") {
+        $('.filter-section-show').show();
+        $('.data-section').removeClass("col-md-9")
+        $('.data-section').addClass("col-md-12")
+        $('.filter-section').hide();
+    } else if (checkCurrentUrl == "show") {
+        $('.filter-section-show').hide();
+        $('.data-section').removeClass("col-md-12")
+        $('.data-section').addClass("col-md-9")
+        $('.filter-section').show();
+    }
+</script>
+@stack('footer-script')
 
 </body>
-
 </html>

@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Notification;
+use Yajra\DataTables\Facades\DataTables;
 
 /**
  * Class MemberProjectsController
@@ -86,10 +87,6 @@ class MemberTasksController extends MemberBaseController
         $task->board_column_id = $taskBoardColumn->id;
         $task->created_by = $this->user->id;
         $task->save();
-
-//      Send notification to user
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->user_id);
-        $notifyUser->notify(new NewTask($task));
 
         $this->logProjectActivity($request->project_id, __('messages.newTaskAddedToTheProject'));
 
@@ -167,10 +164,6 @@ class MemberTasksController extends MemberBaseController
 
         $task->save();
 
-        //Send notification to user
-        $notifyUser = User::findOrFail($task->user_id);
-        $notifyUser->notify(new TaskUpdated($task));
-
         //calculate project progress if enabled
         $this->calculateProjectProgress($request->project_id);
 
@@ -213,14 +206,6 @@ class MemberTasksController extends MemberBaseController
             if($taskBoardColumn->slug == 'completed'){
                 $task->completed_on = Carbon::now()->format('Y-m-d H:i:s');
                 $task->save();
-                
-                // send task complete notification
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->user_id);
-                $notifyUser->notify(new TaskCompleted($task));
-
-                $admins = User::allAdmins($task->user_id);
-
-                Notification::send($admins, new TaskCompleted($task));
             }else{
                 $task->completed_on = null;
             }
@@ -293,6 +278,62 @@ class MemberTasksController extends MemberBaseController
         $subTask = SubTask::where('task_id', $taskID)->count();
 
         return Reply::dataOnly(['taskCount' => $subTask, 'lastStatus' => $task->board_column->slug]);
+    }
+
+    public function data(Request $request, $projectId)
+    {
+        $tasks = Task::leftJoin('projects', 'projects.id', '=', 'tasks.project_id')
+            ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
+            ->join('users', 'users.id', '=', 'tasks.user_id')
+            ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
+            ->leftJoin('users as creator_user', 'creator_user.id', '=', 'tasks.created_by')
+            ->select('tasks.id', 'projects.project_name', 'tasks.heading', 'users.name','client.name as clientName','creator_user.name as created_by','creator_user.image as created_image', 'users.image', 'tasks.due_date', 'taskboard_columns.column_name', 'taskboard_columns.label_color', 'tasks.project_id')
+            ->where('projects.id', $projectId);
+
+        $tasks->get();
+
+        return DataTables::of($tasks)
+            ->addColumn('action', function($row){
+                return '<a href="javascript:;" class="btn btn-info btn-circle edit-task"
+                      data-toggle="tooltip" data-task-id="'.$row->id.'" data-original-title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                        &nbsp;&nbsp;<a href="javascript:;" class="btn btn-danger btn-circle sa-params"
+                      data-toggle="tooltip" data-task-id="'.$row->id.'" data-original-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
+            })
+            ->editColumn('due_date', function($row){
+                if($row->due_date->isPast()) {
+                    return '<span class="text-danger">'.$row->due_date->format($this->global->date_format).'</span>';
+                }
+                return '<span class="text-success">'.$row->due_date->format($this->global->date_format).'</span>';
+            })
+            ->editColumn('name', function($row){
+                $image_url = $row->image?asset_url('avatar/'.$row->image):asset('default-profile-2.png');
+                return '<img src="' . $image_url . '" alt="user" class="img-circle" width="30" height="30"> '. ucwords($row->name);
+
+
+            })
+            ->editColumn('clientName', function($row){
+                return ($row->clientName) ? ucwords($row->clientName) : '-';
+            })
+            ->editColumn('created_by', function($row){
+                if(!is_null($row->created_by)){
+                    return ($row->created_image) ? '<img src="'.asset_url('avatar/'.$row->created_image).'"
+                                                            alt="user" class="img-circle" width="30" height="30"> '.ucwords($row->created_by) : '<img src="'.asset('default-profile-2.png').'"
+                                                            alt="user" class="img-circle" width="30" height="30"> '.ucwords($row->created_by);
+                }
+                return '-';
+            })
+            ->editColumn('heading', function($row){
+                return '<a href="javascript:;" data-task-id="'.$row->id.'" class="show-task-detail">'.ucfirst($row->heading).'</a>';
+            })
+            ->editColumn('column_name', function($row){
+                return '<label class="label" style="background-color: '.$row->label_color.'">'.$row->column_name.'</label>';
+            })
+            ->rawColumns(['column_name', 'action', 'clientName', 'due_date', 'name', 'created_by', 'heading'])
+            ->removeColumn('project_id')
+            ->removeColumn('image')
+            ->removeColumn('created_image')
+            ->removeColumn('label_color')
+            ->make(true);
     }
 
 }

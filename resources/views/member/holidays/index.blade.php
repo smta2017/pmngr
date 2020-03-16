@@ -8,7 +8,19 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:;" onclick="calendarData()" class="btn btn-outline btn-info btn-sm ">@lang('modules.holiday.viewOnCalendar') <i class="fa fa-calendar" aria-hidden="true"></i></a>
+
+            @if($user->can('add_holiday'))
+                <a class="btn btn-outline btn-sm btn-primary markHoliday" onclick="showMarkHoliday()" style="display: none">
+                @lang('modules.holiday.markSunday')
+                <i class="fa fa-check"></i> </a>
+            @endif
+
+            @if($user->can('add_holiday'))
+                <a onclick="showAdd()" class="btn btn-outline btn-success btn-sm ">@lang('modules.holiday.addNewHoliday') <i class="fa fa-plus" aria-hidden="true"></i></a>
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }} @lang('modules.holiday.listOf') {{ \Carbon\Carbon::now()->format('Y') }}</li>
@@ -26,27 +38,9 @@
 
     <div class="row">
 
-        <div class="col-md-12">
+        <div class="col-md-12 panel-inverse">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-12">
-                        @if($user->can('add_holiday'))
-                        <div class="form-group pull-left">
-                            <a onclick="showAdd()" class="btn btn-outline btn-success btn-sm ">@lang('modules.holiday.addNewHoliday') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                        </div>
-                        @endif
-                        <div class="form-group pull-right">
-                            <a href="javascript:;" onclick="calendarData()" class="btn btn-outline btn-info btn-sm ">@lang('modules.holiday.viewOnCalendar') <i class="fa fa-calendar" aria-hidden="true"></i></a>
-                        </div>
-                        @if($user->can('add_holiday'))
-                        <div class="pull-right" style="margin-right: 10px">
-                            <a class="btn btn-outline btn-sm btn-primary markHoliday" onclick="showMarkHoliday()" style="display: none">
-                                @lang('modules.holiday.markSunday')
-                                <i class="fa fa-check"></i> </a>
-                        </div>
-                        @endif
-                    </div>
-                </div>
+               
                 <div class="row">
                     <div class="col-md-12 ">
                         <div class="form-group col-md-2 pull-right">
@@ -61,7 +55,6 @@
 
                     </div>
                 </div>
-                <hr>
                 <div class="row" id="holidaySectionData">
 
                 </div>

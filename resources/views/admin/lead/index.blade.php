@@ -4,11 +4,14 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ $pageTitle }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-6 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.leads.create') }}"
+            class="btn btn-outline btn-success btn-sm">@lang('modules.lead.addNewLead') <i class="fa fa-plus"
+                                                                                            aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -27,57 +30,39 @@
 
 @section('content')
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('modules.dashboard.totalLeads')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-docs text-white"></i></li>
-                    <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $totalLeads }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-info">
-                <h3 class="box-title text-white">@lang('modules.dashboard.totalConvertedClient')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-user text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $totalClientConverted }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-warning">
-                <h3 class="box-title text-white">@lang('modules.dashboard.totalPendingFollowUps')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-calender text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $pendingLeadFollowUps }}</span></li>
-                </ul>
+    <div class="row dashboard-stats">
+        <div class="col-md-12 m-b-30">
+            <div class="white-box">
+                <div class="col-md-4 text-center">
+                    <h4><span class="text-dark">{{ $totalLeads }}</span> <span
+                                class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalLeads')</span></h4>
+                </div>
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-info">{{ $totalClientConverted }}</span> <span
+                                class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalConvertedClient')</span>
+                    </h4>
+                </div>
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-warning">{{ $pendingLeadFollowUps }}</span> <span
+                                class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalPendingFollowUps')</span>
+                    </h4>
+                </div>
             </div>
         </div>
 
+    </div>
+
+    <div class="row">
+ 
+
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.leads.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.lead.addNewLead') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
+                
+                @section('filter-section')
+                <div class="row" id="ticket-filters">
+                    
                     <form action="" id="filter-form">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('modules.lead.client')</label>
                                 <select class="form-control selectpicker" name="client" id="client" data-style="form-control">
@@ -87,7 +72,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">@lang('modules.lead.followUp')</label>
                                 <select class="form-control selectpicker" name="followUp" id="followUp" data-style="form-control">
@@ -96,15 +81,16 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label col-xs-12">&nbsp;</label>
                                 <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
                                 <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
                             </div>
                         </div>
                     </form>
                 </div>
+                @endsection
+
                 <div class="table-responsive">
                 <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="users-table">
                     <thead>

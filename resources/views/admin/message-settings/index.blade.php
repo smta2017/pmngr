@@ -69,7 +69,7 @@
                                                     class="fa fa-check"></i>
                                             @lang('app.update')
                                         </button>
-                                        <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                                     </div>
                                     {!! Form::close() !!}
                                 </div>

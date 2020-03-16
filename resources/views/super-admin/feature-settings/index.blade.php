@@ -3,12 +3,12 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-8 col-md-8 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="{{ route('super-admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -30,13 +30,72 @@
             <div class="panel">
 
                 <div class="vtabs customvtab p-t-10">
-                    @include('sections.front_setting_menu')
+                    @if($global->front_design == 1)
+                        @include('sections.saas.feature_page_setting_menu')
+                    @else
+                        @include('sections.front_setting_menu')
+                    @endif
 
                     <div class="tab-content">
                         <div id="vhome3" class="tab-pane active">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="white-box">
+                                        @if($type !== 'icon')
+                                            {!! Form::open(['id'=>'editSettings','class'=>'ajax-form']) !!}
+                                                <input type="hidden" name="type" value="{{ $type }}">
+                                                <h4>{{ucwords($type)}} @lang('app.section')</h4>
+                                                <hr>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-6 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="title">@lang('app.title')</label>
+                                                            <input type="text" class="form-control" id="title" name="title"
+                                                            @if($type == 'task')
+                                                                 value="{{ $frontDetail->task_management_title }}"
+                                                            @elseif($type == 'bills')
+                                                                 value="{{ $frontDetail->manage_bills_title }}"
+                                                            @elseif($type == 'image')
+                                                                 value="{{ $frontDetail->feature_title }}"
+                                                            @elseif($type == 'team')
+                                                                value="{{ $frontDetail->teamates_title }}"
+                                                            @elseif($type == 'apps')
+                                                                value="{{ $frontDetail->favourite_apps_title }}"
+                                                            @endif
+                                                            >
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <div class="form-group">
+                                                            <label for="address">@lang('app.description')</label>
+
+                                                            @if($type == 'task')
+                                                                <textarea class="form-control" id="detail" rows="5" name="detail">{{ $frontDetail->task_management_detail }}</textarea>
+                                                            @elseif($type == 'bills')
+                                                                <textarea class="form-control" id="detail" rows="5" name="detail">{{ $frontDetail->manage_bills_detail }}</textarea>
+                                                            @elseif($type == 'image')
+                                                                <textarea class="form-control" id="detail" rows="5" name="detail">{{ $frontDetail->feature_description }}</textarea>
+                                                            @elseif($type == 'team')
+                                                                <textarea class="form-control" id="detail" rows="5" name="detail">{{ $frontDetail->teamates_detail }}</textarea>
+                                                            @elseif($type == 'apps')
+                                                                <textarea class="form-control" id="detail" rows="5" name="detail">{{ $frontDetail->favourite_apps_detail }}</textarea>
+                                                            @endif
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <button type="submit" id="save-form"
+                                                        class="btn btn-success waves-effect waves-light m-r-10">
+                                                    @lang('app.update')
+                                                </button>
+
+                                            {!! Form::close() !!}
+                                        @endif
+                                        <br>
+                                        <hr>
                                         <h3 class="box-title m-b-0">@lang('modules.feature.setting')</h3>
 
                                         <div class="row">
@@ -52,8 +111,10 @@
                                                 <thead>
                                                 <tr>
                                                     <th>@lang('app.title')</th>
-                                                    <th>@lang('app.description')</th>
-                                                    <th>@if($type == 'icon')@lang('app.icon')@else @lang('app.image') @endif</th>
+                                                    @if($type !== 'apps')
+                                                     <th>@lang('app.description')</th>
+                                                    @endif
+                                                    <th>{{ucwords($type)}}</th>
                                                     <th class="text-nowrap">@lang('app.action')</th>
                                                 </tr>
                                                 </thead>
@@ -61,19 +122,17 @@
                                                 @forelse($features as $feature)
                                                     <tr>
                                                         <td>{{ ucwords($feature->title) }}</td>
-                                                        <td>{!! $feature->description  !!}</td>
-                                                        <td @if($feature->type == 'icon') style="font-size: 27px" @endif>
-                                                            @if($feature->type == 'image')
-                                                                @if(is_null($feature->image))
-                                                                    <img height="100" width="85" src="{{asset('front/img/demo/slack/tools.png')}}"
-                                                                         alt=""/>
-                                                                @else
-                                                                    <img height="100" width="85" src="{{ asset('front-uploads/feature/'.$feature->image) }}"
-                                                                         alt=""/>
-                                                                @endif
+                                                        @if($type !== 'apps')
+                                                         <td>{!! $feature->description  !!}</td>
+                                                        @endif
+                                                        <td @if($feature->type != 'image' && $feature->type != 'apps') style="font-size: 27px" @endif>
+                                                            @if($feature->type == 'image' || $feature->type == 'apps')
+                                                                <img height="100" width="85" src="{{ $feature->image_url }}" alt=""/>
                                                             @else
                                                                 <i class="{{ $feature->icon }}"></i>
                                                             @endif
+
+
                                                         </td>
                                                         <td class="text-nowrap">
                                                             <a href="javascript:;" data-feature-id="{{ $feature->id }}" class="btn btn-info btn-circle editFeature"
@@ -179,6 +238,16 @@
                 });
             }
         });
+    });
+
+    $('#save-form').click(function () {
+        $.easyAjax({
+            url: '{{route('super-admin.feature-settings.title-update')}}',
+            container: '#editSettings',
+            type: "POST",
+            redirect: true,
+            file: true,
+        })
     });
 
 </script>

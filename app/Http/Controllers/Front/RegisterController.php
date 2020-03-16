@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Company;
 use App\Currency;
+use App\EmployeeDetails;
 use App\Helper\Reply;
 use App\Http\Requests\Front\Register\StoreRequest;
 use App\Notifications\EmailVerification;
@@ -20,7 +21,12 @@ class RegisterController extends FrontBaseController
 {
     public function index() {
         $this->pageTitle = 'Sign Up';
+
+        if($this->setting->front_design == 1){
+            return view('saas.register', $this->data);
+        }
         return view('front.register', $this->data);
+
     }
 
     public function store(StoreRequest $request) {
@@ -60,6 +66,14 @@ class RegisterController extends FrontBaseController
         $user->email_verification_code = str_random(40);
         $user->save();
 
+        $employee = new EmployeeDetails();
+        $employee->user_id = $user->id;
+        $employee->employee_id = 'emp-'.$user->id;
+        $employee->company_id = $user->company_id;
+        $employee->address = 'address';
+        $employee->hourly_rate = '50';
+        $employee->save();
+
         if($globalSetting->email_verification == 1) {
             $user->notify(new EmailVerification($user));
             $user->status = 'deactive';
@@ -72,16 +86,12 @@ class RegisterController extends FrontBaseController
             $user->roles()->attach($employeeRole->id);
         }
 
-        $superAdmin = User::whereNull('company_id')->get();
-
-        Notification::send($superAdmin, new NewCompanyRegister($company));
-
         DB::commit();
 
         if($globalSetting->email_verification == 1) {
-            $message = 'Thank you for signing up. Please verify your email to get started.';
+            $message =  __('messages.signUpThankYou');
         } else {
-            $message = 'Thank you for signing up. click <a href="'.route('login').'">here</a> for login.';
+            $message = __('messages.signUpThankYou').'<a href="'.route('login').'">Login Now</a>.';
         }
 
         return Reply::success($message);
@@ -127,13 +137,15 @@ class RegisterController extends FrontBaseController
 
             $this->messsage = 'Your have successfully verified your email address. You must click  <a href="'.route('login').'">Here</a> to login.';
             $this->class = 'success';
-            return view('front.email-verification', $this->data);
+            return view('saas.email-verification', $this->data);
 
 
         } else {
-
             $this->messsage = 'Verification url doesn\'t exist. Click <a href="'.route('login').'">Here</a> to login.';
             $this->class = 'success';
+            if($this->setting->front_design == 1){
+                return view('saas.email-verification', $this->data);
+            }
             return view('front.email-verification', $this->data);
         }
 

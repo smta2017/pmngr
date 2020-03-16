@@ -2,8 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\SendProjectReminder;
-use App\Console\Commands\VendorCleanUpCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -36,7 +34,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('licence-expire')->daily();
         $schedule->command('check-paypal-plan')->everyThirtyMinutes();
         $schedule->command('hide-crone-message')->daily();
-        // $schedule->command('send-project-reminder')->daily();
+        $schedule->command('send-project-reminder')->daily();
     }
 
     /**
@@ -48,5 +46,5 @@ class Kernel extends ConsoleKernel
     {
         require base_path('routes/console.php');
     }
-    
+
 }

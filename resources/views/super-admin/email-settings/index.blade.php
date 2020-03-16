@@ -37,12 +37,6 @@
                             <div class="row">
                                 <div class="col-md-12">
 
-                                    <h3 class="box-title m-b-0">@lang("modules.emailSettings.notificationTitle")</h3>
-
-                                    <p class="text-muted m-b-10 font-13">
-                                        @lang("modules.emailSettings.notificationSubtitle")
-                                    </p>
-
 
                                     {!! Form::open(['id'=>'updateSettings','class'=>'ajax-form']) !!}
                                     {!! Form::hidden('_token', csrf_token()) !!}
@@ -128,7 +122,7 @@
                                                             <option @if($smtpSetting->mail_encryption == 'ssl') selected @endif>
                                                                 ssl
                                                             </option>
-                                                            
+
                                                             <option value="null" @if($smtpSetting->mail_encryption == null) selected @endif>
                                                                 none
                                                             </option>
@@ -167,7 +161,7 @@
                                             </div>
                                             <!--/span-->
 
-                                            
+
                                     <div class="form-actions">
                                         <button type="submit" id="save-form" class="btn btn-success"><i
                                                     class="fa fa-check"></i>
@@ -175,7 +169,6 @@
                                         </button>
                                         <button type="button" id="send-test-email"
                                                 class="btn btn-primary">@lang('modules.emailSettings.sendTestEmail')</button>
-                                        <button type="reset" class="btn btn-default">@lang('app.reset')</button>
                                     </div>
                                     {!! Form::close() !!}
 

@@ -8,7 +8,22 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <span id="ticket-status" class="m-r-5">
+                <label class="label
+                    @if($ticket->status == 'open')
+                        label-danger
+                @elseif($ticket->status == 'pending')
+                        label-warning
+                @elseif($ticket->status == 'resolved')
+                        label-info
+                @elseif($ticket->status == 'closed')
+                        label-success
+                @endif
+                        ">{{ $ticket->status }}</label>
+            </span>
+            <span class="text-info text-uppercase font-bold">@lang('modules.tickets.ticket') # {{ $ticket->id }}</span>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('member.tickets.index') }}">{{ __($pageTitle) }}</a></li>
@@ -37,23 +52,8 @@
     <div class="form-body">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading text-right">@lang('modules.tickets.ticket') # {{ $ticket->id }}
+                <div class="white-box">
 
-                        <span id="ticket-status">
-                            <label class="label
-                             @if($ticket->status == 'open')
-                                    label-danger
-                            @elseif($ticket->status == 'pending')
-                                    label-warning
-                            @elseif($ticket->status == 'resolved')
-                                    label-info
-                            @elseif($ticket->status == 'closed')
-                                    label-success
-                            @endif
-                                    ">{{ $ticket->status }}</label>
-                        </span>
-                    </div>
 
                     <div class="panel-wrapper collapse in">
                         <div class="panel-body b-b">
@@ -61,7 +61,7 @@
                             <div class="row">
 
                                 <div class="col-md-12">
-                                    <h4 class="text-capitalize">{{ $ticket->subject }}</h4>
+                                    <h4 class="text-capitalize text-info">{{ $ticket->subject }}</h4>
 
                                     <div class="font-12">{{ $ticket->created_at->toDayDateTimeString() }} &bull; {{ ucwords($ticket->requester->name). ' <'.$ticket->requester->email.'>' }}</div>
                                 </div>
@@ -76,98 +76,76 @@
                         <div id="ticket-messages">
 
                             @forelse($ticket->reply as $reply)
-                                <div class="panel-body b-b"  id="replyMessageBox_{{$reply->id}}">
+                                <div class="panel-body @if($reply->user->id == $user->id) bg-owner-reply @else bg-other-reply @endif">
 
-                                    <div class="row">
+                                    <div class="row m-b-5">
 
                                         <div class="col-xs-2 col-md-1">
-                                            {!!  ($reply->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$reply->user->image).'"
-                                                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                                alt="user" class="img-circle" width="40">' !!}
+                                            {!!  '<img src="'.$reply->user->image_url.'" alt="user" class="img-circle" width="40" height="40">' !!}
                                         </div>
-                                        <div class="col-xs-9 col-md-10">
-                                            <h4 class="m-t-0"><a
+                                        <div class="col-xs-8 col-md-10">
+                                            <h5 class="m-t-0 font-bold"><a
                                                         @if($reply->user->hasRole('employee'))
                                                         href="{{ route('member.employees.show', $reply->user_id) }}"
                                                         @elseif($reply->user->hasRole('client'))
                                                         href="{{ route('member.clients.show', $reply->user_id) }}"
                                                         @endif
                                                         class="text-inverse">{{ ucwords($reply->user->name) }} <span
-                                                            class="text-muted font-12">{{ $reply->created_at->toDayDateTimeString() }}</span></a>
-                                            </h4>
+                                                            class="text-muted font-12 font-normal">{{ $reply->created_at->toDayDateTimeString() }}</span></a>
+                                            </h5>
 
                                             <div class="font-light">
                                                 {!! ucfirst(nl2br($reply->message)) !!}
                                             </div>
                                         </div>
-
-                                        <div class="col-xs-1 col-md-1">
+                                        <div class="col-xs-2 col-md-1">
                                             <a href="javascript:;" data-toggle="tooltip" data-original-title="Delete"
-                                               data-file-id="{{ $reply->id }}"
-                                               class="btn btn-danger btn-circle sa-params" data-pk="list"><i
-                                                        class="fa fa-times"></i></a>
+                                            data-file-id="{{ $reply->id }}"
+                                            class="btn btn-inverse btn-outline sa-params" data-pk="list"><i
+                                                        class="fa fa-trash"></i></a>
                                         </div>
+
                                     </div>
                                     <!--/row-->
                                     @if(sizeof($reply->files) > 0)
                                         <div class="row" id="list">
                                             <ul class="list-group" id="files-list">
                                                 @forelse($reply->files as $file)
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-md-9">
-                                                                {{ $file->filename }}
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                @if($file->external_link != '')
-                                                                    <a target="_blank" href="{{ $file->external_link }}"
-                                                                       data-toggle="tooltip" data-original-title="View"
-                                                                       class="btn btn-info btn-circle"><i
-                                                                                class="fa fa-search"></i></a>
-                                                                @elseif(config('filesystems.default') == 'local')
-                                                                    <a target="_blank" href="{{ asset_url('ticket-files/'.$reply->id.'/'.$file->hashname) }}"
-                                                                       data-toggle="tooltip" data-original-title="View"
-                                                                       class="btn btn-info btn-circle"><i
-                                                                                class="fa fa-search"></i></a>
-
-                                                                @elseif(config('filesystems.default') == 's3')
-                                                                    <a target="_blank" href="{{ $url.'ticket-files/'.$reply->id.'/'.$file->filename }}"
-                                                                       data-toggle="tooltip" data-original-title="View"
-                                                                       class="btn btn-info btn-circle"><i
-                                                                                class="fa fa-search"></i></a>
-                                                                @elseif(config('filesystems.default') == 'google')
-                                                                    <a target="_blank" href="{{ $file->google_url }}"
-                                                                       data-toggle="tooltip" data-original-title="View"
-                                                                       class="btn btn-info btn-circle"><i
-                                                                                class="fa fa-search"></i></a>
-                                                                @elseif(config('filesystems.default') == 'dropbox')
-                                                                    <a target="_blank" href="{{ $file->dropbox_link }}"
-                                                                       data-toggle="tooltip" data-original-title="View"
-                                                                       class="btn btn-info btn-circle"><i
-                                                                                class="fa fa-search"></i></a>
-                                                                @endif
-
-                                                                @if(is_null($file->external_link))
-                                                                    &nbsp;&nbsp;
-                                                                    <a href="{{ route('member.ticket-files.download', $file->id) }}"
-                                                                       data-toggle="tooltip" data-original-title="Download"
-                                                                       class="btn btn-inverse btn-circle"><i
-                                                                                class="fa fa-download"></i></a>
-                                                                @endif
-
-                                                                <span class="clearfix m-l-10">{{ $file->created_at->diffForHumans() }}</span>
-                                                            </div>
+                                                <li class="list-group-item b-none col-md-6">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            {{ $file->filename }}
                                                         </div>
-                                                    </li>
-                                                @empty
-                                                    <li class="list-group-item">
-                                                        <div class="row">
-                                                            <div class="col-md-10">
-                                                                @lang('messages.noFileUploaded')
-                                                            </div>
+                                                        <div class="col-md-3">
+
+
+                                                                <a target="_blank" href="{{ $file->file_url }}"
+                                                                data-toggle="tooltip" data-original-title="View"
+                                                                class="btn btn-info btn-sm btn-outline"><i
+                                                                            class="fa fa-search text-info"></i></a>
+
+
+                                                            @if(is_null($file->external_link))
+                                                                &nbsp;&nbsp;
+                                                                <a href="{{ route('member.ticket-files.download', $file->id) }}"
+                                                                data-toggle="tooltip" data-original-title="Download"
+                                                                class="btn btn-inverse btn-sm btn-outline"><i
+                                                                            class="fa fa-download"></i></a>
+                                                            @endif
+
+                                                            <span class="text-muted font-12 font-normal clearfix m-l-10">{{ $file->created_at->diffForHumans() }}</span>
                                                         </div>
-                                                    </li>
-                                                @endforelse
+                                                    </div>
+                                                </li>
+                                            @empty
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            @lang('messages.noFileUploaded')
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforelse
 
                                             </ul>
                                         </div>
@@ -191,7 +169,7 @@
                             @endforelse
                         </div>
 
-                        <div class="panel-body" style="box-shadow: 0 2px 26px -6px rgb(156, 156, 156)">
+                        <div class="panel-body" >
 
                             <div class="row">
 
@@ -223,7 +201,7 @@
 
                     </div>
 
-                    <div class="panel-footer text-right">
+                    <div class="col-md-12 text-right">
                         <div class="btn-group dropup m-r-10">
                             <button aria-expanded="true" data-toggle="dropdown"
                                     class="btn btn-info btn-outline dropdown-toggle waves-effect waves-light"
@@ -291,7 +269,7 @@
                                         <label class="control-label">@lang('modules.tickets.agent')</label>
                                         <select name="agent_id" id="agent_id" class="select2 form-control"
                                                 data-style="form-control">
-                                            <option value="">Agent not assigned</option>
+                                            <option value="">--</option>
                                             @forelse($groups as $group)
                                                 @if(count($group->enabled_agents) > 0)
                                                     <optgroup label="{{ ucwords($group->group_name) }}">
@@ -464,7 +442,7 @@
             url: '{{route('member.tickets.updateAdmin', $ticket->id)}}',
             container: '#updateTicket',
             type: "POST",
-//            data: $('#updateTicket').serialize(),
+            data: $('#updateTicket').serialize(),
             file: true,
             success: function (response) {
                 if(response.status == 'success'){

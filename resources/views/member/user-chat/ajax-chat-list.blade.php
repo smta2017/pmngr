@@ -1,7 +1,16 @@
 @forelse($chatDetails as $chatDetail)
 
     <li class="@if($chatDetail->from == $user->id) odd @else  @endif">
-        <div class="chat-image"> <img alt="user" src="@if(is_null($chatDetail->fromUser->image)){{asset('default-profile-2.png')}} @else{{ asset('user-uploads/avatar/'.$chatDetail->fromUser->image)}}@endif"> </div>
+
+        <div class="chat-image">
+            @if(is_null($chatDetail->fromUser->image))
+                <img src="{{ asset('default-profile-3.png') }}" alt="user-img"
+                     class="img-circle">
+            @else
+                <img src="{{ asset_url('avatar/' . $chatDetail->fromUser->image) }}" alt="user-img"
+                     class="img-circle">
+            @endif
+        </div>
         <div class="chat-body">
             <div class="chat-text">
                 <h4>@if($chatDetail->from == $user->id) you @else {{$chatDetail->fromUser->name}} @endif</h4>

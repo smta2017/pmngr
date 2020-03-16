@@ -44,6 +44,6 @@ class ProjectSettingsController extends AdminBaseController
 
         $projectSetting->save();
 
-        return Reply::redirect(route('admin.settings.index'));
+        return Reply::redirect(route('admin.project-settings.index'));
     }
 }

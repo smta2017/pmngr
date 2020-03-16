@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\SuperAdmin;
 
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\SuperAdmin\Profile\UpdateSuperAdmin;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 
 class SuperAdminProfileController extends SuperAdminBaseController
 {
@@ -26,23 +25,6 @@ class SuperAdminProfileController extends SuperAdminBaseController
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id) {
-       
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdateSuperAdmin $request
-     * @param  int $id
-     * @return array
-     */
     public function update(UpdateSuperAdmin $request, $id) {
         $user = User::withoutGlobalScope('active')->where('super_admin', '1')->findOrFail($id);
         $user->name = $request->input('name');
@@ -54,17 +36,8 @@ class SuperAdminProfileController extends SuperAdminBaseController
         $user->gender = $request->input('gender');
 
         if ($request->hasFile('image')) {
-            File::delete('user-uploads/avatar/'.$user->image);
-
-            $user->image = $request->image->hashName();
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/'.$user->image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
+            Files::deleteFile($user->image,'avatar');
+            $user->image = Files::upload($request->image, 'avatar',300);
         }
 
         $user->save();

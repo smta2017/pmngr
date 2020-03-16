@@ -92,6 +92,16 @@ class NewInvoice extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
+        if(!is_null($this->invoice->project_id)){
+            return [
+                'project_name' => $this->invoice->project->project_name,
+            ];
+        }
+        else{
+            return [
+                'invoice_number' => $this->invoice->invoice_number,
+            ];
+        }
         return $this->invoice->toArray();
     }
 }

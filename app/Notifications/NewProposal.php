@@ -52,7 +52,7 @@ class NewProposal extends Notification implements ShouldQueue
             ->subject('New Lead Proposal Sent!')
             ->greeting('Hello '.ucwords($this->user->name).'!')
             ->line('A new lead proposal has been sent to you. Login now to view the proposal.')
-            ->action('Login To Dashboard', $url);
+            ->action('Login To Dashboard', route('login'));
     }
 
     /**

@@ -3,16 +3,23 @@
 namespace App;
 
 use App\Observers\UserObserver;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Trebol\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Auth\Authenticatable;
 
-class User extends Authenticatable
+use Illuminate\Support\Str;
+
+
+class User extends BaseModel implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract
 {
-    use Notifiable, EntrustUserTrait;
+    use Notifiable, EntrustUserTrait, Authenticatable, CanResetPassword;
 
     protected static function boot()
     {
@@ -25,7 +32,7 @@ class User extends Authenticatable
         });
 
         $company = company();
-        
+
         static::addGlobalScope('company', function (Builder $builder) use ($company) {
             if ($company) {
                 $builder->where('users.company_id', '=', $company->id);
@@ -53,7 +60,7 @@ class User extends Authenticatable
 
     public $dates = ['created_at', 'updated_at'];
 
-    protected $appends = ['name', 'email', 'image','image_url', 'mobile'];
+    protected $appends = ['name', 'email', 'image','image_url', 'mobile','modules','user_other_role'];
 
 
     /**
@@ -291,31 +298,35 @@ class User extends Authenticatable
 
     public function getModulesAttribute()
     {
-
         $user = auth()->user();
 
-        $module = new ModuleSetting();
+        if($user){
 
-        if ($user->hasRole('admin')) {
-            $module = $module->where('type', 'admin');
+            $module = new ModuleSetting();
 
-        } elseif ($user->hasRole('client')) {
-            $module = $module->where('type', 'client');
+            if ($user->hasRole('admin')) {
+                $module = $module->where('type', 'admin');
 
-        } elseif ($user->hasRole('employee')) {
-            $module = $module->where('type', 'employee');
+            } elseif ($user->hasRole('client')) {
+                $module = $module->where('type', 'client');
+
+            } elseif ($user->hasRole('employee')) {
+                $module = $module->where('type', 'employee');
+            }
+
+            $module = $module->where('status', 'active');
+            $module->select('module_name');
+
+            $module = $module->get();
+            $moduleArray = [];
+            foreach ($module->toArray() as $item) {
+                array_push($moduleArray, array_values($item)[0]);
+            }
+
+            return $moduleArray;
         }
 
-        $module = $module->where('status', 'active');
-        $module->select('module_name');
-
-        $module = $module->get();
-        $moduleArray = [];
-        foreach ($module->toArray() as $item) {
-            array_push($moduleArray, array_values($item)[0]);
-        }
-
-        return $moduleArray;
+        return [];
     }
 
     public function getNameAttribute($value)
@@ -382,4 +393,23 @@ class User extends Authenticatable
 
         return $value;
     }
+
+    public function getUserOtherRoleAttribute()
+    {
+        $userRole = null;
+        $roles = Role::where('name', '<>', 'client')
+            ->orderBy('id', 'asc')->get();
+        foreach ($roles as $role) {
+            foreach ($this->role as $urole) {
+                if ($role->id == $urole->role_id) {
+                    $userRole = $role->name;
+                }
+                if ($userRole == 'admin') {
+                    break;
+                }
+            }
+        }
+        return $userRole;
+    }
+
 }

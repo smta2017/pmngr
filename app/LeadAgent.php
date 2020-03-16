@@ -6,7 +6,7 @@ use App\Observers\LeadAgentObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class LeadAgent extends Model
+class LeadAgent extends BaseModel
 {
     protected $table = 'lead_agents';
 

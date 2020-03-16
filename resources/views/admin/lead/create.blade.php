@@ -70,12 +70,47 @@
 
                                 <h3 class="box-title m-t-40">@lang('modules.lead.leadDetails')</h3>
                                 <hr>
+
                                 <div class="row">
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>@lang('modules.lead.clientName')</label>
+                                            <input type="text" name="client_name" id="client_name"  class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>@lang('modules.lead.clientEmail')</label>
+                                            <input type="email" name="client_email" id="client_email"  class="form-control">
+                                            <span class="help-block">@lang('modules.lead.emailNote')</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>@lang('modules.lead.mobile')</label>
+                                            <input type="tel" name="mobile" id="mobile" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label>@lang('app.next_follow_up')</label>
+                                            <select name="next_follow_up" id="next_follow_up" class="form-control">
+                                                <option value="yes"> @lang('app.yes')</option>
+                                                <option value="no"> @lang('app.no')</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <!--/span-->
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">@lang('modules.tickets.chooseAgents') <a href="javascript:;"
-                                                                                                  id="addLeadAgent"
-                                                                                                  class="btn btn-sm btn-outline btn-success"><i
+                                                                                                   id="addLeadAgent"
+                                                                                                   class="btn btn-sm btn-outline btn-success"><i
                                                             class="fa fa-plus"></i> @lang('app.add') @lang('app.leadAgent')</a></label>
                                             <select class="select2 form-control" data-placeholder="@lang('modules.tickets.chooseAgents')" id="agent_id" name="agent_id">
                                                 <option value="">@lang('modules.tickets.chooseAgents')</option>
@@ -86,58 +121,8 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 ">
-                                        <div class="form-group">
-                                            <label>@lang('modules.lead.clientName')</label>
-                                            <input type="text" name="client_name" id="client_name"  class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>@lang('modules.lead.clientEmail')</label>
-                                            <input type="email" name="client_email" id="client_email"  class="form-control">
-                                            <span class="help-block">@lang('modules.lead.emailNote')</span>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <!--/span-->
 
                                     <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>@lang('modules.lead.mobile')</label>
-                                            <input type="tel" name="mobile" id="mobile" class="form-control">
-                                        </div>
-                                    </div>
-
-                                        <div class="col-md-4">
-                                            <div class="form-group">
-                                                <label>@lang('app.next_follow_up')</label>
-                                                <select name="next_follow_up" id="next_follow_up" class="form-control">
-                                                        <option value="yes"> @lang('app.yes')</option>
-                                                        <option value="no"> @lang('app.no')</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-                                    <!--/span-->
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <label>@lang('app.note')</label>
-                                        <div class="form-group">
-                                            <textarea name="note" id="note" class="form-control" rows="5"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6 ">
                                         <div class="form-group">
                                             <label for="">@lang('modules.lead.leadSource')  <a href="javascript:;"
                                                                                                id="addLeadsource"
@@ -150,13 +135,23 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <!--/span-->
                                 </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>@lang('app.note')</label>
+                                        <div class="form-group">
+                                            <textarea name="note" id="note" class="form-control" rows="5"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

@@ -262,13 +262,20 @@
         <tr>
             <td>
                 <div id="creditNoted_to">
-                    @if(!is_null($creditNote->project->client))
-                    <small>@lang("modules.credit-notes.billedTo"):</small>
-                    <h3 class="name">{{ ucwords($creditNote->project->client->company_name) }}</h3>
-                    <div>{!! nl2br($creditNote->project->client->address) !!}</div>
-                    @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->project->client->gst_number))
-                        <div> @lang('app.gstIn'): {{ $creditNote->project->client->gst_number }} </div>
-                    @endif
+                    @if(!is_null($creditNote->project_id) && !is_null($creditNote->project->clientdetails))
+                        <small>@lang("modules.credit-notes.billedTo"):</small>
+                        <h3 class="name">{{ ucwords($creditNote->project->clientdetails->company_name) }}</h3>
+                        <div>{!! nl2br($creditNote->project->clientdetails->address) !!}</div>
+                        @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->project->clientdetails->gst_number))
+                            <div> @lang('app.gstIn'): {{ $creditNote->project->clientdetails->gst_number }} </div>
+                        @endif
+                    @elseif(!is_null($creditNote->client_id))
+                        <small>@lang("modules.credit-notes.billedTo"):</small>
+                        <h3 class="name">{{ ucwords($creditNote->clientdetails->company_name) }}</h3>
+                        <div>{!! nl2br($creditNote->clientdetails->address) !!}</div>
+                        @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->clientdetails->gst_number))
+                            <div> @lang('app.gstIn'): {{ $creditNote->clientdetails->gst_number }} </div>
+                        @endif
                     @endif
                 </div>
             </td>
@@ -318,8 +325,8 @@
             <th class="no">#</th>
             <th class="desc">@lang("modules.credit-notes.item")</th>
             <th class="qty">@lang("modules.credit-notes.qty")</th>
-            <th class="qty">@lang("modules.credit-notes.unitPrice")</th>
-            <th class="unit">@lang("modules.credit-notes.price")</th>
+            <th class="qty">@lang("modules.credit-notes.unitPrice") ({!! htmlentities($creditNote->currency->currency_code)  !!})</th>
+            <th class="unit">@lang("modules.credit-notes.price") ({!! htmlentities($creditNote->currency->currency_code)  !!})</th>
         </tr>
         </thead>
         <tbody>
@@ -330,8 +337,8 @@
                 <td class="no">{{ ++$count }}</td>
                 <td class="desc"><h3>{{ ucfirst($item->item_name) }}</h3></td>
                 <td class="qty"><h3>{{ $item->quantity }}</h3></td>
-                <td class="qty"><h3>{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
-                <td class="unit">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$item->amount, 2, '.', '') }}</td>
+                <td class="qty"><h3>{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
+                <td class="unit">{{ number_format((float)$item->amount, 2, '.', '') }}</td>
             </tr>
             @endif
         @endforeach
@@ -340,7 +347,7 @@
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.credit-notes.subTotal")</td>
-            <td class="unit">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->sub_total, 2, '.', '') }}</td>
+            <td class="unit">{{ number_format((float)$creditNote->sub_total, 2, '.', '') }}</td>
         </tr>
         @if($discount != 0 && $discount != '')
         <tr style="page-break-inside: avoid;" class="discount">
@@ -348,7 +355,7 @@
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.credit-notes.discount")</td>
-            <td class="unit">-{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$discount, 2, '.', '') }}</td>
+            <td class="unit">-{{ number_format((float)$discount, 2, '.', '') }}</td>
         </tr>
         @endif
         @foreach($taxes as $key=>$tax)
@@ -357,29 +364,28 @@
                 <td class="qty">&nbsp;</td>
                 <td class="qty">&nbsp;</td>
                 <td class="desc">{{ strtoupper($key) }}</td>
-                <td class="unit">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$tax, 2, '.', '') }}</td>
+                <td class="unit">{{ number_format((float)$tax, 2, '.', '') }}</td>
             </tr>
         @endforeach
         </tbody>
         <tfoot>
         <tr dontbreak="true">
             <td colspan="4">@lang("modules.credit-notes.total")</td>
-            <td style="text-align: center">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->total, 2, '.', '') }}</td>
+            <td style="text-align: center">{{ number_format((float)$creditNote->total, 2, '.', '') }}</td>
         </tr>
         <tr dontbreak="true">
             <td colspan="4">@lang('modules.credit-notes.creditAmountUsed')</td>
-            <td style="text-align: center">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->creditAmountUsed(), 2, '.', '') }}</td>
+            <td style="text-align: center">{{ number_format((float)$creditNote->creditAmountUsed(), 2, '.', '') }}</td>
         </tr>
         <tr dontbreak="true">
             <td colspan="4">@lang('modules.credit-notes.creditAmountRemaining')</td>
-            <td style="text-align: center">{!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ number_format((float)$creditNote->creditAmountRemaining(), 2, '.', '') }}</td>
+            <td style="text-align: center">{{ number_format((float)$creditNote->creditAmountRemaining(), 2, '.', '') }}</td>
         </tr>    
         </tfoot>
     </table>
     <p>&nbsp;</p>
     <hr>
     <p id="notes">
-        @lang("app.note"): Here {!! htmlentities($creditNote->currency->currency_symbol)  !!} refers to {!! $creditNote->currency->currency_code  !!}<br>
         @if(!is_null($creditNote->note))
             {!! nl2br($creditNote->note) !!}<br>
         @endif

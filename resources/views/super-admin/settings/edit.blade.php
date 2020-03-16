@@ -28,11 +28,35 @@
 
     <div class="row">
         @if(!$global->hide_cron_message)
-            <div class="alert alert-info col-md-12">
-                <h5 class="text-white">Set following cron command on your server (Ignore if already done)</h5>
-                <p>* * * * * cd {{ base_path() }} && php artisan schedule:run >> /dev/null 2>&1</p>
+            <div class="col-md-12">
+                <div class="alert alert-info ">
+                    <h5 class="text-white">Set following cron command on your server (Ignore if already done)</h5>
+                    <code>* * * * * cd {{ base_path() }} && php artisan schedule:run >> /dev/null 2>&1</code>
+                </div>
             </div>
         @endif
+
+            @if($global->show_public_message)
+                <div class="col-md-12">
+                    <div class="alert alert-success">
+                        <h4>Remove public from URL</h4>
+                        <h5 class="text-white">Create a file with the name <code>.htaccess</code> at the root of folder
+                            (where app, bootstrap, config folder resides) and add the following content</h5>
+
+                        <pre>
+                        <code class="apache hljs">
+<span class="hljs-section">&lt;IfModule mod_rewrite.c&gt;</span>
+
+  <span class="hljs-attribute">RewriteEngine </span><span class="hljs-literal"> On</span>
+  <span class="hljs-attribute"><span class="hljs-nomarkup">RewriteRule</span></span><span class="hljs-variable"> ^(.*)$ public/$1</span><span
+                                    class="hljs-meta"> [L]</span>
+
+<span class="hljs-section">&lt;/IfModule&gt;</span>
+</code></pre>
+                    </div>
+
+                </div>
+            @endif
         <div class="col-md-12">
             <div class="panel panel-inverse">
                 <div class="panel-heading">
@@ -48,7 +72,7 @@
                         <a href="javascript:;" id="refresh-cache" class="btn btn-sm btn-success pull-right text-white">
                             <i
                                     class="fa fa-check"></i> @lang('app.enableCache')</a>
-                        <h6 class="text-white pull-right m-r-5">@lang('messages.cacheDisabled')</h6>
+                        <h6 class="text-black pull-right m-r-5">@lang('messages.cacheDisabled')</h6>
                     @endif
                 </div>
 
@@ -145,7 +169,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-sm-12 col-md-6 col-xs-12">
+                                        <div class="col-sm-12 col-md-4 col-xs-12">
                                             <div class="form-group">
                                                 <label for="exampleInputPassword1">@lang('modules.accountSettings.companyLogo')</label>
 
@@ -153,21 +177,15 @@
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                         <div class="fileinput-new thumbnail"
                                                              style="width: 200px; height: 150px;">
-                                                            @if(is_null($global->logo))
-                                                                <img src="{{asset('logo-1.png')}}"
-                                                                     alt=""/>
-                                                            @else
-                                                                <img src="{{ asset('user-uploads/app-logo/'.$global->logo) }}"
-                                                                     alt=""/>
-                                                            @endif
+                                                            <img src="{{ $global->logo_url }}" alt=""/>
                                                         </div>
                                                         <div class="fileinput-preview fileinput-exists thumbnail"
                                                              style="max-width: 200px; max-height: 150px;"></div>
                                                         <div>
-                                <span class="btn btn-info btn-file">
-                                    <span class="fileinput-new"> @lang('app.selectImage') </span>
-                                    <span class="fileinput-exists"> @lang('app.change') </span>
-                                    <input type="file" name="logo" id="logo"> </span>
+                                                            <span class="btn btn-info btn-file">
+                                                                <span class="fileinput-new"> @lang('app.selectImage') </span>
+                                                                <span class="fileinput-exists"> @lang('app.change') </span>
+                                                                <input type="file" name="logo" id="logo"> </span>
                                                             <a href="javascript:;" class="btn btn-danger fileinput-exists"
                                                                data-dismiss="fileinput"> @lang('app.remove') </a>
                                                         </div>
@@ -176,7 +194,35 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-6 col-xs-12">
+
+                                        <div class="col-sm-12 col-md-4 col-xs-12">
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">@lang('modules.accountSettings.frontLogo')</label>
+
+                                                <div class="col-md-12">
+                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                        <div class="fileinput-new thumbnail"
+                                                             style="width: 200px; height: 150px;">
+                                                            <img src="{{ $global->logo_front_url }}" alt=""/>
+                                                        </div>
+                                                        <div class="fileinput-preview fileinput-exists thumbnail"
+                                                             style="max-width: 200px; max-height: 150px;"></div>
+                                                        <div>
+                                                            <span class="btn btn-info btn-file">
+                                                                <span class="fileinput-new"> @lang('app.selectImage') </span>
+                                                                <span class="fileinput-exists"> @lang('app.change') </span>
+                                                                <input type="file" name="logo_front" id="logo_front"> </span>
+                                                            <a href="javascript:;" class="btn btn-danger fileinput-exists"
+                                                               data-dismiss="fileinput"> @lang('app.remove') </a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col-sm-12 col-md-4 col-xs-12">
                                             <div class="form-group">
                                                 <label>@lang('modules.themeSettings.loginScreenBackground')</label>
 
@@ -184,13 +230,7 @@
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                         <div class="fileinput-new thumbnail"
                                                              style="width: 200px; height: 150px;">
-                                                            @if(is_null($global->login_background))
-                                                                <img src="{{ asset('login-bg.jpg') }}"
-                                                                     alt=""/>
-                                                            @else
-                                                                <img src="{{ asset('user-uploads/login-background.jpg') }}"
-                                                                     alt=""/>
-                                                            @endif
+                                                            <img src="{{ $global->login_background_url }}" alt=""/>
                                                         </div>
                                                         <div class="fileinput-preview fileinput-exists thumbnail"
                                                              style="max-width: 200px; max-height: 150px;"></div>
@@ -286,8 +326,7 @@
                                             class="btn btn-success waves-effect waves-light m-r-10">
                                         @lang('app.update')
                                     </button>
-                                    <button type="reset"
-                                            class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                     {!! Form::close() !!}
                                 </div>
                             </div>

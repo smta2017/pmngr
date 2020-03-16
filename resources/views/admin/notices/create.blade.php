@@ -94,7 +94,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

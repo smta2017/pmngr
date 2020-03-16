@@ -38,22 +38,22 @@
                         <div class="form-material"><input class="form-control p-20" id="userSearch" type="text"
                                                           placeholder="@lang("modules.messages.searchContact")"></div>
                         <ul class="chatonline style-none userList">
-                            @forelse($userList as $users)
-                                <li id="dp_{{$users->id}}">
-                                    <a href="javascript:void(0)" id="dpa_{{$users->id}}"
-                                       onclick="getChatData('{{$users->id}}', '{{$users->name}}')">
+                            @forelse($userList as $user)
+                                <li id="dp_{{$user->id}}">
+                                    <a href="javascript:void(0)" id="dpa_{{$user->id}}"
+                                       onclick="getChatData('{{$user->id}}', '{{$user->name}}')">
                                         @if(is_null($users->image))
-                                            <img src="{{ asset('default-profile-2.png') }}" alt="user-img"
+                                            <img src="{{ asset('img/default-profile-2.png') }}" alt="user-img"
                                                  class="img-circle">
                                         @else
-                                            <img src="{{ asset('user-uploads/avatar/'.$users->image) }}" alt="user-img"
+                                            <img src="{{ asset_url('avatar/'.$users->image) }}" alt="user-img"
                                                  class="img-circle">
                                         @endif
-                                        <span @if($users->message_seen == 'no' && $users->user_one != $user->id) class="font-bold" @endif> {{$users->name}}
-                                            <small class="text-simple"> @if($users->last_message){{  \Carbon\Carbon::parse($users->last_message)->diffForHumans()}} @endif
-                                                @if(\App\User::isAdmin($users->id))
+                                        <span @if($user->message_seen == 'no' && $user->user_one != $user->id) class="font-bold" @endif> {{$user->name}}
+                                            <small class="text-simple"> @if($user->last_message){{  \Carbon\Carbon::parse($user->last_message)->diffForHumans()}} @endif
+                                                @if(\App\User::isAdmin($user->id))
                                                     <label class="btn btn-danger btn-xs btn-outline">Admin</label>
-                                                @elseif(\App\User::isClient($users->id))
+                                                @elseif(\App\User::isClient($user->id))
                                                     <label class="btn btn-success btn-xs btn-outline">Client</label>
                                                 @else
                                                     <label class="btn btn-warning btn-xs btn-outline">Employee</label>

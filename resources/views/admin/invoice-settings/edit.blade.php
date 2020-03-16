@@ -170,12 +170,39 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1"> @lang('modules.invoiceSettings.logo')</label>
+
+                                                    <div class="col-md-12">
+                                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                            <div class="fileinput-new thumbnail"
+                                                                 style="width: 200px; height: 80px;">
+                                                                <img src="{{$invoiceSetting->logo_url}}" alt=""/>
+
+                                                            </div>
+                                                            <div class="fileinput-preview fileinput-exists thumbnail"
+                                                                 style="max-width: 200px; max-height: 80px;"></div>
+                                                            <div>
+                                <span class="btn btn-info btn-file">
+                                    <span class="fileinput-new"> @lang('app.selectImage') </span>
+                                    <span class="fileinput-exists"> @lang('app.change') </span>
+                                    <input type="file" name="logo" id="logo"> </span>
+                                                                <a href="javascript:;"
+                                                                   class="btn btn-danger fileinput-exists"
+                                                                   data-dismiss="fileinput"> @lang('app.remove') </a>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-sm-12">
                                                 <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
                                                     @lang('app.update')
                                                 </button>
-                                                <button type="reset"
-                                                        class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                             </div>
 
                                         </div>
@@ -221,6 +248,7 @@
             container: '#editSettings',
             type: "POST",
             redirect: true,
+            file: true,
             data: $('#editSettings').serialize()
         })
     });

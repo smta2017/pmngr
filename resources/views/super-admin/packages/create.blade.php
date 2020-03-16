@@ -42,13 +42,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="control-label">@lang('app.name')</label>
+                                            <label class="control-label required">@lang('app.name')</label>
                                             <input type="text" id="name" name="name" value="" class="form-control" >
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('app.max') @lang('app.menu.employees')</label>
+                                            <label class="control-label required">@lang('app.max') @lang('app.menu.employees')</label>
                                             <input type="number" name="max_employees" id="max_employees" value=""  class="form-control">
                                         </div>
                                     </div>
@@ -56,13 +56,13 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>@lang('app.annual') @lang('app.price') ({{ $global->currency->currency_symbol }})</label>
+                                            <label class="control-label required">@lang('app.annual') @lang('app.price') ({{ $global->currency->currency_symbol }})</label>
                                             <input type="number" name="annual_price" id="annual_price" value=""  class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6 ">
                                         <div class="form-group">
-                                            <label>@lang('app.monthly') @lang('app.price') ({{ $global->currency->currency_symbol }})</label>
+                                            <label class="control-label required">@lang('app.monthly') @lang('app.price') ({{ $global->currency->currency_symbol }})</label>
                                             <input type="number" name="monthly_price" id="monthly_price"  value=""   class="form-control">
                                         </div>
                                     </div>
@@ -105,7 +105,7 @@
                                         <div class="form-group">
                                             <div class="checkbox checkbox-info  col-md-10">
                                                 <input id="select_all_permission"
-                                                        
+
                                                         class="select_all_permission" type="checkbox">
                                                 <label for="select_all_permission">@lang('modules.permission.selectAll')</label>
                                             </div>
@@ -143,7 +143,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

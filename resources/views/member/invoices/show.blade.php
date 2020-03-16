@@ -33,34 +33,24 @@
 
 @section('content')
 
-    <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('modules.payments.totalAmount')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $invoice->currency->currency_symbol.' '.$invoice->total }}</span></li>
-                </ul>
+<div class="row">
+    <div class="col-md-12 m-t-20">
+        <div class="white-box">
+            <div class="col-md-4 text-center">
+                <h4><span class="text-dark">{{ $invoice->currency->currency_symbol}}{{ $invoice->total }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalAmount')</span></h4>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-success">
-                <h3 class="box-title text-white">@lang('modules.payments.totalPaid')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $invoice->currency->currency_symbol.' '.$invoice->amountPaid() }}</span></li>
-                </ul>
+            
+            <div class="col-md-4 text-center b-l">
+                <h4><span class="text-success">{{ $invoice->currency->currency_symbol.' '.$invoice->amountPaid() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalPaid')</span></h4>
             </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-danger">
-                <h3 class="box-title text-white">@lang('modules.payments.totalDue')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $invoice->currency->currency_symbol.' '.$invoice->amountDue() }}</span></li>
-                </ul>
+            
+            <div class="col-md-4 text-center b-l">
+                <h4><span class="text-danger">{{ $invoice->currency->currency_symbol.' '.$invoice->amountDue() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.payments.totalDue')</span></h4>
             </div>
+            
         </div>
+    </div>
+
         <div class="col-md-12">
             @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissable">

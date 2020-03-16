@@ -6,7 +6,7 @@ use App\Observers\ExpenseObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Expense extends Model
+class Expense extends BaseModel
 {
     protected $dates = ['purchase_date', 'purchase_on'];
 

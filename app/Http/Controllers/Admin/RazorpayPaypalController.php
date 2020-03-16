@@ -153,7 +153,7 @@ class RazorpayPaypalController extends AdminBaseController
             }
         }
         $company = Company::findOrFail(company()->id);
-        
+
 
         // Calculating next billing date
         $today = Carbon::now()->addDays(1); //payment will deduct after 1 day
@@ -232,7 +232,7 @@ class RazorpayPaypalController extends AdminBaseController
         /** The payer_id is added to the request query parameters **/
         /** when the user is redirected from paypal back to your site **/
         $execution = new PaymentExecution();
-        $execution->setPayerId(Input::get('PayerID'));
+        $execution->setPayerId(request()->get('PayerID'));
         /**Execute the payment **/
         $result = $payment->execute($execution, $this->_api_context);
         /** dd($result);exit; /** DEBUG RESULT, remove it later **/

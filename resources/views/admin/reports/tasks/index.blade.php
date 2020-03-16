@@ -8,7 +8,7 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12  text-right">
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -34,26 +34,26 @@
 
 
 
-    <div class="white-box">
-        <div class="row m-b-10">
-            <h2>@lang("app.filterResults")</h2>
+    @section('filter-section')
+        <div class="row">
+
             {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-4">
+            <div class="col-md-12">
                 <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+                    <h5 class="box-title">@lang('app.selectDateRange')</h5>
 
                     <div class="input-daterange input-group" id="date-range">
                         <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                               value="{{ $fromDate->format('Y-m-d') }}"/>
+                               value="{{ $fromDate->format($global->date_format) }}"/>
                         <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
                         <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                               value="{{ $toDate->format('Y-m-d') }}"/>
+                               value="{{ $toDate->format($global->date_format) }}"/>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <h5 class="box-title m-t-30">@lang('app.selectProject')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title m-t-20">@lang('app.selectProject')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -71,8 +71,8 @@
             </div>
 
 
-            <div class="col-md-4">
-                <h5 class="box-title m-t-30">@lang('modules.employees.employeeName')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('modules.employees.employeeName')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -97,57 +97,29 @@
             {!! Form::close() !!}
 
         </div>
-    </div>
+    @endsection
 
-    <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12">
+    <div class="row dashboard-stats">
+        <div class="col-md-12">
             <div class="white-box">
-                <div class="row row-in">
-                    <div class="col-lg-4 col-sm-6 row-in-br">
-                        <div class="col-in row">
-                            <h3 class="box-title">@lang("modules.taskReport.taskToComplete")</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-layout-list-thumb text-info"></i></li>
-                                <li class="text-right"><span id="total-counter" class="counter">{{ $totalTasks }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 row-in-br  b-r-none">
-                        <div class="col-in row">
-                            <h3 class="box-title">@lang("modules.taskReport.completedTasks")</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-check-box text-success"></i></li>
-                                <li class="text-right"><span id="completed-counter" class="counter">{{ $completedTasks }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-sm-6 b-0">
-                        <div class="col-in row">
-                            <h3 class="box-title">@lang("modules.taskReport.pendingTasks")</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-alert text-warning"></i></li>
-                                <li class="text-right"><span id="pending-counter" class="counter">{{ $pendingTasks }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-md-4">
+                    <h4><span class="text-info" id="total-counter">{{ $totalTasks }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.taskReport.taskToComplete')</span></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4><span class="text-success" id="completed-counter">{{ $completedTasks }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.taskReport.completedTasks')</span></h4>
+                </div>
+                <div class="col-md-4">
+                    <h4><span class="text-warning" id="pending-counter">{{ $pendingTasks }}</span> <span class="font-12 text-muted m-l-5"> @lang("modules.taskReport.pendingTasks")</span></h4>
                 </div>
             </div>
         </div>
-    </div>    <!-- .row -->
+
+    </div>
 
     <div class="row">
         <div class="col-lg-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-
-                    </div>
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
+                
                 <h3 class="box-title">@lang("modules.taskReport.chartTitle")</h3>
                 <div>
                     <canvas id="chart3" height="50"></canvas>
@@ -239,12 +211,13 @@
             url: url,
             data: {_token: token, startDate: startDate, endDate: endDate, projectId: projectID, employeeId: employeeId},
             success: function (response) {
+                // console.log(response.taskStatus);
 
                 $('#completed-counter').html(response.completedTasks);
                 $('#total-counter').html(response.totalTasks);
                 $('#pending-counter').html(response.pendingTasks);
 
-                pieChart(response.completedTasks, response.pendingTasks);
+                pieChart(response.taskStatus);
                 initConter();
             }
         });
@@ -259,22 +232,22 @@
 </script>
 
 <script>
-    function pieChart(count1, count2) {
+    function pieChart(taskStatus) {
+        console.log(taskStatus);
+
         var ctx3 = document.getElementById("chart3").getContext("2d");
-        var data3 = [
-            {
-                value: parseInt(count1),
-                color:"#00c292",
-                highlight: "#57ecc8",
-                label: "Completed Tasks"
-            },
-            {
-                value: parseInt(count2),
-                color: "#f1c411",
-                highlight: "#f1d877",
-                label: "Pending Tasks"
-            }
-        ];
+        var data3 = new Array();
+        $.each(taskStatus, function(key,val){
+            // console.log("key : "+key+" ; value : "+val);
+            data3.push(
+                {
+                    value: parseInt(val.count),
+                    color: val.color,
+                    highlight: "#57ecc8",
+                    label: val.label
+                }
+            );
+        });
 
         var myPieChart = new Chart(ctx3).Pie(data3,{
             segmentShowStroke : true,
@@ -292,7 +265,7 @@
         showTable();
     }
 
-    pieChart('{{ $completedTasks }}', '{{ $pendingTasks }}');
+    pieChart(jQuery.parseJSON('{!! $taskStatus !!}'));
 
     var table;
 

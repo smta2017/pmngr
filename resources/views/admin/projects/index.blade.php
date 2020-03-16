@@ -8,7 +8,13 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.projects.archive') }}"  class="btn btn-outline btn-danger btn-sm">@lang('app.menu.viewArchive') <i class="fa fa-trash" aria-hidden="true"></i></a>
+                        
+            <a href="{{ route('admin.project-template.index') }}"  class="btn btn-outline btn-primary btn-sm">@lang('app.menu.addProjectTemplate') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
+            <a href="{{ route('admin.projects.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.projects.addNewProject') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -62,95 +68,39 @@
 
 @section('content')
 
-    <div class="row dashboard-stats">
-        <div class="col-md-2">
-            <div class="white-box bg-inverse p-t-10 p-b-10">
-                <h3 class="box-title text-white">@lang('modules.dashboard.totalProjects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span id="totalProjects" class="counter text-white">{{ $totalProjects }}</span></li>
-                </ul>
+<div class="row dashboard-stats">
+    <div class="col-md-12 m-t-20">
+        <div class="white-box">
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-dark" id="totalWorkingDays">{{ $totalProjects }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalProjects')</span></h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-danger" id="daysPresent">{{ $overdueProjects }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.overDueProjects')</span></h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-warning" id="daysLate">{{ $notStartedProjects }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.notStarted') @lang('app.menu.projects')</span></h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-success" id="halfDays">{{ $finishedProjects }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.completedProjects')</span></h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-info" id="absentDays">{{ $inProcessProjects }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.inProgress') @lang('app.menu.projects')</span></h4>
+            </div>
+            <div class="col-md-4 col-sm-6">
+                <h4><span class="text-primary" id="holidayDays">{{ $canceledProjects }}</span> <span class="font-12 text-muted m-l-5">@lang('app.canceled') @lang('app.menu.projects')</span></h4>
             </div>
         </div>
-        <div class="col-md-2">
-            <div class="white-box p-t-10 p-b-10 bg-danger">
-                <h3 class="box-title text-white">@lang('modules.tickets.overDueProjects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span id="overdueProjects" class="counter text-white">{{ $overdueProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
-
     </div>
-    <div class="row dashboard-stats">
-        <div class="col-md-2">
-            <div class="white-box bg-success p-t-10 p-b-10">
-                <h3 class="box-title text-white">@lang('modules.tickets.completedProjects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span id="completedProjects" class="counter text-white">{{ $finishedProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="white-box p-t-10 p-b-10 bg-warning">
-                <h3 class="box-title text-white">@lang('app.notStarted') @lang('app.menu.projects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span class="text-white">{{ $notStartedProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <div class="white-box p-t-10 p-b-10 bg-info">
-                <h3 class="box-title text-white">@lang('app.inProgress') @lang('app.menu.projects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span id="inProcessProjects" class="counter text-white">{{ $inProcessProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
 
-        <div class="col-md-2">
-            <div class="white-box p-t-10 p-b-10 bg-warning">
-                <h3 class="box-title text-white">@lang('app.onHold') @lang('app.menu.projects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span class="text-white">{{ $onHoldProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
+</div>
 
-        <div class="col-md-2">
-            <div class="white-box p-t-10 p-b-10 bg-danger">
-                <h3 class="box-title text-white">@lang('app.canceled') @lang('app.menu.projects')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-white"></i></li>
-                    <li class="text-right"><span class="text-white">{{ $canceledProjects }}</span></li>
-                </ul>
-            </div>
-        </div>
-
-    </div>
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-12  m-t-25">
             <div class="white-box">
+                
+                @section('filter-section')
                 <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group custom-action">
-                            <a href="{{ route('admin.projects.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.projects.addNewProject') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="javascript:;" id="createProject" class="btn btn-outline btn-info btn-sm">@lang('modules.projectCategory.addProjectCategory') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="{{ route('admin.projects.gantt') }}" class="btn btn-outline btn-danger btn-sm"><i class="fa fa-bar-chart" aria-hidden="true"></i> @lang('modules.projects.viewGanttChart')</a>
-                            <a href="{{ route('admin.project-template.index') }}"  class="btn btn-outline btn-primary btn-sm">@lang('app.menu.addProjectTemplate') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="{{ route('admin.projects.archive') }}"  class="btn btn-outline btn-info btn-sm">@lang('app.menu.viewArchive') <i class="fa fa-trash" aria-hidden="true"></i></a>
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">@lang('app.menu.projects') @lang('app.status')</label>
                             <select class="select2 form-control" data-placeholder="@lang('app.menu.projects') @lang('app.status')" id="status">
@@ -174,7 +124,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">@lang('app.clientName')</label>
                             <select class="select2 form-control" data-placeholder="@lang('app.clientName')" id="client_id">
@@ -185,7 +135,19 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">@lang('modules.projects.projectCategory')</label>
+                            <select class="select2 form-control" data-placeholder="@lang('modules.projects.projectCategory')" id="category_id">
+                                <option selected value="all">@lang('app.all')</option>
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                 </div>
+                @endsection
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="project-table">
@@ -344,8 +306,9 @@
     function showData() {
         var status = $('#status').val();
         var clientID = $('#client_id').val();
+        var categoryId = $('#category_id').val();
 
-        var searchQuery = "?status="+status+"&client_id="+clientID;
+        var searchQuery = "?status="+status+"&client_id="+clientID+"&category_id="+categoryId;
        table = $('#project-table').dataTable({
             responsive: true,
             processing: true,
@@ -381,6 +344,11 @@
     });
 
     $('#client_id').on('change', function(event) {
+        event.preventDefault();
+        showData();
+    });
+
+    $('#category_id').on('change', function(event) {
         event.preventDefault();
         showData();
     });

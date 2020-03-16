@@ -6,7 +6,7 @@ use App\Observers\EventObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Event extends BaseModel
 {
     protected $dates = ['start_date_time', 'end_date_time'];
 

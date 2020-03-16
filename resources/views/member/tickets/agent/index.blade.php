@@ -49,74 +49,52 @@
 
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-7">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="white-box bg-inverse">
-                                <h3 class="box-title text-white">@lang('modules.tickets.totalTickets')
-                                    <a class="mytooltip" href="javascript:void(0)"> <i class="fa fa-info-circle text-white"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.totalTicketInfo')</span></span></span></a>
-                                </h3>
-                                <ul class="list-inline two-part">
-                                    <li><i class="ti-ticket text-white"></i></li>
-                                    <li class="text-right"><span id="totalTickets" class="counter text-white">0</span></li>
-                                </ul>
+                <div class="col-md-12">
+                    <div class="row dashboard-stats">
+                        <div class="col-md-12">
+                            <div class="white-box">
+                                <div class="col-md-4">
+                                    <h4>
+                                        <span class="text-dark" id="totalTickets">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.totalTickets')</span>
+                                        <a class="mytooltip font-12" href="javascript:void(0)"> <i class="fa fa-info-circle"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.totalTicketInfo')</span></span></span></a>
+                                    </h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>
+                                        <span class="text-success" id="closedTickets">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.totalClosedTickets')</span>
+                                        <a class="mytooltip font-12" href="javascript:void(0)"> <i class="fa fa-info-circle"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.closedTicketInfo')</span></span></span></a>
+                                    </h4>
+                                </div>
+                                <div class="col-md-4">
+                                    <h4>
+                                        <span class="text-danger" id="openTickets">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.totalOpenTickets')</span>
+                                        <a class="mytooltip font-12" href="javascript:void(0)"> <i class="fa fa-info-circle"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.openTicketInfo')</span></span></span></a>
+                                    </h4>
+                                </div>
+                            
+                                <div class="col-md-4">
+                                    <h4>
+                                        <span class="text-warning" id="pendingTickets">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.totalPendingTickets')</span>
+                                        <a class="mytooltip font-12" href="javascript:void(0)"> <i class="fa fa-info-circle"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.pendingTicketInfo')</span></span></span></a>
+                                    </h4>
+                                </div>
+                            
+                                <div class="col-md-4">
+                                    <h4>
+                                        <span class="text-info" id="resolvedTickets">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.tickets.totalResolvedTickets')</span>
+                                        <a class="mytooltip font-12" href="javascript:void(0)"> <i class="fa fa-info-circle"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.resolvedTicketInfo')</span></span></span></a>
+                                    </h4>
+                                </div>
+                            
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <div class="white-box bg-success">
-                                <h3 class="box-title text-white">@lang('modules.tickets.totalClosedTickets')
-                                    <a class="mytooltip" href="javascript:void(0)"> <i class="fa fa-info-circle text-white"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.closedTicketInfo')</span></span></span></a>
-                                </h3>
-                                <ul class="list-inline two-part">
-                                    <li><i class="ti-ticket text-white"></i></li>
-                                    <li class="text-right"><span id="closedTickets" class="counter text-white">0</span></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="white-box p-t-10 p-b-10 bg-danger">
-                                <h3 class="box-title text-white">@lang('modules.tickets.totalOpenTickets')
-                                    <a class="mytooltip" href="javascript:void(0)"> <i class="fa fa-info-circle text-white"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.openTicketInfo')</span></span></span></a>
-                                </h3>
-                                <ul class="list-inline two-part">
-                                    <li><i class="ti-ticket text-white"></i></li>
-                                    <li class="text-right"><span id="openTickets" class="counter text-white">0</span></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="white-box p-t-10 p-b-10 bg-warning">
-                                <h3 class="box-title text-white">@lang('modules.tickets.totalPendingTickets')
-                                    <a class="mytooltip" href="javascript:void(0)"> <i class="fa fa-info-circle text-white"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.pendingTicketInfo')</span></span></span></a>
-                                </h3>
-                                <ul class="list-inline two-part">
-                                    <li><i class="ti-ticket text-white"></i></li>
-                                    <li class="text-right"><span id="pendingTickets" class="counter text-white">0</span></li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="col-md-4">
-                            <div class="white-box p-t-10 p-b-10 bg-info">
-                                <h3 class="box-title text-white">@lang('modules.tickets.totalResolvedTickets')
-                                    <a class="mytooltip" href="javascript:void(0)"> <i class="fa fa-info-circle text-white"></i><span class="tooltip-content5"><span class="tooltip-text3"><span class="tooltip-inner2">@lang('modules.tickets.resolvedTicketInfo')</span></span></span></a>
-                                </h3>
-                                <ul class="list-inline two-part">
-                                    <li><i class="ti-ticket text-white"></i></li>
-                                    <li class="text-right"><span id="resolvedTickets" class="counter text-white">0</span></li>
-                                </ul>
-                            </div>
-                        </div>
-
+                
                     </div>
 
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-12">
                     <div class="white-box p-t-10 p-b-10">
-                        <h3 class="box-title">Ticket Trend Graph </h3>
+                        <h3 class="box-title"><i class="icon-graph"></i> @lang('modules.tickets.ticketTrendGraph') </h3>
                         <ul class="list-inline text-right">
                             <li>
                                 <h5><i class="fa fa-circle m-r-5" style="color: #4c5667;"></i>Total</h5>
@@ -143,49 +121,38 @@
 
                 <h2>@lang('app.menu.tickets')</h2>
 
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="form-group">
-
-                            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
+                @section('filter-section')
+                <div class="row" id="ticket-filters">
+                 
                     <div class="col-md-12">
-                        <h4>@lang('app.filterBy')</h4>
-                    </div>
-                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">@lang('app.status')</label>
                             <select class="form-control selectpicker" name="status" id="status" data-style="form-control">
-                                <option value="">No Filter</option>
-                                <option>open</option>
-                                <option>pending</option>
-                                <option>resolved</option>
-                                <option>closed</option>
+                                <option value="">@lang('modules.tickets.nofilter')</option>
+                                <option value="open">@lang('modules.tickets.totalOpenTickets')</option>
+                                <option value="pending">@lang('modules.tickets.totalPendingTickets')</option>
+                                <option value="resolved">@lang('modules.tickets.totalResolvedTickets')</option>
+                                <option value="closed">@lang('modules.tickets.totalClosedTickets')</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">@lang('modules.tasks.priority')</label>
                             <select class="form-control selectpicker" name="priority" id="priority" data-style="form-control">
-                                <option value="">No Filter</option>
-                                <option>low</option>
-                                <option>medium</option>
-                                <option>high</option>
-                                <option>urgent</option>
+                                <option value="">@lang('modules.tickets.nofilter')</option>
+                                <option value="low">@lang('modules.tasks.low')</option>
+                                <option value="medium">@lang('modules.tasks.medium')</option>
+                                <option value="high">@lang('modules.tasks.high')</option>
+                                <option value="urgent">@lang('modules.tickets.urgent')</option>
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">@lang('modules.tickets.channelName')</label>
                             <select class="form-control selectpicker" name="channel_id" id="channel_id" data-style="form-control">
-                                <option value="">No Filter</option>
+                                <option value="">@lang('modules.tickets.nofilter')</option>
                                 @forelse($channels as $channel)
                                     <option value="{{ $channel->id }}">{{ ucwords($channel->channel_name) }}</option>
                                 @empty
@@ -194,11 +161,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">@lang('modules.invoices.type')</label>
                             <select class="form-control selectpicker" name="type_id" id="type_id" data-style="form-control">
-                                <option value="">No Filter</option>
+                                <option value="">@lang('modules.tickets.nofilter')</option>
                                 @forelse($types as $type)
                                     <option value="{{ $type->id }}">{{ ucwords($type->type) }}</option>
                                 @empty
@@ -207,11 +174,11 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <label class="control-label">&nbsp;</label>
+                    <div class="col-md-12">
                         <button type="button" id="apply-filters" class="btn btn-success btn-block"><i class="fa fa-check"></i> @lang('app.apply')</button>
                     </div>
                 </div>
+                @endsection
 
                 <div class="row">
                     <div class="col-sm-12 m-t-20">
@@ -329,14 +296,6 @@
 
     function showTable() {
 
-        $('body').block({
-            message: '<p style="margin:0;padding:8px;font-size:24px;">Just a moment...</p>'
-            , css: {
-                color: '#fff'
-                , border: '1px solid #fb9678'
-                , backgroundColor: '#fb9678'
-            }
-        });
 
         var status = $('#status').val();
         if (status == "") {

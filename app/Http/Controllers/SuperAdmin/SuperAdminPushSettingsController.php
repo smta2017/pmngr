@@ -37,7 +37,7 @@ class SuperAdminPushSettingsController extends SuperAdminBaseController
         }
         elseif ($request->hasFile('notification_logo')) {
             $setting->notification_logo = $request->notification_logo->hashName();
-            $request->notification_logo->store('user-uploads/notification-logo');
+            $request->notification_logo->store('notification-logo');
         }
 
         $setting->save();

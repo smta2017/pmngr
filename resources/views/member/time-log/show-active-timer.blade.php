@@ -1,50 +1,46 @@
-<div class="panel panel-default">
-    <div class="panel-heading "><i class="fa fa-stop-circle-o"></i> @lang('modules.projects.activeTimers')
-        <div class="panel-action">
-            <a href="javascript:;" class="close" data-dismiss="modal"><i class="ti-close"></i></a>
-        </div>
-    </div>
-    <div class="panel-wrapper collapse in">
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>@lang('modules.projects.whoWorking')</th>
-                        <th> @if($logTimeFor->log_time_for == 'task')
-                                @lang('app.task')
-                            @else
-                                @lang('app.project')
-                            @endif
-                            @lang('app.name')</th>
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h4 class="modal-title"><i class="fa fa-stop-circle-o"></i> @lang('modules.projects.activeTimers')</h4>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>@lang('modules.projects.whoWorking')</th>
+                <th> @if($logTimeFor->log_time_for == 'task')
+                        @lang('app.task')
+                    @else
+                        @lang('app.project')
+                    @endif
+                    @lang('app.name')</th>
 
-                        <th>@lang('modules.employees.memo')</th>
-                        <th>@lang('modules.projects.activeSince')</th>
-                        <td> </td>
-                    </tr>
-                    </thead>
-                    <tbody id="active-timer-list">
-                    @forelse($activeTimers as $key=>$time)
-                        <tr>
-                            <td>{{ $key+1 }}</td>
-                            <td>{{ ucwords($time->name) }}</td>
-                            <td>{{ ucwords($time->project_name) }}</td>
-                            <td class="font-bold ">{{ ucwords(substr($time->memo, 0, 50)) }}</td>
-                            <td class="font-bold "><i class="ti-alarm-clock"></i> <span class="timer">{{ $time->timer }}</span></td>
-                            <td><a href="javascript:;" data-time-id="{{ $time->id }}" class="label label-danger stop-active-timer">@lang('app.stop')</a></td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="3">@lang('messages.noActiveTimer')</td>
-                        </tr>
-                    @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+                <th>@lang('modules.employees.memo')</th>
+                <th>@lang('modules.projects.activeSince')</th>
+                <th> </th>
+            </tr>
+            </thead>
+            <tbody id="active-timer-list">
+            @forelse($activeTimers as $key=>$time)
+                <tr>
+                    <td>{{ $key+1 }}</td>
+                    <td>{{ ucwords($time->name) }}</td>
+                    <td>{{ ucwords($time->project_name) }}</td>
+                    <td class="font-bold ">{{ ucwords(substr($time->memo, 0, 50)) }}</td>
+                    <td class="font-bold "><i class="ti-alarm-clock"></i> <span class="timer">{{ $time->timer }}</span></td>
+                    <td><a href="javascript:;" data-time-id="{{ $time->id }}" class="label label-danger stop-active-timer">@lang('app.stop')</a></td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="6">@lang('messages.noActiveTimer')</td>
+                </tr>
+            @endforelse
+            </tbody>
+        </table>
     </div>
 </div>
+    
 
 <script>
 

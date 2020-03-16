@@ -128,10 +128,6 @@ class ManageEstimatesController extends AdminBaseController
         $this->logSearchEntry($estimate->id, 'Estimate #' . $estimate->id, 'admin.estimates.edit', 'estimate');
         DB::commit();
 
-        // Notify client
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($estimate->client_id);
-        $notifyUser->notify(new NewEstimate($estimate));
-
         return Reply::redirect(route('admin.estimates.index'), __('messages.estimateCreated'));
     }
 
@@ -212,10 +208,6 @@ class ManageEstimatesController extends AdminBaseController
                 ]
             );
         endforeach;
-
-        // Notify client
-        $notifyUser = User::withoutGlobalScopes()->findOrFail($estimate->client_id);
-        $notifyUser->notify(new NewEstimate($estimate));
 
         return Reply::redirect(route('admin.estimates.index'), __('messages.estimateUpdated'));
     }

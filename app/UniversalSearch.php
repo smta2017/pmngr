@@ -6,7 +6,7 @@ use App\Observers\UniversalSearchObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class UniversalSearch extends Model
+class UniversalSearch extends BaseModel
 {
     protected $table = 'universal_search';
 

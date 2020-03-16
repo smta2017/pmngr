@@ -3,12 +3,12 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-8 col-md-6 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('admin.settings.index') }}">@lang('app.menu.settings')</a></li>
@@ -54,16 +54,18 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Paypal Client Id</label>
-                                                                <input type="text" name="paypal_client_id" id="paypal_client_id"
+                                                                <input type="password" name="paypal_client_id" id="paypal_client_id"
                                                                        class="form-control" value="{{ $credentials->paypal_client_id }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-md-12">
                                                             <div class="form-group">
                                                                 <label>Paypal Secret</label>
-                                                                <input type="text" name="paypal_secret" id="paypal_secret"
+                                                                <input type="password" name="paypal_secret" id="paypal_secret"
                                                                        class="form-control" value="{{ $credentials->paypal_secret }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
 
                                                             <div class="form-group">
@@ -101,6 +103,7 @@
                                                                 <label>Stripe Client Id</label>
                                                                 <input type="text" name="stripe_client_id" id="stripe_client_id"
                                                                        class="form-control" value="{{ $credentials->stripe_client_id }}">
+
                                                             </div>
                                                         </div>
 
@@ -109,6 +112,7 @@
                                                                 <label>Stripe Secret</label>
                                                                 <input type="text" name="stripe_secret" id="stripe_secret"
                                                                        class="form-control" value="{{ $credentials->stripe_secret }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
                                                         </div>
 
@@ -117,6 +121,7 @@
                                                                 <label>Stripe Webhook Secret</label>
                                                                 <input type="text" name="stripe_webhook_secret" id="stripe_webhook_secret"
                                                                        class="form-control" value="{{ $credentials->stripe_webhook_secret }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
 
                                                             <div class="form-group">
@@ -146,6 +151,7 @@
                                                                 <label class="">Razorpay Key</label>
                                                                 <input type="text" name="razorpay_key" id="razorpay_key"
                                                                        class="form-control" value="{{ $credentials->razorpay_key }}">
+
                                                             </div>
                                                         </div>
 
@@ -154,6 +160,7 @@
                                                                 <label>Razorpay Secret Key</label>
                                                                 <input type="text" name="razorpay_secret" id="razorpay_secret"
                                                                        class="form-control" value="{{ $credentials->razorpay_secret }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
                                                         </div>
 
@@ -162,6 +169,7 @@
                                                                 <label>Razorpay Webhook Secret Key</label>
                                                                 <input type="text" name="razorpay_webhook_secret" id="razorpay_webhook_secret"
                                                                        class="form-control" value="{{ $credentials->razorpay_webhook_secret }}">
+                                                                <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                             </div>
                                                         </div>
 
@@ -183,7 +191,7 @@
                                                     <button type="submit" id="save-form-2" class="btn btn-success"><i class="fa fa-check"></i>
                                                         @lang('app.save')
                                                     </button>
-                                                    <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                                                 </div>
                                                 {!! Form::close() !!}
                                             </div>

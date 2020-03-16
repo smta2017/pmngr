@@ -230,7 +230,7 @@
                                                         <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.slackSettings.uploadSlackLog')) }}"
                                                              alt=""/>
                                                     @else
-                                                        <img src="{{ asset('user-uploads/slack-logo/'.$slackSettings->slack_logo) }}"
+                                                        <img src="{{ $slackSettings->slack_logo_url }}"
                                                              alt=""/>
                                                     @endif
                                                 </div>
@@ -269,8 +269,7 @@
                                         </button>
                                         <button type="button" id="send-test-notification"
                                                 class="btn btn-primary waves-effect waves-light">@lang('modules.slackSettings.sendTestNotification')</button>
-                                        <button type="reset"
-                                                class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+
                                     </div>
 
                                     {!! Form::close() !!}
@@ -317,7 +316,7 @@
             img = '<img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.slackSettings.uploadSlackLog')) }}" alt=""/>';
         }
         else{
-            img = '<img src="{{ asset('user-uploads/slack-logo/'.$slackSettings->slack_logo) }}" alt=""/>'
+            img = '<img src="{{ asset_url('slack-logo/'.$slackSettings->slack_logo) }}" alt=""/>'
         }
         $('.thumbnail').html(img);
 

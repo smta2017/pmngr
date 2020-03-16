@@ -6,7 +6,7 @@ use App\Observers\TaskCategoryObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskCategory extends Model
+class TaskCategory extends BaseModel
 {
     protected $table = 'task_category';
 

@@ -14,8 +14,8 @@ class AddLatitudeLongitudeColumn extends Migration
     public function up()
     {
         Schema::table('organisation_settings', function (Blueprint $table) {
-            $table->decimal('latitude', 10, 8)->default('26.9124336')->after('locale');
-            $table->decimal('longitude', 11, 8)->default('75.78727090000007')->after('latitude');
+            $table->decimal('latitude', 10, 8)->nullable()->after('locale');
+            $table->decimal('longitude', 11, 8)->nullable()->after('latitude');
         });
     }
 

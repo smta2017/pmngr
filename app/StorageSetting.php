@@ -6,9 +6,9 @@ use App\Observers\StorageSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class StorageSetting extends Model
+class StorageSetting extends BaseModel
 {
-    protected $table = 'file_storage_settings';
+    protected $table = 'storage_settings';
 
     protected $fillable = ['filesystem','auth_keys','status'];
 
@@ -17,14 +17,6 @@ class StorageSetting extends Model
         parent::boot();
 
         static::observe(StorageSettingObserver::class);
-
-        $company = company();
-
-        static::addGlobalScope('company', function (Builder $builder) use($company) {
-            if ($company) {
-                $builder->where('file_storage_settings.company_id', '=', $company->id);
-            }
-        });
     }
 
 }

@@ -8,7 +8,7 @@ use App\Observers\ContractRenewObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContractRenew extends Model
+class ContractRenew extends BaseModel
 {
 
     protected static function boot()

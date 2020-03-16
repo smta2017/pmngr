@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LanguageSetting extends Model
+class LanguageSetting extends BaseModel
 {
     //
 }

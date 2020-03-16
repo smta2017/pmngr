@@ -63,7 +63,12 @@ class ManageAllInvoicesController extends AdminBaseController
     {
         $firstInvoice = Invoice::orderBy('id', 'desc')->first();
         $invoices = Invoice::with(['project:id,project_name,client_id', 'currency:id,currency_symbol,currency_code', 'project.client'])
-            ->select('id', 'project_id', 'client_id',  'invoice_number', 'currency_id', 'total', 'status', 'issue_date', 'credit_note');
+            ->leftJoin('projects', 'projects.id', 'invoices.project_id')
+            ->leftJoin('currencies', 'currencies.id', 'invoices.currency_id')
+            ->select('invoices.id', 'invoices.project_id', 'invoices.client_id', 'projects.id as projectid',
+                'projects.project_name',  'invoices.invoice_number', 'invoices.currency_id',
+                'currencies.currency_symbol',  'currencies.currency_code',
+                'invoices.total', 'invoices.status', 'invoices.issue_date', 'invoices.credit_note');
 
 
         if ($request->startDate !== null && $request->startDate != 'null' && $request->startDate != '') {
@@ -89,7 +94,6 @@ class ManageAllInvoicesController extends AdminBaseController
         $invoices = $invoices->whereHas('project', function($q) {
             $q->whereNull('deleted_at');
         }, '>=', 0)->orderBy('invoices.id', 'desc')->get();
-
 
         return DataTables::of($invoices)
             ->addIndexColumn()
@@ -395,13 +399,6 @@ class ManageAllInvoicesController extends AdminBaseController
         //log search
         $this->logSearchEntry($invoice->id, 'Invoice ' . $invoice->invoice_number, 'admin.all-invoices.show', 'invoice');
 
-        if (($invoice->project && $invoice->project->client_id != null) || $invoice->client_id != null) {
-            $clientId = ($invoice->project && $invoice->project->client_id != null) ? $invoice->project->client_id : $invoice->client_id;
-            // Notify client
-            $notifyUser = User::withoutGlobalScopes(['active', 'company'])->findOrFail($clientId);
-            $notifyUser->notify(new NewInvoice($invoice));
-        }
-
         return Reply::redirect(route('admin.all-invoices.index'), __('messages.invoiceCreated'));
     }
 
@@ -495,15 +492,6 @@ class ManageAllInvoicesController extends AdminBaseController
         $invoice->billing_cycle = $request->recurring_payment == 'yes' ? $request->billing_cycle : null;
         $invoice->note = $request->note;
         $invoice->save();
-
-        if (($invoice->project && $invoice->project->client_id != null) || $invoice->client_id != null) {
-            $clientId = ($invoice->project && $invoice->project->client_id != null) ? $invoice->project->client_id : $invoice->client_id;
-            // Notify client
-            $notifyUser = User::withoutGlobalScope('active')->find($clientId);
-            if (!is_null($notifyUser)) {
-                $notifyUser->notify(new NewInvoice($invoice));
-            }
-        }
 
         // delete and create new
         InvoiceItems::where('invoice_id', $invoice->id)->delete();
@@ -859,10 +847,6 @@ class ManageAllInvoicesController extends AdminBaseController
         $invoice->status = 'paid';
         $invoice->save();
 
-
-        $client = User::withoutGlobalScope('company')->find($offlineRequest->client_id);
-        $client->notify(new OfflineInvoicePaymentAccept($offlineRequest));
-
         return Reply::success('Successfully verified');
     }
 
@@ -877,9 +861,6 @@ class ManageAllInvoicesController extends AdminBaseController
         //Change the status of invoice
         $invoice->status = 'unpaid';
         $invoice->save();
-
-        $client = User::withoutGlobalScope('company')->find($offlineRequest->client_id);
-        $client->notify(new OfflineInvoicePaymentReject($offlineRequest));
 
         return Reply::success('Successfully rejected');
     }

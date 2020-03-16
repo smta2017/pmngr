@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class ProjectTimeLog extends Model
+class ProjectTimeLog extends BaseModel
 {
     use Notifiable;
 

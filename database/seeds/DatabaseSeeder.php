@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
 
     public function run() {
 
+        // Set Seeding to true check if data is seeding.
+        // This is required to stop notification in installation
+        config(['app.seeding' => true]);
         $this->call(GlobalCurrencySeeder::class);
         $this->call(GlobalSettingTableSeeder::class);
         $this->call(PackageTableSeeder::class);
@@ -25,6 +28,7 @@ class DatabaseSeeder extends Seeder
         if (!App::environment('codecanyon')) {
             $this->call(ProjectSeeder::class);
         }
+        config(['app.seeding' => false]);
     }
 
 }

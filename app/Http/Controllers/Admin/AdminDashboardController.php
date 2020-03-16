@@ -101,22 +101,7 @@ class AdminDashboardController extends AdminBaseController
 
         $this->feedbacks = Project::with('client')->whereNotNull('feedback')->limit(5)->get();
 
-        $locale = strtolower($this->global->locale);
 
-
-        $darSkyLangs = array('ar', 'az', 'be', 'bg', 'bs', 'ca', 'cs', 'da', 'de', 'el', 'en', 'es', 'et', 'fi', 'fr', 'he', 'hr', 'hu', 'id', 'is', 'it', 'ja', 'ka', 'ko', 'kw', 'lv', 'nb', 'nl', 'no', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sr', 'sv', 'tet', 'tr', 'uk', 'x-pig-latin', 'zh', 'zh-tw');
-
-        if (!in_array($locale, $darSkyLangs)) {
-            $locale = 'en';
-        }
-
-        // if(!is_null($this->global->latitude)){
-        //     // get current weather
-        //     $client = new Client();
-        //     $res = $client->request('GET', 'https://api.darksky.net/forecast/4bc1f8da9ffda5c9cdcadda4dc8c5611/'.$this->global->latitude.','.$this->global->longitude.'?units=auto&exclude=minutely,daily&lang='.$locale, ['verify' => false]);
-        //     $weather = $res->getBody();
-        //     $this->weather = json_decode($weather, true);
-        // }
 
         // earning chart
         $this->currencies = Currency::all();
@@ -129,6 +114,7 @@ class AdminDashboardController extends AdminBaseController
             ->where('paid_on', '>=', $this->fromDate)
             ->where('paid_on', '<=', $this->toDate)
             ->where('payments.status', 'complete')
+            ->where('payments.company_id', company()->id)
             ->groupBy('paid_on')
             ->orderBy('paid_on', 'ASC')
             ->get([

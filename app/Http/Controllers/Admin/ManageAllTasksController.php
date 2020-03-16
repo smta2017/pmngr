@@ -52,11 +52,17 @@ class ManageAllTasksController extends AdminBaseController
         return view('admin.tasks.index', $this->data);
     }
 
-    public function data(Request $request, $startDate = null, $endDate = null, $hideCompleted = null, $projectId = null)
+    public function data(Request $request)
     {
+        $startDate = Carbon::createFromFormat($this->global->date_format, $request->startDate)->toDateString();
+        $endDate = Carbon::createFromFormat($this->global->date_format, $request->endDate)->toDateString();
+        $projectId = $request->projectId;
+        $hideCompleted = $request->hideCompleted;
+
         $taskBoardColumn = TaskboardColumn::where('slug', 'incomplete')->first();
 
         $tasks = Task::leftJoin('projects', 'projects.id', '=', 'tasks.project_id')
+            ->with('user')
             ->leftJoin('users as client', 'client.id', '=', 'projects.client_id')
             ->join('users', 'users.id', '=', 'tasks.user_id')
             ->join('taskboard_columns', 'taskboard_columns.id', '=', 'tasks.board_column_id')
@@ -117,18 +123,17 @@ class ManageAllTasksController extends AdminBaseController
                 return '<span class="text-success">' . $row->due_date->format($this->global->date_format) . '</span>';
             })
             ->editColumn('name', function ($row) {
-                return ($row->image) ? '<img src="' . asset('user-uploads/avatar/' . $row->image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->name) : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->name);
+                $image_url = $row->image?asset_url('avatar/'.$row->image):asset('default-profile-2.png');
+                return '<img src="' . $image_url . '" alt="user" class="img-circle" width="30" height="30"> '. ucwords($row->name);
             })
             ->editColumn('clientName', function ($row) {
                 return ($row->clientName) ? ucwords($row->clientName) : '-';
             })
             ->editColumn('created_by', function ($row) {
                 if (!is_null($row->created_by)) {
-                    return ($row->created_image) ? '<img src="' . asset('user-uploads/avatar/' . $row->created_image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->created_by) : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ' . ucwords($row->created_by);
+                    return ($row->created_image) ? '<img src="' . asset_url('avatar/' . $row->created_image) . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ' . ucwords($row->created_by) : '<img src="' . asset('default-profile-2.png') . '"
+                                                            alt="user" class="img-circle" width="30" height="30"> ' . ucwords($row->created_by);
                 }
                 return '-';
             })
@@ -206,33 +211,8 @@ class ManageAllTasksController extends AdminBaseController
         $task->project_id = $request->project_id;
         $task->save();
 
-        if ($oldStatus->slug == 'incomplete'  && $taskBoardColumn->slug == 'completed') {
-            // notify user
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($request->user_id);
-            $notifyUser->notify(new TaskCompleted($task));
+        $this->calculateProjectProgress($request->project_id);
 
-            if ($task->project_id != null) {
-                if ($task->project->client_id != null  && $task->project->allow_client_notification == 'enable') {
-                    //calculate project progress if enabled
-                    $this->calculateProjectProgress($request->project_id);
-                    $notifyClient = User::findOrFail($task->project->client_id);
-                    $notifyClient->notify(new TaskCompleted($task));
-                }
-            }
-        } else {
-            //Send notification to user
-            $notifyUser = User::findOrFail($request->user_id);
-            $notifyUser->notify(new TaskUpdated($task));
-
-            if ($task->project_id != null) {
-                if ($task->project->client_id != null && $task->project->allow_client_notification == 'enable') {
-                    //calculate project progress if enabled
-                    $this->calculateProjectProgress($request->project_id);
-                    $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                    $notifyUser->notify(new TaskUpdatedClient($task));
-                }
-            }
-        }
         return Reply::dataOnly(['taskID' => $task->id]);
         //        return Reply::redirect(route('admin.all-tasks.index'), __('messages.taskUpdatedSuccessfully'));
     }
@@ -451,17 +431,6 @@ class ManageAllTasksController extends AdminBaseController
 
         //calculate project progress if enabled
         $this->calculateProjectProgress($request->project_id);
-
-        //      Send notification to user
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($request->user_id);
-        $notifyUser->notify(new NewTask($task));
-
-        if ($task->project_id != null) {
-            if ($task->project->client_id != null && $task->project->allow_client_notification == 'enable') {
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                $notifyUser->notify(new NewClientTask($task));
-            }
-        }
 
         if (!is_null($request->project_id)) {
             $this->logProjectActivity($request->project_id, __('messages.newTaskAddedToTheProject'));

@@ -4,11 +4,7 @@
             <div class="col-12 col-lg-3">
                 <p class="text-center text-lg-left">
                     <a href="{{ route('front.home') }}">
-                        @if(is_null($setting->logo))
-                            <img src="{{ asset('front/img/worksuite-logo.png') }}" alt="home" />
-                        @else
-                            <img src="{{ asset('user-uploads/app-logo/'.$setting->logo) }}" alt="home" />
-                        @endif
+                        <img src="{{ $setting->logo_front_url }}" alt="home" />
                     </a>
                 </p>
             </div>
@@ -24,20 +20,6 @@
 
                     @endforelse
                 </ul>
-                {{--<ul class="nav nav-primary nav-hero">--}}
-                    {{--<li class="nav-item">--}}
-                        {{--<a class="nav-link" @if($routeName != 'front.home') href="{{route('front.home').'#home'}}" @else data-scrollto="home" @endif >@lang('app.menu.home')</a>--}}
-                    {{--</li>--}}
-                    {{--<li class="nav-item">--}}
-                        {{--<a class="nav-link" @if($routeName != 'front.home') href="{{route('front.home').'#section-features'}}" @else  data-scrollto="section-features" @endif>@lang('app.menu.features')</a>--}}
-                    {{--</li>--}}
-                    {{--<li class="nav-item hidden-sm-down">--}}
-                        {{--<a class="nav-link" @if($routeName != 'front.home') href="{{route('front.home').'#section-pricing'}}" @else  data-scrollto="section-pricing" @endif>@lang('app.menu.pricing')</a>--}}
-                    {{--</li>--}}
-                    {{--<li class="nav-item hidden-sm-down">--}}
-                        {{--<a class="nav-link" @if($routeName != 'front.home') href="{{route('front.home').'#section-contact'}}" @else data-scrollto="section-contact" @endif>@lang('app.menu.contact')</a>--}}
-                    {{--</li>--}}
-                {{--</ul>--}}
             </div>
 
             <div class="col-12 col-lg-3">

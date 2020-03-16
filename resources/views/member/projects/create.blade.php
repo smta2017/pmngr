@@ -57,7 +57,7 @@
                     <div class="pull-right">
                         <div class="btn-group m-r-10">
                             <button aria-expanded="true" data-toggle="dropdown" class="btn btn-block btn-outline btn-info waves-effect dropdown-toggle waves-light" type="button">@lang('app.menu.template') <span class="caret"></span></button>
-                            <ul role="menu" class="dropdown-menu">
+                            <ul role="menu" class="dropdown-menu pull-right">
                                 @forelse($templates as $template)
                                     <li onclick="setTemplate('{{$template->id}}')" role="presentation"><a href="javascript:void(0)" role="menuitem"><i class="icon wb-reply" aria-hidden="true"></i> {{ ucwords($template->project_name) }}</a></li>
                                 @empty
@@ -298,7 +298,7 @@
                             <button type="submit" id="save-form" class="btn btn-success"><i class="fa fa-check"></i>
                                 @lang('app.save')
                             </button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

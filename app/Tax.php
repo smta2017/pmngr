@@ -6,7 +6,7 @@ use App\Observers\TaxObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Tax extends Model
+class Tax extends BaseModel
 {
     protected static function boot()
     {

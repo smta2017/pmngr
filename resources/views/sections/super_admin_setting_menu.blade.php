@@ -1,3 +1,5 @@
+@section('other-section')
+
 <ul class="nav tabs-vertical">
     <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.settings.index') active @endif">
         <a href="{{ route('super-admin.settings.index') }}">@lang('app.global') @lang('app.menu.settings')</a></li>
@@ -11,17 +13,18 @@
     </li>
     <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.currency.index') active @endif">
         <a href="{{ route('super-admin.currency.index') }}">@lang('app.menu.currencySettings')</a></li>
-    </li> <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.stripe-settings.index') active @endif">
+    <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.stripe-settings.index') active @endif">
         <a href="{{ route('super-admin.stripe-settings.index') }}">@lang('app.menu.paymentGatewayCredential')</a></li>
-    <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.front-settings.index') active @endif">
-        <a href="{{ route('super-admin.front-settings.index') }}">@lang('app.front') @lang('app.menu.settings')</a></li>
-
     <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.package-settings.index') active @endif">
         <a href="{{ route('super-admin.package-settings.index') }}">@lang('app.freeTrial') @lang('app.menu.settings')</a></li>
+    <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.custom-modules.index' || \Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.custom-modules.create') active @endif">
+        <a href="{{ route('super-admin.custom-modules.index') }}">@lang('app.menu.customModule')</a></li>
+        <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.storage-settings.index') active @endif">
+            <a href="{{ route('super-admin.storage-settings.index') }}">@lang('app.menu.storageSettings')</a></li>
     @if($global->system_update == 1)
-    <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.update-settings.index') active @endif">
-        <a href="{{ route('super-admin.update-settings.index') }}">@lang('app.menu.updates')</a>
-    </li>
+        <li class="tab @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'super-admin.update-settings.index') active @endif">
+            <a href="{{ route('super-admin.update-settings.index') }}">@lang('app.menu.updates')</a>
+        </li>
     @endif
 </ul>
 
@@ -62,3 +65,4 @@
     }
 
 </script>
+@endsection

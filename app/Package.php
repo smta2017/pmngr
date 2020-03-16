@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Package extends Model
+class Package extends BaseModel
 {
     protected $table = 'packages';
 
@@ -32,7 +32,7 @@ class Package extends Model
     }
 
     public function currency () {
-        return $this->belongsTo(GlobalCurrency::class, 'currency_id');
+        return $this->belongsTo(GlobalCurrency::class, 'currency_id')->withTrashed();
     }
 
     function getFormattedAnnualPriceAttribute() {

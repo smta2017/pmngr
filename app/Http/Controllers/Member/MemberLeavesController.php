@@ -32,6 +32,7 @@ class MemberLeavesController extends MemberBaseController
     public function index()
     {
         $this->leaves = Leave::byUser($this->user->id);
+        $this->leavesCount = Leave::byUserCount($this->user->id);
         $this->leaveTypes = LeaveType::byUser($this->user->id);
         $this->allowedLeaves = LeaveType::sum('no_of_leaves');
         $this->pendingLeaves = Leave::where('status', 'pending')
@@ -73,15 +74,6 @@ class MemberLeavesController extends MemberBaseController
             $leave->status = $request->status;
             $leave->save();
         }
-
-        //      Send notification to user
-        $notifyUsers = User::allAdmins();
-        foreach ($notifyUsers as $notifyUser) {
-            $notifyUser->notify(new NewLeaveRequest($leave));
-        }
-
-        $notifyLeavesUser = User::find($request->user_id);
-        $notifyLeavesUser->notify(new LeaveApplication($leave));
 
         return Reply::redirect(route('member.leaves.index'), __('messages.leaveAssignSuccess'));
     }

@@ -6,7 +6,7 @@ use App\Observers\RemovalRequestLeadObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class RemovalRequestLead extends Model
+class RemovalRequestLead extends BaseModel
 {
 
     protected $table = 'removal_requests_lead';

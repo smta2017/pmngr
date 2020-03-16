@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_invoices'))
+                <a href="{{ route('member.all-invoices.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.invoices.addInvoice') <i class="fa fa-plus" aria-hidden="true"></i></a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -40,70 +43,57 @@
         <div class="col-md-12">
             <div class="white-box">
 
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            @if($user->can('add_invoices'))
-                                <a href="{{ route('member.all-invoices.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.invoices.addInvoice') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            @endif
-                            @if($user->can('view_invoices'))
-                                <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
 
                 @if($user->can('view_invoices'))
-                    <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
+                    @section('filter-section')
+                        
+                    <div class="row" id="ticket-filters">
+                       
+                        <form action="" id="filter-form">
+                            <div class="col-md-12">
+                                <h5 >@lang('app.selectDateRange')</h5>
+                                <div class="input-daterange input-group" id="date-range">
+                                    <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
+                                        value=""/>
+                                    <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
+                                    <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
+                                        value=""/>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <h5 >@lang('app.project')</h5>
+                                <div class="form-group">
+                                    {{--<label class="control-label">@lang('app.status')</label>--}}
+                                    <select class="form-control select2" name="projectID" id="projectID" data-style="form-control">
+                                        <option value="all">@lang('app.all')</option>
+                                        @forelse($projects as $project)
+                                            <option value="{{$project->id}}">{{ ucfirst($project->project_name) }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <h5 >@lang('app.status')</h5>
+                                <div class="form-group">
+                                    {{--<label class="control-label">@lang('app.status')</label>--}}
+                                    <select class="form-control selectpicker" name="status" id="status" data-style="form-control">
+                                        <option value="all">@lang('app.all')</option>
+                                        <option value="unpaid">@lang('app.unpaid')</option>
+                                        <option value="paid">@lang('app.paid')</option>
+                                        <option value="partial">@lang('app.partial')</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group m-t-10">
+                                    <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
+                                    <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <form action="" id="filter-form">
-                        <div class="col-md-4">
-                            <h5 >@lang('app.selectDateRange')</h5>
-                            <div class="input-daterange input-group" id="date-range">
-                                <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                                       value=""/>
-                                <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
-                                <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                                       value=""/>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <h5 >@lang('app.project')</h5>
-                            <div class="form-group">
-                                {{--<label class="control-label">@lang('app.status')</label>--}}
-                                <select class="form-control select2" name="projectID" id="projectID" data-style="form-control">
-                                    <option value="all">@lang('app.all')</option>
-                                    @forelse($projects as $project)
-                                        <option value="{{$project->id}}">{{ ucfirst($project->project_name) }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-2">
-                            <h5 >@lang('app.status')</h5>
-                            <div class="form-group">
-                                {{--<label class="control-label">@lang('app.status')</label>--}}
-                                <select class="form-control selectpicker" name="status" id="status" data-style="form-control">
-                                    <option value="all">@lang('app.all')</option>
-                                    <option value="unpaid">@lang('app.unpaid')</option>
-                                    <option value="paid">@lang('app.paid')</option>
-                                    <option value="partial">@lang('app.partial')</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group m-t-10">
-                                <label class="control-label col-xs-12">&nbsp;</label>
-                                <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
-                                <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    @endsection
                 @endif
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="invoice-table">

@@ -64,30 +64,30 @@
                                     </div>
 
                                 </div>
+                                @if(in_array('projects', $modules))
+                                    <div class="col-md-4">
 
-                                <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">@lang('app.project')</label>
 
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('app.project')</label>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <select class="select2 form-control" onchange="getCompanyName()" data-placeholder="Choose Project"
-                                                        name="project_id" id="project_id">
-                                                    <option value="">--</option>
-                                                    @foreach($projects as $project)
-                                                        <option
-                                                                @if($invoice->project_id == $project->id) selected
-                                                                @endif
-                                                                value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <select class="select2 form-control" onchange="getCompanyName()" data-placeholder="Choose Project"
+                                                            name="project_id" id="project_id">
+                                                        <option value="">--</option>
+                                                        @foreach($projects as $project)
+                                                            <option
+                                                                    @if($invoice->project_id == $project->id) selected
+                                                                    @endif
+                                                                    value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
+
                                     </div>
-
-                                </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label" id="companyClientName"> @if($invoice->project_id == '') @lang('app.client_name') @else @lang('app.company_name') @endif</label>
@@ -500,7 +500,7 @@
     function getCompanyName(){
         var projectID = $('#project_id').val();
         var url = "{{ route('admin.all-invoices.get-client-company') }}";
-        if(projectID != '')
+        if(projectID != ''  && projectID !== undefined )
         {
             url = "{{ route('admin.all-invoices.get-client-company',':id') }}";
             url = url.replace(':id', projectID);
@@ -732,7 +732,7 @@
         });
 
         $('.sub-total').html(decimalupto2(subtotal).toFixed(2));
-        $('.sub-total-field').val(decimalupto2(subtotal).toFixed(2));
+        $('.sub-total-field').val(decimalupto2(subtotal));
 
 
         var discountType = $('#discount_type').val();

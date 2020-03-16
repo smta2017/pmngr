@@ -60,7 +60,7 @@
                                     </div>
 
                                 </div>
-
+                                @if(in_array('projects', $modules))
                                 <div class="col-md-4">
 
                                     <div class="form-group" >
@@ -79,7 +79,7 @@
                                     </div>
 
                                 </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">@lang('app.company_name')</label>
@@ -186,6 +186,7 @@
                             </div>
 
                             <hr>
+
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -417,7 +418,7 @@
     function getCompanyName(){
         var projectID = $('#project_id').val();
         var url = "{{ route('member.all-invoices.get-client-company') }}";
-        if(projectID != '')
+        if(projectID != '' && projectID !== undefined )
         {
             url = "{{ route('member.all-invoices.get-client-company',':id') }}";
             url = url.replace(':id', projectID);
@@ -485,7 +486,7 @@
             +'<div class="form-group">'
             +'<textarea name="item_summary[]" class="form-control" placeholder="@lang('app.description')" rows="2"></textarea>'
             +'</div>'
-            
+
             +'</div>'
 
             +'</div>'

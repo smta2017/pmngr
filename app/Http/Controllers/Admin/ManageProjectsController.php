@@ -91,6 +91,7 @@ class ManageProjectsController extends AdminBaseController
 
         //Budget Total
         $this->projectBudgetTotal = $allProject->sum('project_budget');
+        $this->categories = ProjectCategory::all();
 
         $this->projectEarningTotal = Payment::join('projects', 'projects.id', '=', 'payments.project_id')
             ->where('payments.status', 'complete')
@@ -464,13 +465,17 @@ class ManageProjectsController extends AdminBaseController
             $projects->where('client_id', $request->client_id);
         }
 
+        if (!is_null($request->category_id) && $request->category_id != 'all') {
+            $projects->where('category_id', $request->category_id);
+        }
+
         $projects->get();
 
         return DataTables::of($projects)
             ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $action = '<div class="btn-group m-r-10">
-                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-info btn-outline  dropdown-toggle waves-effect waves-light" type="button">'.trans('app.action').' <span class="caret"></span></button>
+                 <button aria-expanded="false" data-toggle="dropdown" class="btn " type="button"><i class="ti-more"></i> </button>
                 <ul role="menu" class="dropdown-menu">
                   <li><a href="' . route('admin.projects.edit', [$row->id]) . '"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a></li>
                   <li><a href="' . route('admin.projects.show', [$row->id]) . '"><i class="fa fa-search" aria-hidden="true"></i> View Project Details</a></li>
@@ -488,14 +493,13 @@ class ManageProjectsController extends AdminBaseController
 
                 if (count($row->members) > 0) {
                     foreach ($row->members as $member) {
-                        $members .= ($member->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('user-uploads/avatar/' . $member->user->image) . '"
-                        alt="user" class="img-circle" width="30"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('default-profile-2.png') . '"
-                        alt="user" class="img-circle" width="30"> ';
+                        $members .= '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . $member->user->image_url . '"
+                        alt="user" class="img-circle" width="30" height="30"> ';
                     }
                 } else {
                     $members .= __('messages.noMemberAddedToProject');
                 }
-                $members .= '<br><br><a class="font-12" href="' . route('admin.project-members.show', $row->id) . '"><i class="fa fa-plus"></i> ' . __('modules.projects.addMemberTitle') . '</a>';
+                $members .= '<a class="btn btn-primary btn-circle" style="width: 25px;height: 25px;padding: 3px;" data-toggle="tooltip" data-original-title="' . __('modules.projects.addMemberTitle') . '"  href="' . route('admin.project-members.show', $row->id) . '"><i class="fa fa-plus" ></i></a>';
                 return $members;
             })
             ->editColumn('project_name', function ($row) {
@@ -562,7 +566,7 @@ class ManageProjectsController extends AdminBaseController
                 $pendingPayment = ($row->project_budget - $projectEarningTotal);
 
                 $pendingAmount = '';
-                if ($pendingPayment > 0) {
+                if ($pendingPayment > 0 && $row->currency) {
                     $pendingAmount = $row->currency->currency_symbol . $pendingPayment;
                 }
 
@@ -617,9 +621,8 @@ class ManageProjectsController extends AdminBaseController
 
                 if (count($row->members) > 0) {
                     foreach ($row->members as $member) {
-                        $members .= ($member->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('user-uploads/avatar/' . $member->user->image) . '"
-                        alt="user" class="img-circle" width="30"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('default-profile-2.png') . '"
-                        alt="user" class="img-circle" width="30"> ';
+                        $members .= '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . $member->user->image_url . '"
+                        alt="user" class="img-circle" width="30" height="30"> ';
                     }
                 } else {
                     $members .= __('messages.noMemberAddedToProject');

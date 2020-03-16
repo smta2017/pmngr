@@ -8,7 +8,8 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.all-tasks.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.tasks.newTask') <i class="fa fa-plus" aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -35,149 +36,129 @@
 @section('content')
 
 
-    <h2>@lang('app.filterResults')</h2>
 
-    <div class="white-box">
-        <div class="row m-b-10">
-            {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-5">
-                <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+@section('filter-section')
+    <div class="row m-b-10">
+        {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
+        <div class="col-md-12">
+            <div class="example">
+                <h5 class="box-title">@lang('app.selectDateRange')</h5>
 
-                    <div class="input-daterange input-group" id="date-range">
-                        <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                               value="{{ \Carbon\Carbon::today()->subDays(15)->format('Y-m-d') }}"/>
-                        <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
-                        <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                               value="{{ \Carbon\Carbon::today()->addDays(15)->format('Y-m-d') }}"/>
-                    </div>
+                <div class="input-daterange input-group" id="date-range">
+                    <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
+                            value="{{ \Carbon\Carbon::today()->subDays(15)->format($global->date_format) }}"/>
+                    <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
+                    <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
+                            value="{{ \Carbon\Carbon::today()->addDays(15)->format($global->date_format) }}"/>
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.selectProject')</h5>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select class="select2 form-control" data-placeholder="@lang('app.selectProject')" id="project_id">
-                                <option value="all">@lang('app.all')</option>
-                                @foreach($projects as $project)
-                                    <option
-                                            value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.client')</h5>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select class="select2 form-control" data-placeholder="@lang('app.client')" id="clientID">
-                                <option value="all">@lang('app.all')</option>
-                                @foreach($clients as $client)
-                                    <option
-                                            value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('modules.tasks.assignTo')</h5>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select class="select2 form-control" data-placeholder="@lang('modules.tasks.assignTo')" id="assignedTo">
-                                <option value="all">@lang('app.all')</option>
-                                @foreach($employees as $employee)
-                                    <option
-                                            value="{{ $employee->id }}">{{ ucwords($employee->name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('modules.tasks.assignBy')</h5>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select class="select2 form-control" data-placeholder="@lang('modules.tasks.assignBy')" id="assignedBY">
-                                <option value="all">@lang('app.all')</option>
-                                @foreach($employees as $employee)
-                                    <option
-                                            value="{{ $employee->id }}">{{ ucwords($employee->name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.status')</h5>
-
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <select class="select2 form-control" data-placeholder="@lang('status')" id="status">
-                                <option value="all">@lang('app.all')</option>
-                                @foreach($taskBoardStatus as $status)
-                                    <option value="{{ $status->id }}">{{ ucwords($status->column_name) }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">&nbsp;</h5>
-
-                <div class="checkbox checkbox-info">
-                    <input type="checkbox" id="hide-completed-tasks">
-                    <label for="hide-completed-tasks">@lang('app.hideCompletedTasks')</label>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <button type="button" class="btn btn-success" id="filter-results"><i class="fa fa-check"></i> @lang('app.apply')
-                </button>
-            </div>
-            {!! Form::close() !!}
-
         </div>
+
+        <div class="col-md-12">
+            <h5 class="box-title">@lang('app.selectProject')</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" data-placeholder="@lang('app.selectProject')" id="project_id">
+                            <option value="all">@lang('app.all')</option>
+                            @foreach($projects as $project)
+                                <option
+                                        value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h5 class="box-title">@lang('app.select') @lang('app.client')</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" data-placeholder="@lang('app.client')" id="clientID">
+                            <option value="all">@lang('app.all')</option>
+                            @foreach($clients as $client)
+                                <option
+                                        value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h5 class="box-title">@lang('app.select') @lang('modules.tasks.assignTo')</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" data-placeholder="@lang('modules.tasks.assignTo')" id="assignedTo">
+                            <option value="all">@lang('app.all')</option>
+                            @foreach($employees as $employee)
+                                <option
+                                        value="{{ $employee->id }}">{{ ucwords($employee->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h5 class="box-title">@lang('app.select') @lang('modules.tasks.assignBy')</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" data-placeholder="@lang('modules.tasks.assignBy')" id="assignedBY">
+                            <option value="all">@lang('app.all')</option>
+                            @foreach($employees as $employee)
+                                <option
+                                        value="{{ $employee->id }}">{{ ucwords($employee->name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <h5 class="box-title">@lang('app.select') @lang('app.status')</h5>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-12">
+                        <select class="select2 form-control" data-placeholder="@lang('status')" id="status">
+                            <option value="all">@lang('app.all')</option>
+                            @foreach($taskBoardStatus as $status)
+                                <option value="{{ $status->id }}">{{ ucwords($status->column_name) }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+
+            <div class="checkbox checkbox-info">
+                <input type="checkbox" id="hide-completed-tasks">
+                <label for="hide-completed-tasks">@lang('app.hideCompletedTasks')</label>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <button type="button" class="btn btn-success" id="filter-results"><i class="fa fa-check"></i> @lang('app.apply')
+            </button>
+        </div>
+        {!! Form::close() !!}
+
     </div>
+@endsection
 
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-
-                <h2>@lang('app.menu.tasks')</h2>
-
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.all-tasks.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.tasks.newTask') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="{{ route('admin.taskboard.index') }}" class="btn btn-inverse btn-sm"><i class="ti-layout-column3" aria-hidden="true"></i> @lang('modules.tasks.taskBoard')</a>
-                            <a href="javascript:;" id="createTaskCategory" class="btn btn-outline btn-info btn-sm">@lang('modules.taskCategory.addTaskCategory') <i class="fa fa-plus" aria-hidden="true"></i></a>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable"
@@ -335,7 +316,7 @@
             var hideCompleted = '0';
         }
 
-        var url = '{!!  route('admin.all-tasks.data', [':startDate', ':endDate', ':hideCompleted', ':projectId']) !!}?clientID='+clientID +'&assignedBY='+ assignedBY+'&assignedTo='+ assignedTo+'&status='+ status+'&_token={{ csrf_token() }}';
+        var url = '{!!  route('admin.all-tasks.data') !!}?clientID='+clientID +'&assignedBY='+ assignedBY+'&assignedTo='+ assignedTo+'&status='+ status+'&_token={{ csrf_token() }}&startDate='+startDate+'&endDate='+endDate+'&hideCompleted='+hideCompleted+'&projectId='+projectID;
 
         url = url.replace(':startDate', startDate);
         url = url.replace(':endDate', endDate);

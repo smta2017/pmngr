@@ -4,11 +4,16 @@
     <div class="row bg-title">
         <!-- .page title -->
         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
+            <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}
+                <span class="text-info b-l p-l-10 m-l-5">{{ $totalPackages }}</span> <span
+                class="font-12 text-muted m-l-5"> @lang('app.total') @lang('app.menu.packages')</span>
+            </h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('super-admin.packages.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.package') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('super-admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -28,25 +33,10 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('app.total') @lang('app.menu.packages')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-user text-white"></i></li>
-                    <li class="text-right"><span id="totalPackages" class="counter text-white">{{ $totalPackages }}</span></li>
-                </ul>
-            </div>
-        </div>
 
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('super-admin.packages.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.package') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
+  
 
                 <div class="table-responsive">
                 <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="users-table">

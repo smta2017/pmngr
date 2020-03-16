@@ -12,10 +12,10 @@ use App\LeaveType;
 use App\LogTimeFor;
 use App\MessageSetting;
 use App\ModuleSetting;
+use App\Notifications\NewCompanyRegister;
 use App\Package;
 use App\PackageSetting;
 use App\Role;
-use App\StorageSetting;
 use App\TaskboardColumn;
 use App\ThemeSetting;
 use App\TicketChannel;
@@ -23,8 +23,10 @@ use App\TicketGroup;
 use App\TicketType;
 use App\GlobalSetting;
 use App\ProjectSetting;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Notification;
 
 class CompanyObserver
 {
@@ -88,12 +90,14 @@ class CompanyObserver
         $this->addCustomFieldGroup($company);
         $this->addRoles($company);
         $this->addMessageSetting($company);
-        $this->addStorageSetting($company);
         $this->addLogTImeForSetting($company);
         $this->addLeadSourceAndLeadStatus($company);
         $this->addProjectCategory($company);
         $this->addDashboardWidget($company);
         $this->insertGDPR($company);
+
+        $superAdmin = User::whereNull('company_id')->get();
+        Notification::send($superAdmin, new NewCompanyRegister($company));
     }
 
     public function updated(Company $company)
@@ -136,10 +140,84 @@ class CompanyObserver
 
     public function updating(Company $company)
     {
-        $original = $company->getOriginal();
-        if ($company->isDirty('logo')) {
-            File::delete('user-uploads/app-logo/' . $original['logo']);
+
+
+        if(user()){
+            $company->last_updated_by = user()->id;
         }
+
+        if ($company->isDirty('date_format')) {
+            switch ($company->date_format) {
+                case 'd-m-Y':
+                    $company->date_picker_format = 'dd-mm-yyyy';
+                    break;
+                case 'm-d-Y':
+                    $company->date_picker_format = 'mm-dd-yyyy';
+                    break;
+                case 'Y-m-d':
+                    $company->date_picker_format = 'yyyy-mm-dd';
+                    break;
+                case 'd.m.Y':
+                    $company->date_picker_format = 'dd.mm.yyyy';
+                    break;
+                case 'm.d.Y':
+                    $company->date_picker_format = 'mm.dd.yyyy';
+                    break;
+                case 'Y.m.d':
+                    $company->date_picker_format = 'yyyy.mm.dd';
+                    break;
+                case 'd/m/Y':
+                    $company->date_picker_format = 'dd/mm/yyyy';
+                    break;
+                case 'm/d/Y':
+                    $company->date_picker_format = 'mm/dd/yyyy';
+                    break;
+                case 'Y/m/d':
+                    $company->date_picker_format = 'yyyy/mm/dd';
+                    break;
+                case 'd-M-Y':
+                    $company->date_picker_format = 'dd-M-yyyy';
+                    break;
+                case 'd/M/Y':
+                    $company->date_picker_format = 'dd/M/yyyy';
+                    break;
+                case 'd.M.Y':
+                    $company->date_picker_format = 'dd.M.yyyy';
+                    break;
+                case 'd M Y':
+                    $company->date_picker_format = 'dd M yyyy';
+                    break;
+                case 'd F, Y':
+                    $company->date_picker_format = 'dd MM, yyyy';
+                    break;
+                case 'D/M/Y':
+                    $company->date_picker_format = 'D/M/yyyy';
+                    break;
+                case 'D.M.Y':
+                    $company->date_picker_format = 'D.M.yyyy';
+                    break;
+                case 'D-M-Y':
+                    $company->date_picker_format = 'D-M-yyyy';
+                    break;
+                case 'D M Y':
+                    $company->date_picker_format = 'D M yyyy';
+                    break;
+                case 'd D M Y':
+                    $company->date_picker_format = 'dd D M yyyy';
+                    break;
+                case 'D d M Y':
+                    $company->date_picker_format = 'D dd M yyyy';
+                    break;
+                case 'dS M Y':
+                    $company->date_picker_format = 'dd M yyyy';
+                    break;
+
+                default:
+                    $company->date_picker_format = 'mm/dd/yyyy';
+                    break;
+            }
+        }
+
     }
 
     public function deleting(Company $company)
@@ -544,13 +622,13 @@ class CompanyObserver
 
     public function addInvoiceSettings($company)
     {
-        $setting = new \App\InvoiceSetting();
-        $setting->company_id = $company->id;
-        $setting->invoice_prefix = 'INV';
-        $setting->template = 'invoice-1';
-        $setting->due_after = 15;
-        $setting->invoice_terms = 'Thank you for your business. Please process this invoice within the due date.';
-        $setting->save();
+        $invoice = new \App\InvoiceSetting();
+        $invoice->company_id = $company->id;
+        $invoice->invoice_prefix = 'INV';
+        $invoice->template = 'invoice-1';
+        $invoice->due_after = 15;
+        $invoice->invoice_terms = 'Thank you for your business. Please process this invoice within the due date.';
+        $invoice->save();
     }
 
     public function addSlackSettings($company)
@@ -576,12 +654,12 @@ class CompanyObserver
 
     public function addAttendanceSettings($company)
     {
-        $setting = new \App\AttendanceSetting();
-        $setting->company_id = $company->id;
-        $setting->office_start_time = '09:00:00';
-        $setting->office_end_time = '18:00:00';
-        $setting->late_mark_duration = '20';
-        $setting->save();
+        $attendance = new \App\AttendanceSetting();
+        $attendance->company_id = $company->id;
+        $attendance->office_start_time = '09:00:00';
+        $attendance->office_end_time = '18:00:00';
+        $attendance->late_mark_duration = '20';
+        $attendance->save();
     }
 
     public function addCustomFieldGroup($company)
@@ -638,14 +716,6 @@ class CompanyObserver
         $setting->save();
     }
 
-    public function addStorageSetting($company)
-    {
-        $storage = new StorageSetting();
-        $storage->company_id = $company->id;
-        $storage->filesystem = 'local';
-        $storage->status = 'enabled';
-        $storage->save();
-    }
 
     public function addLogTImeForSetting($company)
     {

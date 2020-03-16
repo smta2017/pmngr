@@ -28,24 +28,6 @@ trait FileSystemSettingTrait{
                 config(['filesystems.disks.s3.region' => $region]);
                 config(['filesystems.disks.s3.bucket' => $bucket]);
                 break;
-            case 'google':
-                $authKeys = json_decode($settings->auth_keys);
-                $driver = $authKeys->driver;
-                $clientId = $authKeys->clientId;
-                $clientSecret = $authKeys->clientSecret;
-                $refreshToken = $authKeys->refreshToken;
-                config(['filesystems.default' => $driver]);
-                config(['filesystems.cloud' => $driver]);
-                config(['filesystems.disks.google.clientId' => $clientId]);
-                config(['filesystems.disks.google.clientSecret' => $clientSecret]);
-                config(['filesystems.disks.google.refreshToken' => $refreshToken]);
-                config(['filesystems.disks.google.folderId' => null]);
-                break;
-            case 'dropbox':
-                $driver = $settings->filesystem;
-                config(['filesystems.default' => $driver]);
-                config(['filesystems.disks.dropbox.token' => $settings->auth_keys]);
-                break;
         }
 
     }

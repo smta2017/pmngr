@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
  * Class Holiday
  * @package App\Models
  */
-class Holiday extends Model
+class Holiday extends BaseModel
 {
     // Don't forget to fill this array
     protected $fillable = [];

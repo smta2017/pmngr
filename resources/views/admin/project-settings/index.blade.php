@@ -134,7 +134,7 @@
 
         $('#save-form').click(function () {
             $.easyAjax({
-                url: '{{route('admin.project-settings.update', ['id' => $projectSetting->id])}}',
+                url: '{{route('admin.project-settings.update', [$projectSetting->id])}}',
                 container: '#editSettings',
                 type: "POST",
                 redirect: true,

@@ -165,7 +165,7 @@ class MemberProjectsController extends MemberBaseController
     public function data(Request $request)
     {
         $this->userDetail = auth()->user();
-        $projects = Project::select('projects.id', 'projects.project_name', 'projects.project_admin', 'projects.project_summary', 'projects.start_date', 'projects.deadline', 'projects.notes', 'projects.category_id', 'projects.client_id', 'projects.feedback', 'projects.completion_percent', 'projects.created_at', 'projects.updated_at');
+        $projects = Project::select('projects.id', 'projects.project_name', 'projects.project_admin', 'projects.project_summary', 'projects.start_date', 'projects.deadline', 'projects.notes', 'projects.category_id', 'projects.client_id', 'projects.feedback', 'projects.completion_percent', 'projects.created_at', 'projects.updated_at', 'projects.status');
 
         if (!$this->user->can('view_projects')) {
             $projects = $projects->join('project_members', 'project_members.project_id', '=', 'projects.id');
@@ -214,9 +214,8 @@ class MemberProjectsController extends MemberBaseController
 
                 if (count($row->members) > 0) {
                     foreach ($row->members as $member) {
-                        $members .= ($member->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('user-uploads/avatar/' . $member->user->image) . '"
-                        alt="user" class="img-circle" width="30"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('default-profile-2.png') . '"
-                        alt="user" class="img-circle" width="30"> ';
+                        $members .= '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . $member->user->image_url . '"
+                        alt="user" class="img-circle" width="30" height="30"> ';
                     }
                 } else {
                     $members .= __('messages.noMemberAddedToProject');
@@ -268,7 +267,22 @@ class MemberProjectsController extends MemberBaseController
                   <div class="progress-bar progress-bar-' . $statusColor . '" aria-valuenow="' . $row->completion_percent . '" aria-valuemin="0" aria-valuemax="100" style="width: ' . $row->completion_percent . '%" role="progressbar"> <span class="sr-only">' . $row->completion_percent . '% Complete</span> </div>
                 </div>';
             })
-            ->rawColumns(['project_name', 'action', 'members', 'completion_percent'])
+            ->editColumn('status', function ($row) {
+
+                if ($row->status == 'in progress') {
+                    $status = '<label class="label label-info">' . __('app.inProgress') . '</label>';
+                } else if ($row->status == 'on hold') {
+                    $status = '<label class="label label-warning">' . __('app.onHold') . '</label>';
+                } else if ($row->status == 'not started') {
+                    $status = '<label class="label label-warning">' . __('app.notStarted') . '</label>';
+                } else if ($row->status == 'canceled') {
+                    $status = '<label class="label label-danger">' . __('app.canceled') . '</label>';
+                } else if ($row->status == 'finished') {
+                    $status = '<label class="label label-success">' . __('app.finished') . '</label>';
+                }
+                return $status;
+            })
+            ->rawColumns(['project_name', 'action', 'members', 'completion_percent', 'status'])
             ->removeColumn('project_summary')
             ->removeColumn('notes')
             ->removeColumn('category_id')

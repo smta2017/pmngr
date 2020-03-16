@@ -191,10 +191,12 @@ class AdminBillingController extends AdminBaseController
     }
 
     public function payment(PaymentRequest $request) {
+//        dd($request->all());
         $this->setStripConfigs();
-        $token = $request->stripeToken;
+        $token = $request->payment_method;
         $email = $request->stripeEmail;
         $plan = Package::find($request->plan_id);
+
 
         $stripe = DB::table("stripe_invoices")
             ->join('packages', 'packages.id', 'stripe_invoices.package_id')
@@ -264,7 +266,9 @@ class AdminBillingController extends AdminBaseController
                 $superAdmin = User::whereNull('company_id')->get();
                 Notification::send($superAdmin, new CompanyUpdatedPlan($company, $plan->id));
 
-                \Session::flash('success', 'Payment successfully done.');
+//                \Session::flash('message', 'Payment successfully done.');
+                $request->session()->flash('message', 'Payment successfully done.');
+//                return Reply::success('Payment successfully done.');
                 return redirect(route('admin.billing'));
 
             } catch (\Exception $e) {
@@ -433,14 +437,11 @@ class AdminBillingController extends AdminBaseController
     public function selectPackage(Request $request, $packageID) {
         $this->setStripConfigs();
         $this->package = Package::findOrFail($packageID);
-        $this->comapny = company();
+        $this->company = company();
         $this->type    = $request->type;
         $this->stripeSettings = StripeSetting::first();
-        if(is_null($this->superadmin->logo)) {
-            $this->logo = asset('worksuite-logo.png');
-        } else {
-            $this->logo = asset('user-uploads/app-logo/'.$this->superadmin->logo) ;
-        }
+        $this->logo = $this->company->logo_url;
+
         $this->methods = OfflinePaymentMethod::withoutGlobalScope('company')->where('status', 'yes')->whereNull('company_id')->get();
         return View::make('admin.billing.payment-method-show', $this->data);
     }
@@ -586,16 +587,10 @@ class AdminBillingController extends AdminBaseController
             \File::makeDirectory(public_path('user-uploads/offline-payment-files'), 0775, true);
         }
 
-        $request->slip->storeAs('user-uploads/offline-payment-files/', $request->slip->hashName());
+        $request->slip->image->store('offline-payment-files/', $request->slip->hashName());
 
         $offlinePlanChange->file_name = $request->slip->hashName();
         $offlinePlanChange->save();
-
-        $company = company();
-
-        $superAdmin = User::withoutGlobalScope('company')->whereNull('company_id')->get();
-
-        Notification::send($superAdmin, new OfflinePackageChangeRequest($company, $offlinePlanChange));
 
         return Reply::redirect(route('admin.billing'));
     }

@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_tasks') || $global->task_self == 'yes')
+                <a href="{{ route('member.all-tasks.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.tasks.newTask') <i class="fa fa-plus" aria-hidden="true"></i></a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -34,15 +37,12 @@
 
 @section('content')
 
-
-    <h2>@lang('app.filterResults')</h2>
-
-    <div class="white-box">
-        <div class="row m-b-10">
+    @section('filter-section')
+        <div class="row">
             {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+                    <h5 class="box-title m-t-20">@lang('app.selectDateRange')</h5>
 
                     <div class="input-daterange input-group" id="date-range">
                         <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
@@ -54,8 +54,8 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.selectProject')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('app.selectProject')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -71,8 +71,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.client')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('app.select') @lang('app.client')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -88,8 +88,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('modules.tasks.assignTo')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('app.select') @lang('modules.tasks.assignTo')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -105,8 +105,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('modules.tasks.assignBy')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('app.select') @lang('modules.tasks.assignBy')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -122,8 +122,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.status')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title">@lang('app.select') @lang('app.status')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -139,8 +139,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">&nbsp;</h5>
+            <div class="col-md-12">
 
                 <div class="checkbox checkbox-info">
                     <input type="checkbox" id="hide-completed-tasks">
@@ -155,24 +154,12 @@
             {!! Form::close() !!}
 
         </div>
-    </div>
+    @endsection
 
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
 
-                <h2>@lang('app.menu.tasks')</h2>
-
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            @if($user->can('add_tasks') || $global->task_self == 'yes')
-                                <a href="{{ route('member.all-tasks.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.tasks.newTask') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            @endif
-                            <a href="{{ route('member.taskboard.index') }}" class="btn btn-inverse btn-sm"><i class="ti-layout-column3" aria-hidden="true"></i> @lang('modules.tasks.taskBoard')</a>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable"

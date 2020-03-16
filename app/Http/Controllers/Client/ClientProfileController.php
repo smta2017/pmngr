@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\ClientDetails;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\User\UpdateProfile;
 use App\User;
@@ -88,7 +89,7 @@ class ClientProfileController extends ClientBaseController
         config(['filesystems.default' => 'local']);
 
         $user = User::withoutGlobalScope('active')->findOrFail($id);
-        
+
         if($request->password != ''){
             $user->password = Hash::make($request->input('password'));
         }
@@ -118,17 +119,8 @@ class ClientProfileController extends ClientBaseController
         $client->gst_number = $request->gst_number;
 
         if ($request->hasFile('image')) {
-            File::delete('user-uploads/avatar/'.$client->image);
-
-            $client->image = $request->image->hashName();
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/'.$client->image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
+            Files::deleteFile($user->image,'avatar');
+            $user->image = Files::upload($request->image, 'avatar',300);
         }
 
         $client->save();

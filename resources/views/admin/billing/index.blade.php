@@ -35,8 +35,12 @@
 
     <div class="row">
         <div class="col-lg-12 col-sm-12">
-
-            <div class="panel panel-info">
+            @if (session('message'))
+                <div class="alert alert-success">{{ session('message') }}</div>
+                <?php Session::forget('message');?>
+            @endif
+            <div class="white-box">
+            <div class="panel panel-inverse">
                 <div class="panel-heading">@lang('modules.billing.yourCurrentPlan') ({{  $company->package->name }})
                     @if(!is_null($firstInvoice) && $stripeSettings->api_key != null && $stripeSettings->api_secret != null && $firstInvoice->method == 'Stripe')
                         @if(!is_null($subscription) && $subscription->ends_at == null)
@@ -108,6 +112,7 @@
                     </div>
                 </div>
             </div>
+            </div>
 
         </div>
     </div>
@@ -118,7 +123,7 @@
                 <h3 class="box-title">@lang('app.menu.invoices')</h3>
 
                 <div class="table-responsive">
-                    <table class="table color-table info-table" id="users-table">
+                    <table class="table color-table inverse-table" id="users-table">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -144,6 +149,10 @@
     <script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
     <script>
+{{--        {{ dd(session()->all()) }}--}}
+        @if(\Session::has('message'))
+        toastr.success("{{  \Session::get('message') }}");
+        @endif
         $(function() {
             var table = $('#users-table').dataTable({
                 responsive: true,

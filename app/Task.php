@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Task extends Model
+class Task extends BaseModel
 {
     protected $fillable = ['board_column_id'];
     use Notifiable;

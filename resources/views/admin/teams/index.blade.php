@@ -3,12 +3,16 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if(!$groups->isEmpty())
+            <a href="{{ route('admin.teams.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.department') <i class="fa fa-plus" aria-hidden="true"></i></a>
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -23,14 +27,6 @@
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.teams.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.department') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-
-                </div>
 
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="users-table">
@@ -42,20 +38,44 @@
                         </tr>
                         </thead>
                         <tbody>
+
+
                         @forelse($groups as $group)
                             <tr>
-                                <td>{{ $group->id }}</td>
-                                <td>{{ $group->team_name }} <label class="label label-success">{{ count($group->member) }} @lang('modules.projects.members')</label></td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $group->team_name }} <label class="label label-success">{{ sizeof($group->members) }} @lang('modules.projects.members')</label></td>
                                 <td>
-                                    <a href="{{ route('admin.teams.edit', [$group->id]) }}" class="btn btn-info"><i class="icon-settings"></i> @lang('app.manage')</a>
-                                    <a href="javascript:;" data-group-id="{{ $group->id }}" class="btn btn-danger sa-params"><i class="fa fa-times"></i> @lang('app.delete')</a>
+
+                                    <div class="btn-group dropdown m-r-10">
+                                        <button aria-expanded="false" data-toggle="dropdown" class="btn dropdown-toggle waves-effect waves-light" type="button"><i class="ti-more"></i></button>
+                                        <ul role="menu" class="dropdown-menu pull-right">
+                                            <li><a href="{{ route('admin.teams.edit', [$group->id]) }}"><i class="icon-settings"></i> @lang('app.manage')</a></li>
+                                            <li><a href="javascript:;"  data-group-id="{{ $group->id }}" class="sa-params"><i class="fa fa-times" aria-hidden="true"></i> @lang('app.delete') </a></li>
+
+                                        </ul>
+                                    </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3">@lang('messages.noRecordFound')</td>
+                                <td colspan="3" class="text-center">
+                                    <div class="empty-space" style="height: 200px;">
+                                        <div class="empty-space-inner">
+                                            <div class="icon" style="font-size:30px"><i
+                                                        class="icon-layers"></i>
+                                            </div>
+                                            <div class="title m-b-15">@lang('messages.noDepartment')
+                                            </div>
+                                            <div class="subtitle">
+                                                <a href="{{ route('admin.teams.create') }}" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.team') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @endforelse
+
                         </tbody>
                     </table>
                 </div>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class StickyNote
  * @package App
  */
-class StickyNote extends Model
+class StickyNote extends BaseModel
 {
     protected $table = 'sticky_notes';
 

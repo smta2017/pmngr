@@ -58,7 +58,7 @@ class FileUpload extends Notification implements ShouldQueue
             ->line(__('email.fileUpload.subject')  . ucwords($this->project->project_name))
             ->line(__('modules.projects.fileName') . ' - ' . $this->file->filename)
             ->line(__('app.date') . ' - ' . $this->file->created_at->format($this->global->date_format))
-            ->action(__('email.loginDashboard'), $url)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 

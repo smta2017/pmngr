@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 
+use App\Notifications\NewProjectMember;
 use App\ProjectMember;
 
 class ProjectMemberObserver
@@ -16,4 +17,10 @@ class ProjectMemberObserver
         }
     }
 
+    public function created(ProjectMember $member)
+    {
+        if (!app()->runningInConsole() ) {
+            $member->user->notify(new NewProjectMember($member));
+        }
+    }
 }

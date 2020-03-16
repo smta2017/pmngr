@@ -18,8 +18,8 @@ class MemberLeadController extends MemberBaseController
 {
     public function __construct() {
         parent::__construct();
-        $this->pageIcon = 'user-follow';
-        $this->pageTitle = 'leads';
+        $this->pageIcon = __('icon-people');
+        $this->pageTitle = 'app.menu.lead';
         $this->middleware(function ($request, $next) {
             if(!in_array('leads',$this->user->modules)){
                 abort(403);

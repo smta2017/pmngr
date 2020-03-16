@@ -32,42 +32,39 @@
                 <div class="vtabs customvtab m-t-10">
                     @include('sections.admin_setting_menu')
 
-                    <div class="tab-content">
-                        <div id="vhome3" class="tab-pane active">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="white-box">
+                
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="white-box">
 
-                                        <div class="alert alert-info ">
-                                            <i class="fa fa-info-circle"></i> @lang('messages.taskSettingNote')
-                                        </div>
-                                        {!! Form::open(['id'=>'editSettings','class'=>'ajax-form','method'=>'POST']) !!}
+                                <div class="alert alert-info ">
+                                    <i class="fa fa-info-circle"></i> @lang('messages.taskSettingNote')
+                                </div>
+                                {!! Form::open(['id'=>'editSettings','class'=>'ajax-form','method'=>'POST']) !!}
 
-                                        <div class="form-group">
-                                            <div class="checkbox checkbox-info  col-md-10">
-                                                <input id="self_task" name="self_task" value="yes"
-                                                       @if($global->task_self == "yes") checked
-                                                       @endif
-                                                       type="checkbox">
-                                                <label for="self_task">@lang('messages.employeeSelfTask')</label>
-                                            </div>
-                                        </div>
-
-                                        {{--<div class="row">--}}
-                                            {{--<div class="col-md-12 m-t-30">--}}
-                                                {{--<button class="btn btn-success" id="save-form" type="button"><i class="fa fa-check"></i> @lang('app.save')</button>--}}
-                                            {{--</div>--}}
-                                        {{--</div>--}}
-                                        {!! Form::close() !!}
-
+                                <div class="form-group">
+                                    <div class="checkbox checkbox-info  col-md-10">
+                                        <input id="self_task" name="self_task" value="yes"
+                                                @if($global->task_self == "yes") checked
+                                                @endif
+                                                type="checkbox">
+                                        <label for="self_task">@lang('messages.employeeSelfTask')</label>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- /.row -->
 
-                            <div class="clearfix"></div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-12 m-t-30">--}}
+                                        {{--<button class="btn btn-success" id="save-form" type="button"><i class="fa fa-check"></i> @lang('app.save')</button>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {!! Form::close() !!}
+
+                            </div>
                         </div>
                     </div>
+                    <!-- /.row -->
+
+                            
                 </div>
 
             </div>

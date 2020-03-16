@@ -35,63 +35,32 @@
                         {!! Form::open(['id'=>'updateEmployee','class'=>'ajax-form','method'=>'PUT']) !!}
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-6 ">
+                                <div class="col-md-4 ">
                                     <div class="form-group">
-                                        <label>@lang('modules.employees.employeeName')</label>
+                                        <label>@lang('app.name')</label>
                                         <input type="text" name="name" id="name" class="form-control"
                                                value="{{ $userDetail->name }}" autocomplete="nope">
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>@lang('modules.employees.employeeEmail')</label>
+                                        <label>@lang('app.email')</label>
                                         <input type="email" name="email" id="email" class="form-control"
                                                value="{{ $userDetail->email }}" autocomplete="nope">
-                                        <span class="help-block">Employee will login using this email.</span>
                                     </div>
                                 </div>
                                 <!--/span-->
-                            </div>
-                            <div class="row">
-
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label>@lang('modules.employees.employeePassword')</label>
                                         <input type="password" style="display: none">
                                         <input type="password" name="password" id="password" class="form-control" autocomplete="nope">
-                                        <span class="help-block"> @lang('modules.employees.updatePasswordNote')</span>
-                                    </div>
-                                </div>
-                                <!--/span-->
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label>@lang('app.mobile')</label>
-                                        <input type="tel" name="mobile" id="mobile" class="form-control"
-                                               value="{{ $userDetail->mobile }}" autocomplete="nope">
+                                        <span class="help-block"> @lang('modules.profile.passwordNote')</span>
                                     </div>
                                 </div>
                                 <!--/span-->
                             </div>
-                            <!--/row-->
-
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>@lang('modules.employees.gender')</label>
-                                        <select name="gender" id="gender" class="form-control">
-                                            <option @if($userDetail->gender == 'male') selected
-                                                    @endif value="male">@lang('app.male')</option>
-                                            <option @if($userDetail->gender == 'female') selected
-                                                    @endif value="female">@lang('app.female')</option>
-                                            <option @if($userDetail->gender == 'others') selected
-                                                    @endif value="others">@lang('app.others')</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/row-->
 
                             <div class="row">
                                 <div class="col-md-6">
@@ -99,13 +68,7 @@
                                     <div class="form-group">
                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                             <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                                @if(is_null($userDetail->image))
-                                                    <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.profile.uploadPicture')) }}"
-                                                         alt=""/>
-                                                @else
-                                                    <img src="{{ asset('user-uploads/avatar/'.$userDetail->image) }}"
-                                                         alt=""/>
-                                                @endif
+                                                <img src="{{ $userDetail->image_url }}" alt=""/>
                                             </div>
                                             <div class="fileinput-preview fileinput-exists thumbnail"
                                                  style="max-width: 200px; max-height: 150px;"></div>

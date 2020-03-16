@@ -36,7 +36,7 @@
                                     {!! Form::open(['id'=>'updateProfile','class'=>'ajax-form','method'=>'PUT']) !!}
                                     <div class="form-body">
                                         <div class="row">
-                                            <div class="col-md-12 ">
+                                            <div class="col-md-4 ">
                                                 <div class="form-group">
                                                     <label>@lang('modules.profile.yourName')</label>
                                                     <input type="text" name="name" id="name"
@@ -44,7 +44,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>@lang('modules.profile.yourEmail')</label>
                                                     <input type="email" name="email" id="email"
@@ -52,10 +52,7 @@
                                                 </div>
                                             </div>
                                             <!--/span-->
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-md-12">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label>@lang('modules.profile.yourPassword')</label>
                                                     <input type="password" name="password" id="password"
@@ -63,56 +60,47 @@
                                                     <span class="help-block"> @lang('modules.profile.passwordNote')</span>
                                                 </div>
                                             </div>
-                                            <!--/span-->
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>@lang('modules.profile.yourMobileNumber')</label>
-                                                    <input type="tel" name="mobile" id="mobile" class="form-control"
-                                                           value="{{ $userDetail->mobile }}">
-                                                </div>
-                                            </div>
-                                            <!--/span-->
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>@lang('modules.employees.gender')</label>
-                                                    <select name="gender" id="gender" class="form-control">
-                                                        <option @if($userDetail->gender == 'male') selected @endif value="male">@lang('app.male')</option>
-                                                        <option @if($userDetail->gender == 'female') selected @endif value="female">@lang('app.female')</option>
-                                                        <option @if($userDetail->gender == 'others') selected @endif value="others">@lang('app.others')</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <!--/span-->
                                         </div>
+{{--                                        <div class="row">--}}
+
+
+{{--                                            <!--/span-->--}}
+
+{{--                                            <div class="col-md-4">--}}
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label>@lang('modules.profile.yourMobileNumber')</label>--}}
+{{--                                                    <input type="tel" name="mobile" id="mobile" class="form-control"--}}
+{{--                                                           value="{{ $userDetail->mobile }}">--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <!--/span-->--}}
+
+{{--                                            <div class="col-md-4">--}}
+{{--                                                <div class="form-group">--}}
+{{--                                                    <label>@lang('modules.employees.gender')</label>--}}
+{{--                                                    <select name="gender" id="gender" class="form-control">--}}
+{{--                                                        <option @if($userDetail->gender == 'male') selected @endif value="male">@lang('app.male')</option>--}}
+{{--                                                        <option @if($userDetail->gender == 'female') selected @endif value="female">@lang('app.female')</option>--}}
+{{--                                                        <option @if($userDetail->gender == 'others') selected @endif value="others">@lang('app.others')</option>--}}
+{{--                                                    </select>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <!--/span-->--}}
+{{--                                        </div>--}}
                                         <!--/row-->
 
                                         <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">@lang('modules.profile.yourAddress')</label>
-                                        <textarea name="address" id="address" rows="5"
-                                                  class="form-control">@if(!empty($employeeDetail)){{ $employeeDetail->address }}@endif</textarea>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-4">
                                                 <label>@lang('modules.profile.profilePicture')</label>
 
                                                 <div class="form-group">
                                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                                         <div class="fileinput-new thumbnail"
                                                              style="width: 200px; height: 150px;">
-                                                            @if(is_null($userDetail->image))
-                                                                <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.profile.uploadPicture')) }}"
-                                                                     alt=""/>
-                                                            @else
-                                                                <img src="{{ asset('user-uploads/avatar/'.$userDetail->image) }}"
-                                                                     alt=""/>
-                                                            @endif
+                                                            <img src="{{ $userDetail->image_url  }}" alt=""/>
                                                         </div>
                                                         <div class="fileinput-preview fileinput-exists thumbnail"
-                                                              style="max-width: 200px; max-height: 150px;"></div>
+                                                             style="max-width: 200px; max-height: 150px;"></div>
                                                         <div>
                                 <span class="btn btn-info btn-file">
                                     <span class="fileinput-new"> @lang('app.selectImage') </span>
@@ -126,6 +114,14 @@
                                                 </div>
 
                                             </div>
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label class="control-label">@lang('modules.profile.yourAddress')</label>
+                                        <textarea name="address" id="address" rows="5"
+                                                  class="form-control">@if(!empty($employeeDetail)){{ $employeeDetail->address }}@endif</textarea>
+                                                </div>
+                                            </div>
+
 
                                         </div>
                                         <!--/span-->
@@ -137,7 +133,7 @@
                                                     class="fa fa-check"></i>
                                             @lang('app.update')
                                         </button>
-                                        <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                                     </div>
                                     {!! Form::close() !!}
                                 </div>

@@ -39,60 +39,47 @@
                         {!! Form::open(['id'=>'createEmployee','class'=>'ajax-form','method'=>'POST']) !!}
                             <div class="form-body">
                                 <div class="row">
-                                    <div class="col-md-4 ">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>@lang('modules.employees.employeeId')</label>
+                                            <label class="required">@lang('modules.employees.employeeId')</label>
                                             <input type="text" name="employee_id" id="employee_id" class="form-control"
                                                    autocomplete="nope">
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>@lang('modules.employees.employeeName')</label>
+                                            <label class="required">@lang('modules.employees.employeeName')</label>
                                             <input type="text" name="name" id="name" class="form-control" autocomplete="nope">
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>@lang('modules.employees.employeeEmail')</label>
+                                            <label class="required">@lang('modules.employees.employeeEmail')</label>
                                             <input type="email" name="email" id="email" class="form-control" autocomplete="nope">
                                             <span class="help-block">@lang('modules.employees.emailNote')</span>
                                         </div>
                                     </div>
-                                    <!--/span-->
-                                </div>
-                                <div class="row">
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>@lang('modules.employees.employeePassword')</label>
+                                            <label class="required">@lang('modules.employees.employeePassword')</label>
                                             <input type="password" style="display: none">
                                             <input type="password" name="password" id="password" class="form-control" autocomplete="nope">
+                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                             <span class="help-block"> @lang('modules.employees.passwordNote') </span>
-                                        </div>
-                                    </div>
-                                    <!--/span-->
-
-                                    <div class="col-xs-12 col-md-4 m-t-20">
-                                        <div class="form-group">
                                             <div class="checkbox checkbox-info">
-                                                <input id="random_password" name="random_password" value="true"
-                                                       type="checkbox" >
+                                                <input id="random_password" name="random_password" value="true" type="checkbox">
                                                 <label for="random_password">@lang('modules.client.generateRandomPassword')</label>
                                             </div>
                                         </div>
                                     </div>
+                                    <!--/span-->
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>@lang('app.mobile')</label>
-                                            <input type="tel" name="mobile" id="mobile"  class="form-control" autocomplete="nope">
-                                        </div>
-                                    </div>
                                     <!--/span-->
                                 </div>
+
                                 <!--/row-->
 
                                 <div class="row">
@@ -109,7 +96,7 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label>@lang('modules.employees.joiningDate')</label>
+                                            <label class="required">@lang('modules.employees.joiningDate')</label>
                                             <input type="text" autocomplete="off"  name="joining_date" id="joining_date" class="form-control">
                                         </div>
                                     </div>
@@ -145,9 +132,9 @@
                                     </div>
 
                                 </div>
-                                <!--/span-->
+
                                 <div class="row">
-                                    <div class="col-md-12 ">
+                                    <div class="col-md-12">
                                         <div class="form-group">
                                             <label>@lang('app.skills')</label>
                                             <input name='tags' placeholder='@lang('app.skills')' value='' >
@@ -181,17 +168,21 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>@lang('app.mobile')</label>
+                                            <input type="tel" name="mobile" id="mobile"  class="form-control" autocomplete="nope">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>@lang('modules.employees.hourlyRate')</label>
                                             <input type="text" name="hourly_rate" id="hourly_rate" class="form-control">
                                         </div>
                                     </div>
                                     <!--/span-->
-                                </div>
-                                <!--/row-->
-                                <div class="row">
-                                    <div class="col-md-6 ">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>@lang('app.login')</label>
                                             <select name="login" id="login" class="form-control">
@@ -201,6 +192,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div class="row">
                                     <div class="col-md-6">
@@ -288,7 +280,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

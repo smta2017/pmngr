@@ -215,7 +215,7 @@
                                         <select name="currency_id" id="" class="form-control">
                                             <option value="">--</option>
                                             @foreach ($currencies as $item)
-                                                <option 
+                                                <option
                                                 @if($item->id == $project->currency_id) selected @endif
                                                 value="{{ $item->id }}">{{ $item->currency_name }} ({{ $item->currency_code }})</option>
                                             @endforeach
@@ -347,7 +347,7 @@
                         <div class="form-actions m-t-15">
                             <button type="submit" id="save-form" class="btn btn-success"><i
                                         class="fa fa-check"></i> @lang('app.update')</button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

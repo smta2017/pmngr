@@ -8,7 +8,12 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-inverse btn-sm toggle-filter"><i class="fa fa-sliders"></i></a>
+
+            @if($user->can('add_tasks'))
+                <a href="javascript:;" id="add-column" class="btn btn-success btn-sm btn-outline"><i class="fa fa-plus"></i> @lang('modules.tasks.addBoardColumn')</a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -30,21 +35,8 @@
     <div class="row">
         <div class="white-box">
 
-            <div class="row">
-                <div class="col-md-5">
-                    <a href="{{ route('member.all-tasks.index') }}" class="btn btn-info btn-outline"><i class="fa fa-arrow-left"></i> @lang('modules.tasks.tasksTable')</a>
-
-                    @if($user->can('add_tasks'))
-                        <a href="javascript:;" id="add-column" class="btn btn-success btn-outline"><i class="fa fa-plus"></i> @lang('modules.tasks.addBoardColumn')</a>
-                    @endif
-                    <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger toggle-filter"><i
-                                class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                </div>
-            </div>
-            <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                <div class="col-md-12">
-                    <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                </div>
+            <div class="row" style="display: none; " id="ticket-filters">
+            
                 <form action="" id="filter-form">
                     <div class="col-md-4 m-t-30">
                         <div class="input-daterange input-group m-t-5" id="date-range">
@@ -159,11 +151,12 @@
 
     </div>
 
-    <div class="container-scroll">
+    <div class="container-scroll white-box">
+        <a href="javascript:;" id="toggle_fullscreen" class="btn btn-inverse btn-outline btn-sm pull-right"><i class="icon-size-fullscreen"></i></a>
 
-    <div class="row container-row">
+        <div class="row container-row">
 
-    </div>
+        </div>
     <!-- .row -->
     </div>
 
@@ -275,7 +268,7 @@
     })
 
     $('.toggle-filter').click(function () {
-        $('#ticket-filters').toggle('slide');
+        $('#ticket-filters').slideToggle();
     })
 
     function loadData () {
@@ -310,6 +303,40 @@
 
         })
     }
+</script>
+
+<script>
+    $('#toggle_fullscreen').on('click', function(){
+    // if already full screen; exit
+    // else go fullscreen
+    if (
+        document.fullscreenElement ||
+        document.webkitFullscreenElement ||
+        document.mozFullScreenElement ||
+        document.msFullscreenElement
+    ) {
+        if (document.exitFullscreen) {
+        document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+        }
+    } else {
+        element = $('.container-scroll').get(0);
+        if (element.requestFullscreen) {
+        element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+        element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+        element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        } else if (element.msRequestFullscreen) {
+        element.msRequestFullscreen();
+        }
+    }
+    });
 </script>
 
 @endpush

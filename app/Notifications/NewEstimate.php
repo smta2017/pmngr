@@ -69,6 +69,9 @@ class NewEstimate extends Notification implements ShouldQueue
      */
     public function toArray($notifiable)
     {
-        return $this->estimate->toArray();
+        return [
+            'id' => $this->estimate->id,
+            'total' => $this->estimate->total,
+        ];
     }
 }

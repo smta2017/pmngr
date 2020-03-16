@@ -25,7 +25,6 @@ class ManageAccountSetupController extends AdminBaseController
 
     public function index() {
         $invoiceSetting = InvoiceSetting::first();
-//        dd($invoiceSetting->invoice_prefix);
         if ($this->company->company_name && $this->company->company_email && $this->company->company_phone && $this->company->address && $this->company->website && $invoiceSetting->invoice_prefix && $invoiceSetting->estimate_prefix && $invoiceSetting->credit_note_prefix && $invoiceSetting->template && $invoiceSetting->due_after && $invoiceSetting->invoice_terms){
             return Redirect::route('admin.dashboard');
         }
@@ -54,7 +53,7 @@ class ManageAccountSetupController extends AdminBaseController
 
         if ($request->hasFile('logo')) {
             $setting->logo = $request->logo->hashName();
-            $request->logo->store('user-uploads/app-logo');
+            $request->logo->store('app-logo');
         }
         $setting->last_updated_by = $this->user->id;
 

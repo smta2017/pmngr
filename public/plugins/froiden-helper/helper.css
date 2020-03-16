@@ -124,13 +124,24 @@ UI Loading
 }
 
 .block-spinner-bar .bounce1 {
+    -webkit-animation-delay: -0.64s;
+    animation-delay: -0.64s;
+    background: #ffd400;
+}
+
+.block-spinner-bar .bounce2 {
     -webkit-animation-delay: -0.32s;
     animation-delay: -0.32s;
 }
 
-.block-spinner-bar .bounce2 {
+.block-spinner-bar .bounce3 {
     -webkit-animation-delay: -0.16s;
     animation-delay: -0.16s;
+    background: #00c4ff;
+}
+
+.block-spinner-bar .bounce4 {
+    background: #71b11c;
 }
 
 #toast-container > div {

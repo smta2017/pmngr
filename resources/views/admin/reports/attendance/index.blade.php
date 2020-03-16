@@ -26,15 +26,12 @@
 
 @section('content')
 
-
-    <h2>@lang('app.filterResults')</h2>
-
-    <div class="white-box">
-        <div class="row m-b-10">
+    @section('filter-section')
+        <div class="row">
             {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-5">
+            <div class="col-md-21">
                 <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+                    <h5 class="box-title m-t-20">@lang('app.selectDateRange')</h5>
 
                     <div class="input-daterange input-group" id="date-range">
                         <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
@@ -46,8 +43,8 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.employee')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title m-t-20">@lang('app.select') @lang('app.employee')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -71,15 +68,13 @@
             {!! Form::close() !!}
 
         </div>
-    </div>
+    @endsection
 
     <div class="row">
-        <div class="col-md-12 m-b-20">
-            <a href="javascript:;" id="export-excel" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o"></i> @lang('app.exportExcel')</a>
-        </div>
         
         <div class="col-md-12">
             <div class="white-box" id="attendanceData">
+
             </div>
         </div>
     </div>

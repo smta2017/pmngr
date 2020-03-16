@@ -30,50 +30,53 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="white-box">
-                <h3 class="box-title m-b-0">@lang('app.update') @lang('app.department')</h3>
+            <div class="panel panel-inverse">
+                <div class="panel-heading">@lang('app.update') @lang('app.department')</div>
 
-                <p class="text-muted m-b-30 font-13"></p>
+                <p class="text-muted font-13"></p>
 
-                <div class="row">
-                    <div class="col-sm-12 col-xs-12">
-                        {!! Form::open(['id'=>'createCurrency','class'=>'ajax-form','method'=>'PUT']) !!}
-                        <div class="form-group">
-                            <label for="company_name">@lang('app.department')</label>
-                            <input type="text" class="form-control" id="team_name" name="team_name" value="{{ $group->team_name }}">
-                        </div>
-                        <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
-                            @lang('app.save')
-                        </button>
-                        {!! Form::close() !!}
-                        <hr>
-
-                    </div>
-
-
-                    <div class="col-md-7">
-                        <h3 class="box-title m-b-0">@lang('modules.projects.members')</h3>
-
-                    @forelse($group->member as $member)
-                            <div class="row">
-                                <div class="col-sm-2 col-md-1 p-10">
-                                    {!!  ($member->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$member->user->image).'"
-                                    alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                    alt="user" class="img-circle" width="40">' !!}
-
+                <div class="panel-wrapper collapse in" aria-expanded="true">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12 col-xs-12">
+                                {!! Form::open(['id'=>'createCurrency','class'=>'ajax-form','method'=>'PUT']) !!}
+                                <div class="form-group">
+                                    <label for="company_name">@lang('app.department')</label>
+                                    <input type="text" class="form-control" id="team_name" name="team_name" value="{{ $group->team_name }}">
                                 </div>
-                                <div class="col-sm-7">
-                                    <h5>{{ ucwords($member->user->name) }}</h5>
-                                    <h6>{{ $member->user->email }}</h6>
-                                </div>
-                                <div class="col-sm-3 p-20">
-                                </div>
+                                <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
+                                    @lang('app.save')
+                                </button>
+                                {!! Form::close() !!}
+                                <hr>
+
                             </div>
-                        @empty
-                            @lang('messages.noRecordFound')
-                        @endforelse
-                    </div>
 
+
+                            <div class="col-md-7">
+                                <h3 class="box-title m-b-0">@lang('modules.projects.members')</h3>
+
+                            @forelse($group->member as $member)
+                                    <div class="row">
+                                        <div class="col-sm-2 col-md-1 p-10">
+                                            {!!  '<img src="'.$member->user->image_url.'"
+                                                            alt="user" class="img-circle" width="40" height="40">' !!}
+
+                                        </div>
+                                        <div class="col-sm-7">
+                                            <h5>{{ ucwords($member->user->name) }}</h5>
+                                            <h6>{{ $member->user->email }}</h6>
+                                        </div>
+                                        <div class="col-sm-3 p-20">
+                                        </div>
+                                    </div>
+                                @empty
+                                    @lang('messages.noRecordFound')
+                                @endforelse
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

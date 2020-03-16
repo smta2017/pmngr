@@ -51,30 +51,33 @@ class SuperAdminCurrencySettingController extends SuperAdminBaseController
         $currencyApiKey = GlobalSetting::first()->currency_converter_key;
         $currencyApiKeyVersion = GlobalSetting::first()->currency_key_version;
         $currencyApiKey = ($currencyApiKey) ? $currencyApiKey : env('CURRENCY_CONVERTER_KEY');
-        if ($currencyApiKey!='00') {
+        try {
             if ($request->is_cryptocurrency == 'no') {
-                // get exchange rate
+
                 $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                 $conversionRate = $res->getBody();
                 $conversionRate = json_decode($conversionRate, true);
 
                 if (!empty($conversionRate)) {
                     $currency->exchange_rate = $conversionRate[strtoupper($this->global->currency->currency_code . '_' . $currency->currency_code)];
                 }
-            } else {
 
+            } else {
                 if ($this->global->currency->currency_code != 'USD') {
                     // get exchange rate
                     $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                    $res = $client->request('GET', 'https://' . $currencyApiKeyVersion . '.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                     $conversionRate = $res->getBody();
                     $conversionRate = json_decode($conversionRate, true);
 
                     $usdExchangePrice = $conversionRate[strtoupper($this->global->currency->currency_code) . '_USD'];
                     $currency->exchange_rate = ceil(($currency->usd_price / $usdExchangePrice));
                 }
+
             }
+        } catch (\Exception $th) {
+            //throw $th;
         }
         $currency->save();
 
@@ -101,29 +104,28 @@ class SuperAdminCurrencySettingController extends SuperAdminBaseController
 
         $currency->usd_price = $request->usd_price;
         $currency->is_cryptocurrency = $request->is_cryptocurrency;
-        if ($currencyApiKey!='00') {
-            if ($request->is_cryptocurrency == 'no') {
+
+        if ($request->is_cryptocurrency == 'no') {
+            // get exchange rate
+            $client = new Client();
+            $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+            $conversionRate = $res->getBody();
+            $conversionRate = json_decode($conversionRate, true);
+
+            if (!empty($conversionRate)) {
+                $currency->exchange_rate = $conversionRate[strtoupper($this->global->currency->currency_code) . '_' . $currency->currency_code];
+            }
+        } else {
+
+            if ($this->global->currency->currency_code != 'USD') {
                 // get exchange rate
                 $client = new Client();
-                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_' . $currency->currency_code . '&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
+                $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
                 $conversionRate = $res->getBody();
                 $conversionRate = json_decode($conversionRate, true);
-    
-                if (!empty($conversionRate)) {
-                    $currency->exchange_rate = $conversionRate[strtoupper($this->global->currency->currency_code) . '_' . $currency->currency_code];
-                }
-            } else {
-    
-                if ($this->global->currency->currency_code != 'USD') {
-                    // get exchange rate
-                    $client = new Client();
-                    $res = $client->request('GET', 'https://'.$currencyApiKeyVersion.'.currconv.com/api/v7/convert?q=' . $this->global->currency->currency_code . '_USD&compact=ultra&apiKey=' . $currencyApiKey, ['verify' => false]);
-                    $conversionRate = $res->getBody();
-                    $conversionRate = json_decode($conversionRate, true);
-    
-                    $usdExchangePrice = $conversionRate[strtoupper($this->global->currency->currency_code) . '_USD'];
-                    $currency->exchange_rate = $usdExchangePrice;
-                }
+
+                $usdExchangePrice = $conversionRate[strtoupper($this->global->currency->currency_code) . '_USD'];
+                $currency->exchange_rate = $usdExchangePrice;
             }
         }
 

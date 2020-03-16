@@ -20,7 +20,8 @@ class SuperAdminDashboardController extends SuperAdminBaseController
 {
     use CurrencyExchange;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->pageTitle = 'app.menu.dashboard';
         $this->pageIcon = 'icon-speedometer';
@@ -30,7 +31,8 @@ class SuperAdminDashboardController extends SuperAdminBaseController
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function index() {
+    public function index()
+    {
         $this->totalCompanies = Company::count();
         $this->totalPackages = Package::where('default', '!=', 'trial')->count();
         $this->activeCompanies = Company::where('status', '=', 'active')->count();
@@ -45,7 +47,7 @@ class SuperAdminDashboardController extends SuperAdminBaseController
 
         // Collect data for earning chart
         $months = [
-            '1' => 'jan',
+            '1' => 'Jan',
             '2' => 'Feb',
             '3' => 'Mar',
             '4' => 'Apr',
@@ -63,35 +65,49 @@ class SuperAdminDashboardController extends SuperAdminBaseController
         $paypalInvoices = PaypalInvoice::selectRaw('SUM(total) as total,YEAR(paid_on) as year, MONTH(paid_on) as month')->where('paypal_invoices.status', 'paid')->havingRaw('year = ?', [Carbon::now()->year])->groupBy('month')->get()->groupBy('month')->toArray();
         $razorpayInvoice = RazorpayInvoice::selectRaw('SUM(amount) as amount,YEAR(pay_date) as year, MONTH(pay_date) as month')->whereNotNull('razorpay_invoices.pay_date')->havingRaw('year = ?', [Carbon::now()->year])->groupBy('month')->get()->groupBy('month')->toArray();
         $chartData = [];
-        foreach($months as $key => $month) {
-            if(key_exists($key, $invoices)) {
-                foreach($invoices[$key] as $amount) {
+        foreach ($months as $key => $month) {
+            if (key_exists($key, $invoices)) {
+                foreach ($invoices[$key] as $amount) {
                     $chartData[] = ['month' => $month, 'amount' => $amount['amount']];
                 }
-            }
-            else{
+            } else {
                 $chartData[] = ['month' => $month, 'amount' => 0];
             }
 
-            if(key_exists($key, $razorpayInvoice)) {
-                foreach($razorpayInvoice[$key] as $amount) {
+            if (key_exists($key, $razorpayInvoice)) {
+                foreach ($razorpayInvoice[$key] as $amount) {
                     $chartData[] = ['month' => $month, 'amount' => $amount['amount']];
                 }
-            }
-            else{
+            } else {
                 $chartData[] = ['month' => $month, 'amount' => 0];
             }
-            if(key_exists($key, $paypalInvoices)) {
-                foreach($paypalInvoices[$key] as $amount) {
+            if (key_exists($key, $paypalInvoices)) {
+                foreach ($paypalInvoices[$key] as $amount) {
                     $chartData[] = ['month' => $month, 'amount' => $amount['total']];
                 }
-            }
-            else{
+            } else {
                 $chartData[] = ['month' => $month, 'amount' => 0];
             }
         }
+        // return $chartData;
+        $sumArray = array();
 
-        $this->chartData = json_encode($chartData);
+        foreach ($months as $key => $month) {
+
+            $amount = 0;
+            foreach ($chartData as $k=>$subArray) {
+                if ($subArray['month'] == $month) {
+                    $amount = $amount + $subArray['amount'];
+                }
+            }
+            $sumArray[] = [
+                'month' => $month,
+                'amount' => $amount,
+            ];
+        }
+
+
+        $this->chartData = json_encode($sumArray);
 
         // Collect data of recent registered 5 companies
         $this->recentRegisteredCompanies = Company::with('package')->take(5)->latest()->get();
@@ -128,7 +144,7 @@ class SuperAdminDashboardController extends SuperAdminBaseController
             $lastVersion = $res->getBody();
             $lastVersion = json_decode($lastVersion, true);
 
-            if ($lastVersion['version'] > File::get(public_path().'version.txt')) {
+            if ($lastVersion['version'] > File::get(public_path() . 'version.txt')) {
                 $this->lastVersion = $lastVersion['version'];
             }
         } catch (\Throwable $th) {
@@ -164,7 +180,7 @@ class SuperAdminDashboardController extends SuperAdminBaseController
 
             $completedItem++;
         }
-       
+
 
         if ($totalItems == $completedItem) {
             $progress['progress_completed'] = true;
@@ -174,7 +190,5 @@ class SuperAdminDashboardController extends SuperAdminBaseController
 
 
         return ($completedItem / $totalItems) * 100;
-
     }
-
 }

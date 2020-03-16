@@ -70,9 +70,8 @@
                                                     @forelse($project->members as $member)
                                                         <a href="#">
                                                             <div class="user-img">
-                                                                {!!  ($member->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$member->user->image).'"
-                                                            alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="img-circle" width="40">' !!}
+                                                                {!!  '<img src="'.$member->user->image_url.'"
+                                                            alt="user" class="img-circle" width="40" height="40">' !!}
                                                             </div>
                                                             <div class="mail-contnet">
                                                                 <h5>{{ ucwords($member->user->name) }}</h5>

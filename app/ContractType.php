@@ -7,7 +7,7 @@ use App\Observers\ContractTypeObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class ContractType extends Model
+class ContractType extends BaseModel
 {
     protected static function boot()
     {

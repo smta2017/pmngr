@@ -269,7 +269,7 @@
             /*margin-right: 100px;*/
             margin-top: 30px;
         }
-        
+
         #sums table{
             width: 50%;
         }
@@ -359,14 +359,8 @@
     <div class="invoice-top">
         <section id="memo">
             <div class="logo">
+                <img src="{{ $invoiceSetting->logo_url }}" alt="home" class="dark-logo" />
 
-                @if(!is_null($global->logo))
-                    <img src="{{ public_path().'/user-uploads/app-logo/'.$global->logo }}" alt="home" class="dark-logo"/>
-                @elseif(!is_null($superadmin->logo))
-                    <img src="{{ public_path().'/user-uploads/app-logo/'.$superadmin->logo }}" alt="home" class="dark-logo"/>
-                @else
-                    <img src="{{ public_path().'/worksuite-logo.png' }}" />
-                @endif
             </div>
 
             <div class="company-info">
@@ -502,8 +496,8 @@
                     <th>#</th> <!-- Dummy cell for the row number and row commands -->
                     <th>@lang("modules.invoices.item")</th>
                     <th>@lang("modules.invoices.qty")</th>
-                    <th>@lang("modules.invoices.unitPrice")</th>
-                    <th>@lang("modules.invoices.price")</th>
+                    <th>@lang("modules.invoices.unitPrice") ({!! htmlentities($invoice->currency->currency_code)  !!})</th>
+                    <th>@lang("modules.invoices.price") ({!! htmlentities($invoice->currency->currency_code)  !!})</th>
                 </tr>
 
                 <?php $count = 0; ?>
@@ -513,8 +507,8 @@
                     <td>{{ ++$count }}</td> <!-- Don't remove this column as it's needed for the row commands -->
                     <td>{{ ucfirst($item->item_name) }}</td>
                     <td>{{ $item->quantity }}</td>
-                    <td>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$item->unit_price, 2, '.', '') }}</td>
-                    <td>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$item->amount, 2, '.', '') }}</td>
+                    <td>{{ number_format((float)$item->unit_price, 2, '.', '') }}</td>
+                    <td>{{ number_format((float)$item->amount, 2, '.', '') }}</td>
                 </tr>
                     @endif
                 @endforeach
@@ -528,34 +522,34 @@
             <table cellpadding="0" cellspacing="0">
                 <tr>
                     <th>@lang("modules.invoices.subTotal"):</th>
-                    <td>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->sub_total, 2, '.', '') }}</td>
+                    <td>{{ number_format((float)$invoice->sub_total, 2, '.', '') }}</td>
                 </tr>
                 @if($discount != 0 && $discount != '')
                 <tr data-iterate="tax">
                     <th>@lang("modules.invoices.discount"):</th>
-                    <td>-{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$discount, 2, '.', '') }}</td>
+                    <td>-{{ number_format((float)$discount, 2, '.', '') }}</td>
                 </tr>
                 @endif
                 @foreach($taxes as $key=>$tax)
                 <tr data-iterate="tax">
                     <th>{{ strtoupper($key) }}:</th>
-                    <td>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$tax, 2, '.', '') }}</td>
+                    <td>{{ number_format((float)$tax, 2, '.', '') }}</td>
                 </tr>
                 @endforeach
                 <tr class="amount-total">
                     <th>
                         <hr>@lang("modules.invoices.total"):
-                    </th>    
+                    </th>
                     <td>
-                        <hr>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->total, 2, '.', '') }}
-                    </td>    
+                        <hr>{{ number_format((float)$invoice->total, 2, '.', '') }}
+                    </td>
                 </tr>
                 @if ($invoice->credit_notes()->count() > 0)
                     <tr>
                         <th>
                             <hr>@lang('modules.invoices.appliedCredits'):</th>
                         <td>
-                            <hr>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->appliedCredits(), 2, '.', '') }}
+                            <hr>{{ number_format((float)$invoice->appliedCredits(), 2, '.', '') }}
                         </td>
                     </tr>
                 @endif
@@ -564,7 +558,7 @@
                         @lang("modules.invoices.total") @lang("modules.invoices.paid"):
                     </th>
                     <td>
-                        {!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->getPaidAmount(), 2, '.', '') }}
+                        {{ number_format((float)$invoice->getPaidAmount(), 2, '.', '') }}
                     </td>
                 </tr>
                 <tr>
@@ -572,7 +566,7 @@
                         @lang("modules.invoices.total") @lang("modules.invoices.due"):
                     </th>
                     <td>
-                        {!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->amountDue(), 2, '.', '') }}
+                        {{ number_format((float)$invoice->amountDue(), 2, '.', '') }}
                     </td>
                 </tr>
             </table>
@@ -583,10 +577,7 @@
         <hr>
         <section id="terms">
             <span class="hidden">@lang('app.terms'):</span>
-            <div class="currency">
-                <span>Here {!! htmlentities($invoice->currency->currency_symbol)  !!} refers to {!! $invoice->currency->currency_code  !!}</span>
-
-            </div>
+     
             @if(!is_null($invoice->note))
                 <div>{!! nl2br($invoice->note) !!}</div>
             @endif

@@ -129,11 +129,6 @@ class PublicLeadGdprController extends Controller
         $removal->description = $request->description;
         $removal->save();
 
-        $notifyUsers = User::allAdmins();
-        foreach ($notifyUsers as $notifyUser) {
-            $notifyUser->notify(new RemovalRequestAdminNotification());
-        }
-
         return Reply::success('modules.gdpr.removalRequestSuccess');
     }
 }

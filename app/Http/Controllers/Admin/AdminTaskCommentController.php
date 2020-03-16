@@ -47,23 +47,6 @@ class AdminTaskCommentController extends AdminBaseController
         $comment->user_id = $this->user->id;
         $comment->save();
 
-        $task = Task::with(['project','project.members'])->findOrFail($comment->task_id);
-
-        $notifyUser = User::findOrFail($task->user_id);
-        $notifyUser->notify(new \App\Notifications\TaskComment($task, $comment->created_at));
-
-        if ($task->project_id != null) {
-
-            if ($task->project->client_id != null && $task->project->allow_client_notification == 'enable') {
-                $notifyUser = User::withoutGlobalScope('active')->findOrFail($task->project->client_id);
-                $notifyUser->notify(new TaskCommentClient($task, $comment->created_at));
-            }
-
-            $members = User::whereIn('id',$task->project->members->pluck('user_id'))->get();
-
-            Notification::send($members, new \App\Notifications\TaskComment($task, $comment->created_at));
-        }
-
         $this->comments = TaskComment::where('task_id', $request->taskId)->orderBy('id', 'desc')->get();
         $view = view('admin.tasks.task_comment', $this->data)->render();
 

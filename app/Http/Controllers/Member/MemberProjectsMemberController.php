@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Member;
 
 use App\Helper\Reply;
 use App\Http\Requests\ProjectMembers\StoreProjectMembers;
-use App\Notifications\NewProjectMember;
 use App\Project;
 use App\ProjectMember;
 use App\User;
@@ -64,9 +63,6 @@ class MemberProjectsMemberController extends MemberBaseController
             $member->user_id = $user;
             $member->project_id = $request->project_id;
             $member->save();
-
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($user);
-            $notifyUser->notify(new NewProjectMember($member));
 
             $this->logProjectActivity($request->project_id, ucwords($member->user->name).' '.__('messages.isAddedAsProjectMember'));
         }

@@ -70,7 +70,7 @@
 {{--                                    </div>--}}
 
                                 </div>
-
+                                @if(in_array('projects', $modules))
                                 <div class="col-md-4">
 
                                     <div class="form-group" >
@@ -89,7 +89,7 @@
                                     </div>
 
                                 </div>
-
+                                @endif
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label" id="companyClientName">@lang('app.client_name')</label>
@@ -445,12 +445,11 @@
     function getCompanyName(){
         var projectID = $('#project_id').val();
         var url = "{{ route('admin.all-invoices.get-client-company') }}";
-        if(projectID != '')
+        if(projectID != '' && projectID !== undefined )
         {
             url = "{{ route('admin.all-invoices.get-client-company',':id') }}";
             url = url.replace(':id', projectID);
         }
-
         $.ajax({
             type: 'GET',
             url: url,
@@ -670,7 +669,7 @@
         });
 
         $('.sub-total').html(decimalupto2(subtotal).toFixed(2));
-        $('.sub-total-field').val(decimalupto2(subtotal).toFixed(2));
+        $('.sub-total-field').val(decimalupto2(subtotal));
 
         var discountType = $('#discount_type').val();
         var discountValue = $('.discount_value').val();

@@ -30,26 +30,25 @@
 
 
 
-    <div class="white-box">
-        <div class="row m-b-10">
-            <h2>@lang("app.filterResults")</h2>
+    @section('filter-section')
+        <div class="row">
             {!! Form::open(['id'=>'storePayments','class'=>'ajax-form','method'=>'POST']) !!}
-            <div class="col-md-5">
+            <div class="col-md-12">
                 <div class="example">
-                    <h5 class="box-title m-t-30">@lang('app.selectDateRange')</h5>
+                    <h5 class="box-title m-t-20">@lang('app.selectDateRange')</h5>
 
                     <div class="input-daterange input-group" id="date-range">
                         <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
-                               value="{{ $fromDate->format('Y-m-d') }}"/>
+                               value="{{ $fromDate->format($global->date_format) }}"/>
                         <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
                         <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
-                               value="{{ $toDate->format('Y-m-d') }}"/>
+                               value="{{ $toDate->format($global->date_format) }}"/>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <h5 class="box-title m-t-30">@lang('app.select') @lang('app.duration')</h5>
+            <div class="col-md-12">
+                <h5 class="box-title m-t-20">@lang('app.select') @lang('app.duration')</h5>
 
                 <div class="form-group">
                     <div class="row">
@@ -66,8 +65,7 @@
             </div>
 
 
-            <div class="col-md-3">
-                <h5 class="box-title m-t-30">@lang('app.action')</h5>
+            <div class="col-md-12">
                 <div class="form-group">
                     <div class="row">
                         <div class="col-md-12">
@@ -80,34 +78,21 @@
             {!! Form::close() !!}
 
         </div>
-    </div>
+    @endsection
 
     <div class="row">
-        <div class="col-md-12 col-lg-12 col-sm-12">
+        <div class="col-md-12">
             <div class="white-box">
-                <div class="row row-in">
-                    <div class="col-lg-6 col-sm-6 row-in-br">
-                        <div class="col-in row">
-                            <h3 class="box-title">@lang("modules.incomeVsExpenseReport.totalIncome")</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="fa fa-money text-info"></i></li>
-                                <li class="text-right"><span>{{ $global->currency->currency_symbol }}</span><span id="total-incomes" class="counter">{{ $totalIncomes }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-sm-6 b-0">
-                        <div class="col-in row">
-                            <h3 class="box-title">@lang("modules.incomeVsExpenseReport.totalExpense")</h3>
-                            <ul class="list-inline two-part">
-                                <li><i class="ti-shopping-cart text-success"></i></li>
-                                <li class="text-right"><span>{{ $global->currency->currency_symbol }}</span><span id="total-expenses" class="counter">{{ $totalExpenses }}</span></li>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-md-6  text-center">
+                    <h4><span class="text-info">{{ $global->currency->currency_symbol }}</span><span class="text-info" id="total-incomes">{{ $totalIncomes }}</span> <span class="font-12 text-muted m-l-5">@lang("modules.incomeVsExpenseReport.totalIncome")</span></h4>
+                </div>
+                <div class="col-md-6 b-l text-center">
+                    <h4><span class="text-danger">{{ $global->currency->currency_symbol }}</span><span class="text-danger" id="total-expenses">{{ $totalExpenses }}</span> <span class="font-12 text-muted m-l-5"> @lang("modules.incomeVsExpenseReport.totalExpense")</span></h4>
                 </div>
             </div>
         </div>
-    </div>    <!-- .row -->
+
+    </div>
 
     <div class="row">
         <div class="col-lg-12">

@@ -10,7 +10,7 @@
             <div id="addMoreBox1" class="clearfix">
                 <div class="col-md-5">
                     <div id="dateBox" class="form-group ">
-                        <input class="form-control date-picker" autocomplete="off" id="dateField1" data-date-format="dd/mm/yyyy" name="date[0]" type="text" value="" placeholder="Date"/>
+                        <input class="form-control date-picker" autocomplete="off" id="dateField1"  name="date[0]" type="text" value="" placeholder="Date"/>
                         <div id="errorDate"></div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
         $i = $i+1;
         var indexs = $i+1;
         $(' <div id="addMoreBox'+indexs+'" class="clearfix"> ' +
-            '<div class="col-md-5"><div class="form-group "><input autocomplete="off" class="form-control date-picker'+$i+'" id="dateField'+indexs+'" name="date['+$i+']" data-date-format="dd/mm/yyyy" type="text" value="" placeholder="Date"/></div></div>' +
+            '<div class="col-md-5"><div class="form-group "><input autocomplete="off" class="form-control date-picker'+$i+'" id="dateField'+indexs+'" name="date['+$i+']"  type="text" value="" placeholder="Date"/></div></div>' +
             '<div class="col-md-5 "style="margin-left:5px;"><div class="form-group"><input class="form-control " name="occasion['+$i+']" type="text" value="" placeholder="Occasion"/></div></div>' +
             '<div class="col-md-1"><button type="button" onclick="removeBox('+indexs+')" class="btn btn-sm btn-danger"><i class="fa fa-times"></i></button></div>' +
             '</div>').insertBefore($insertBefore);

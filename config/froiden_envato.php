@@ -27,6 +27,7 @@ return [
     'envato_product_name' => $product,
 
     'envato_product_url' => $productUrl,
+    'plugins_url' => $verifyDomain.'/plugins/'.$envato_item_id,
 
     /*
     * Temp folder to store update before to install it.

@@ -37,57 +37,56 @@
     <div class="col-md-5 col-xs-12">
         <div class="white-box">
             <div class="user-bg">
-                {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" width="100%">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" width="100%">' !!}
+                <img src="{{$employee->image_url}}" alt="user" width="100%">
                 <div class="overlay-box">
                     <div class="user-content"> <a href="javascript:void(0)">
-                            {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" class="thumb-lg img-circle">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="thumb-lg img-circle">' !!}
+                            <img src="{{$employee->image_url}}" alt="user" class="thumb-lg img-circle">
                             </a>
                         <h4 class="text-white">{{ ucwords($employee->name) }}</h4>
                         <h5 class="text-white">{{ $employee->email }}</h5>
                     </div>
                 </div>
             </div>
-            <div class="user-btm-box">
-                <div class="row row-in">
-                    <div class="col-md-6 row-in-br">
-                        <div class="col-in row">
-                                <h3 class="box-title">@lang('modules.employees.tasksDone')</h3>
-                                <div class="col-xs-4"><i class="ti-check-box text-success"></i></div>
-                                <div class="col-xs-8 text-right counter">{{ $taskCompleted }}</div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 row-in-br  b-r-none">
-                        <div class="col-in row">
-                                <h3 class="box-title">@lang('modules.employees.hoursLogged')</h3>
-                            <div class="col-xs-2"><i class="icon-clock text-info"></i></div>
-                            <div class="col-xs-10 text-right counter" style="font-size: 13px">{{ $hoursLogged }}</div>
-                        </div>
+
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="user-btm-box">
+            <div class="row row-in">
+                <div class="col-md-6 row-in-br">
+                    <div class="col-in row">
+                            <h3 class="box-title">@lang('modules.employees.tasksDone')</h3>
+                            <div class="col-xs-4"><i class="ti-check-box text-success"></i></div>
+                            <div class="col-xs-8 text-right counter">{{ $taskCompleted }}</div>
                     </div>
                 </div>
-                <div class="row row-in">
-                    <div class="col-md-6 row-in-br">
-                        <div class="col-in row">
-                                <h3 class="box-title">@lang('modules.leaves.leavesTaken')</h3>
-                                <div class="col-xs-4"><i class="icon-logout text-warning"></i></div>
-                                <div class="col-xs-8 text-right counter">{{ count($leaves) }}</div>
-                        </div>
+                <div class="col-md-6 row-in-br  b-r-none">
+                    <div class="col-in row">
+                            <h3 class="box-title">@lang('modules.employees.hoursLogged')</h3>
+                        <div class="col-xs-2"><i class="icon-clock text-info"></i></div>
+                        <div class="col-xs-10 text-right counter" style="font-size: 13px">{{ $hoursLogged }}</div>
                     </div>
-                    <div class="col-md-6 row-in-br  b-r-none">
-                        <div class="col-in row">
-                                <h3 class="box-title">@lang('modules.leaves.remainingLeaves')</h3>
-                            <div class="col-xs-4"><i class="icon-logout text-danger"></i></div>
-                            <div class="col-xs-8 text-right counter">{{ ($allowedLeaves-count($leaves)) }}</div>
-                        </div>
+                </div>
+            </div>
+            <div class="row row-in">
+                <div class="col-md-6 row-in-br b-t">
+                    <div class="col-in row">
+                            <h3 class="box-title">@lang('modules.leaves.leavesTaken')</h3>
+                            <div class="col-xs-4"><i class="icon-logout text-warning"></i></div>
+                            <div class="col-xs-8 text-right counter">{{ $leavesCount }}</div>
+                    </div>
+                </div>
+                <div class="col-md-6 row-in-br  b-r-none b-t">
+                    <div class="col-in row">
+                            <h3 class="box-title">@lang('modules.leaves.remainingLeaves')</h3>
+                        <div class="col-xs-4"><i class="icon-logout text-danger"></i></div>
+                        <div class="col-xs-8 text-right counter">{{ ($allowedLeaves-count($leaves)) }}</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-md-7 col-xs-12">
+    <div class="col-xs-12">
         <div class="white-box">
             <ul class="nav nav-tabs tabs customtab">
                 <li class="active tab"><a href="#home" data-toggle="tab"> <span class="visible-xs"><i class="fa fa-home"></i></span> <span class="hidden-xs">@lang('modules.employees.activity')</span> </a> </li>
@@ -104,9 +103,7 @@
                         @forelse($activities as $key=>$activity)
                         <div class="sl-item">
                             <div class="sl-left">
-                                {!!  ($employee->image) ? '<img src="'.asset('user-uploads/avatar/'.$employee->image).'"
-                                                            alt="user" class="img-circle">' : '<img src="'.asset('default-profile-2.png').'"
-                                                            alt="user" class="img-circle">' !!}
+                                <img src="{{ $employee->image_url }}" alt="user" class="img-circle">'
                             </div>
                             <div class="sl-right">
                                 <div class="m-l-40"><a href="#" class="text-info">{{ ucwords($employee->name) }}</a> <span  class="sl-date">{{ $activity->created_at->diffForHumans() }}</span>
@@ -169,7 +166,7 @@
                         </div>
                         <div class="col-md-6 col-xs-6"> <strong>@lang('app.skills')</strong> <br>
                             {{implode(', ', $employee->skills()) }}
-                        
+
                         </div>
                     </div>
                     <hr>
@@ -379,7 +376,7 @@
                                            data-toggle="tooltip" data-original-title="Download"
                                            class="btn btn-inverse btn-circle"><i
                                                     class="fa fa-download"></i></a>
-                                        <a target="_blank" href="{{ asset('user-uploads/employee-docs/'.$employeeDoc->user_id.'/'.$employeeDoc->hashname) }}"
+                                        <a target="_blank" href="{{ asset_url('employee-docs/'.$employeeDoc->user_id.'/'.$employeeDoc->hashname) }}"
                                            data-toggle="tooltip" data-original-title="View"
                                            class="btn btn-info btn-circle"><i
                                                     class="fa fa-search"></i></a>

@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
 /**
@@ -20,8 +21,10 @@ class Files
      * @return string
      * @throws \Exception
      */
+
     public static function upload($image, $dir, $width = null, $height = 800, $crop = false)
     {
+        config(['filesystems.default' => 'local']);
 
         /** @var UploadedFile $uploadedFile */
         $uploadedFile = $image;
@@ -34,15 +37,16 @@ class Files
         $newName = self::generateNewFileName($uploadedFile->getClientOriginalName());
 
         $tempPath = public_path('user-uploads/temp/' . $newName);
+
         /** Check if folder exits or not. If not then create the folder */
         if (!\File::exists(public_path('user-uploads/' . $folder))) {
-            $result = \File::makeDirectory(public_path('user-uploads/' . $folder), 0775, true);
+            \File::makeDirectory(public_path('user-uploads/' . $folder), 0775, true);
         }
 
         $newPath = $folder . '/' . $newName;
 
         /** @var UploadedFile $uploadedFile */
-        $uploadedFile->move(public_path('user-uploads/temp'), $newName);
+        $uploadedFile->storeAs('temp', $newName);
 
         if (!empty($crop)) {
             // Crop image
@@ -84,6 +88,7 @@ class Files
 
         if (($width || $height)) {
             // Crop image
+
             $image = Image::make($tempPath);
             $image->resize($width, $height, function ($constraint) {
                 $constraint->aspectRatio();
@@ -96,6 +101,7 @@ class Files
 
         // Deleting temp file
         \File::delete($tempPath);
+
 
         return $newName;
     }
@@ -110,6 +116,22 @@ class Files
         }
 
         return $newName . '.' . $ext;
+    }
+
+    public static function uploadLocalOrS3($uploadedFile, $dir)
+    {
+        if (!$uploadedFile->isValid()) {
+            throw new \Exception('File was not uploaded correctly');
+        }
+
+        $newName = self::generateNewFileName($uploadedFile->getClientOriginalName());
+
+        if(config('filesystems.default') === 'local'){
+            return self::upload($uploadedFile,$dir,false,false,false);
+        }
+
+        Storage::disk('s3')->putFileAs($dir, $uploadedFile, $newName, 'public');
+        return $newName;
     }
 
     public static function deleteFile($image, $folder)

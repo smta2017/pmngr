@@ -113,8 +113,8 @@ class AdminPaypalController extends AdminBaseController
             ->setCancelUrl(route('admin.paypal-recurring')."?success=false&invoice_id=".$invoiceId)
             ->setAutoBillAmount("yes")
             ->setInitialFailAmountAction("CONTINUE")
-            ->setMaxFailAttempts("0")
-            ->setSetupFee(new Currency(array('value' => $totalAmount, 'currency' => $package->currency->currency_code)));
+            ->setMaxFailAttempts("0");
+//            ->setSetupFee(new Currency(array('value' => $totalAmount, 'currency' => $package->currency->currency_code)));
 
         $plan->setPaymentDefinitions(array($paymentDefinition));
         $plan->setMerchantPreferences($merchantPreferences);
@@ -156,7 +156,7 @@ class AdminPaypalController extends AdminBaseController
             }
         }
         $company = Company::findOrFail(company()->id);
-        
+
 
         // Calculating next billing date
         $today = Carbon::now()->addDays(1); //payment will deduct after 1 day
@@ -199,7 +199,7 @@ class AdminPaypalController extends AdminBaseController
         $paypalInvoice = new PaypalInvoice();
         $paypalInvoice->company_id = company()->id;
         $paypalInvoice->package_id = $package->id;
-        $paypalInvoice->currency_id = $this->global->currency_id;
+        $paypalInvoice->currency_id = $this->superadmin->currency_id;
         $paypalInvoice->total = $totalAmount;
         $paypalInvoice->status = 'pending';
         $paypalInvoice->plan_id = $newPlan->getId();
@@ -235,7 +235,7 @@ class AdminPaypalController extends AdminBaseController
         /** The payer_id is added to the request query parameters **/
         /** when the user is redirected from paypal back to your site **/
         $execution = new PaymentExecution();
-        $execution->setPayerId(Input::get('PayerID'));
+        $execution->setPayerId(request()->get('PayerID'));
         /**Execute the payment **/
         $result = $payment->execute($execution, $this->_api_context);
         /** dd($result);exit; /** DEBUG RESULT, remove it later **/

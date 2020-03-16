@@ -26,7 +26,7 @@ class UpdateCreditNote extends CoreRequest
     public function rules()
     {
         $rules = [
-            'project_id' => 'required',
+//            'project_id' => 'required',
             // 'invoice_number' => Rule::unique('invoices')->where(function ($query) {
             //     return $query->where('company_id', company()->id)
             //         ->where('id', '<>'. $this->id);

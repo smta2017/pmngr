@@ -8,7 +8,26 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a class="btn btn-default btn-sm btn-outline"
+            href="{{ route('admin.all-credit-notes.download', $creditNote->id) }}"> <span><i class="fa fa-file-pdf-o"></i> @lang('modules.credit-notes.downloadPdf')</span> </a>
+
+            @if($invoiceExist && $creditNote->invoice_id)
+                <a href="{{ route('admin.all-invoices.show', $creditNote->invoice_id) }}" class="btn btn-info btn-outline btn-sm">
+                    @lang('app.viewInvoice')
+                </a>
+            @endif
+            @if ($creditNote->status == 'open')
+                <a href="javascript:;" onclick="applyToInvoice('{{ route('admin.all-credit-notes.apply-to-invoice-modal', $creditNote->id) }}')" class="btn btn-primary btn-outline btn-sm">
+                    @lang('app.applyToInvoice')
+                </a>    
+            @endif
+            @if ($creditNote->invoices->count() > 0)
+                <a href="javascript:;" onclick="showCreditedInvoices('{{ route('admin.all-credit-notes.credited-invoices', $creditNote->id) }}')" class="btn btn-warning btn-outline btn-sm">
+                    @lang('app.creditedInvoices')
+                </a>    
+            @endif
+            
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang("app.menu.home")</a></li>
                 <li><a href="{{ route('admin.all-credit-notes.index') }}">@lang("app.menu.credit-note")</a></li>
@@ -31,44 +50,31 @@
 </style>
 @endpush
 
+
 @section('content')
 
     <div class="row">
-        <div class="col-md-3">
-            <div class="white-box bg-inverse">
-                <h3 class="box-title text-white">@lang('modules.credit-notes.creditAmountTotal')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right"><span class="counter text-white">{{ $creditNote->currency->currency_symbol}} {{ $creditNote->total }}</span></li>
-                </ul>
+        <div class="col-md-12">
+            <div class="white-box">
+                <div class="col-md-4 text-center">
+                    <h4><span class="text-dark">{{ $creditNote->currency->currency_symbol}} {{ $creditNote->total }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.credit-notes.creditAmountTotal')</span></h4>
+                </div>
+                
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-success">{{ $creditNote->currency->currency_symbol.' '.$creditNote->creditAmountRemaining() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.credit-notes.creditAmountRemaining')</span></h4>
+                </div>
+                
+                <div class="col-md-4 text-center b-l">
+                    <h4><span class="text-danger">{{ $creditNote->currency->currency_symbol.' '.$creditNote->creditAmountUsed() }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.credit-notes.creditAmountUsed')</span></h4>
+                </div>
+                
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="white-box bg-success">
-                <h3 class="box-title text-white">@lang('modules.credit-notes.creditAmountRemaining')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right">
-                        <span class="counter text-white">
-                            {{ $creditNote->currency->currency_symbol.' '.$creditNote->creditAmountRemaining() }}
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="white-box bg-danger">
-                <h3 class="box-title text-white">@lang('modules.credit-notes.creditAmountUsed')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="fa fa-money text-white"></i></li>
-                    <li class="text-right">
-                        <span class="counter text-white">
-                            {{ $creditNote->currency->currency_symbol.' '.$creditNote->creditAmountUsed() }}
-                        </span>
-                    </li>
-                </ul>
-            </div>
-        </div>
+
+    </div>
+
+    <div class="row">
+  
         <div class="col-md-12">
             @if ($message = Session::get('success'))
                 <div class="alert alert-success alert-dismissable">
@@ -88,29 +94,15 @@
 
 
             <div class="white-box printableArea ribbon-wrapper">
-                @if ($invoiceExist && $creditNote->invoice_id)
-                    <a href="{{ route('admin.all-invoices.show', $creditNote->invoice_id) }}" class="btn btn-info pull-right">
-                        @lang('app.viewInvoice')
-                    </a>
-                @endif
-                @if ($creditNote->status == 'open')
-                    <a href="javascript:;" onclick="applyToInvoice('{{ route('admin.all-credit-notes.apply-to-invoice-modal', $creditNote->id) }}')" class="btn btn-info pull-right m-r-5">
-                        @lang('app.applyToInvoice')
-                    </a>    
-                @endif
-                @if ($creditNote->invoices->count() > 0)
-                    <a href="javascript:;" onclick="showCreditedInvoices('{{ route('admin.all-credit-notes.credited-invoices', $creditNote->id) }}')" class="btn btn-info pull-right m-r-5">
-                        @lang('app.creditedInvoices')
-                    </a>    
-                @endif
+                
                 <div class="clearfix"></div>
-                <div class="ribbon-content ">
+
+                <div class="ribbon-content p-t-30">
                     @if($creditNote->status == 'closed')
                         <div class="ribbon ribbon-bookmark ribbon-danger">@lang('modules.credit-notes.closed')</div>
                     @else
                         <div class="ribbon ribbon-bookmark ribbon-success">@lang('modules.credit-notes.open')</div>
                     @endif
-    
                     <h3><b>@lang('app.credit-note')</b> <span class="pull-right">{{ $creditNote->cn_number }}</span></h3>
                     <hr>
                     <div class="row">
@@ -130,15 +122,26 @@
                             </div>
                             <div class="pull-right text-right">
                                 <address>
-                                    @if(!is_null($creditNote->project->client))
-                                        <h3>@lang('app.to')</h3>
-                                        <h4 class="font-bold">{{ ucwords($creditNote->project->client->name) }}</h4>
+                                    @if(!is_null($creditNote->project_id) && !is_null($creditNote->project->clientdetails))
+                                        <h3>@lang('app.to'),</h3>
+                                        <h4 class="font-bold">{{ ucwords($creditNote->project->clientdetails->name) }}</h4>
 
-                                        <p class="text-muted m-l-30">{!! nl2br($creditNote->project->client->address) !!}</p>
-                                        @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->project->client->gst_number))
+                                        <p class="text-muted m-l-30">{!! nl2br($creditNote->project->clientdetails->address) !!}</p>
+                                        @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->project->clientdetails->gst_number))
                                             <p class="m-t-5"><b>@lang('app.gstIn')
-                                                    :</b>  {{ $creditNote->project->client->gst_number }}
+                                                    :</b>  {{ $creditNote->project->clientdetails->gst_number }}
                                             </p>
+                                        @endif
+                                    @elseif(!is_null($creditNote->client_id))
+                                        <h3>@lang('app.to'),</h3>
+                                        <h4 class="font-bold">{{ ucwords($creditNote->client->name) }}</h4>
+                                        @if(!is_null($creditNote->client->client[0]))
+                                            <p class="text-muted m-l-30">{!! nl2br($creditNote->clientdetails->address) !!}</p>
+                                            @if($creditNoteSetting->show_gst == 'yes' && !is_null($creditNote->clientdetails->gst_number))
+                                                <p class="m-t-5"><b>@lang('app.gstIn')
+                                                        :</b>  {{ $creditNote->clientdetails->gst_number }}
+                                                </p>
+                                            @endif
                                         @endif
                                     @endif
 
@@ -185,7 +188,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="pull-right m-t-30 text-right">
+                            <div class="pull-right m-t-30 m-b-15 text-right">
                                 <p>@lang("modules.credit-notes.subTotal")
                                     : {!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ $creditNote->sub_total }}</p>
 
@@ -200,38 +203,30 @@
                                         :</b> {!! htmlentities($creditNote->currency->currency_symbol)  !!}{{ $creditNote->total }}
                                 </h3>
                                 <hr>
-                                <p>
-                                    @lang('modules.credit-notes.creditAmountUsed'): {{ $creditNote->currency->currency_symbol.''.$creditNote->creditAmountUsed() }}
-                                </p>
-                                <p>
-                                    @lang('modules.credit-notes.creditAmountRemaining'): {{ $creditNote->currency->currency_symbol.''.$creditNote->creditAmountRemaining() }}
-                                </p>
+                                
                             </div>
+                        </div>
 
+                        
+
+                        <div class="col-md-12">
                             @if(!is_null($creditNote->note))
                                 <div class="col-md-12">
                                     <p><strong>@lang('app.note')</strong>: {{ $creditNote->note }}</p>
                                 </div>
                             @endif
-                            <div class="clearfix"></div>
-
-                            <hr>
-                            <div class="text-right">
-
-                                <a class="btn btn-default btn-outline"
-                                   href="{{ route('admin.all-credit-notes.download', $creditNote->id) }}"> <span><i class="fa fa-file-pdf-o"></i> @lang('modules.credit-notes.downloadPdf')</span> </a>
-                            </div>
+                            <div class="clearfix"></div>                          
                         </div>
+
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
     {{--Ajax Modal--}}
     <div class="modal fade bs-modal-lg in" id="applyToInvoice" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
-         <div class="modal-dialog modal-lg" id="modal-data-application">
+        <div class="modal-dialog modal-lg" id="modal-data-application">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -253,8 +248,7 @@
 
     {{--Ajax Modal--}}
     <div class="modal fade bs-modal-lg in" id="creditedInvoices" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden="true">
-    
+         aria-hidden="true">
         <div class="modal-dialog modal-lg" id="modal-data-application">
             <div class="modal-content">
                 <div class="modal-header">

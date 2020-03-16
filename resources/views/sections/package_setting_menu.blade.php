@@ -1,3 +1,5 @@
+@section('other-section')
+
 <ul class="nav tabs-vertical">
     <li class="tab">
         <a href="{{ route('super-admin.settings.index') }}" class="text-danger"><i class="ti-arrow-left"></i> @lang('app.menu.settings')</a></li>
@@ -42,3 +44,4 @@
 
     }
 </script>
+@endsection

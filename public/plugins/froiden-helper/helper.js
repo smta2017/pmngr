@@ -14,7 +14,8 @@
             redirect: true,
             data: {},
             file: false,
-            formReset: false
+            formReset: false,
+            async: true,
         };
 
         var opt = defaults;
@@ -143,6 +144,7 @@
 
         $.ajax({
             type: opt.type,
+            async: opt.async,
             url: opt.url,
             dataType: opt.dataType,
             data: opt.data,
@@ -213,7 +215,8 @@
                         // If the response has form array
                         if(formarray.indexOf('.') >0){
                             var array = formarray.split('.');
-                            key = array[0]+'['+array[1]+']';
+                            response.errors[keys[i]] = response.errors[keys[i]];
+                            key = array[0]+'[]';
                         }
 
                         var ele = $(opt.container).find("[name='" + key + "']");
@@ -306,61 +309,76 @@
             message = "Loading...";
         }
 
-        var html = '<div class="loading-message"><div class="block-spinner-bar"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div></div></div>';
+        var html = '<div class="loading-message"><div class="block-spinner-bar"><div class="bounce1"></div><div class="bounce2"></div><div class="bounce3"></div><div class="bounce4"></div></div></div>';
 
-
-        if (container != undefined) { // element blocking
-            var el = $(container);
-            var centerY = false;
-            if (el.height() <= ($(window).height())) {
-                centerY = true;
+        $.blockUI({
+            message: html,
+            baseZ: 999999,
+            css: {
+                border: '0',
+                padding: '0',
+                backgroundColor: 'none'
+            },
+            overlayCSS: {
+                backgroundColor: '#555',
+                opacity: 0.3,
+                cursor: 'wait'
             }
-            el.block({
-                message: html,
-                baseZ: 999999,
-                centerY: centerY,
-                css: {
-                    top: '10%',
-                    border: '0',
-                    padding: '0',
-                    backgroundColor: 'none'
-                },
-                overlayCSS: {
-                    backgroundColor: 'transparent',
-                    opacity: 0.05,
-                    cursor: 'wait'
-                }
-            });
-        } else { // page blocking
-            $.blockUI({
-                message: html,
-                baseZ: 999999,
-                css: {
-                    border: '0',
-                    padding: '0',
-                    backgroundColor: 'none'
-                },
-                overlayCSS: {
-                    backgroundColor: '#555',
-                    opacity: 0.05,
-                    cursor: 'wait'
-                }
-            });
-        }
+        });
+        
+        // if (container != undefined) { // element blocking
+        //     var el = $(container);
+        //     var centerY = false;
+        //     if (el.height() <= ($(window).height())) {
+        //         centerY = true;
+        //     }
+        //     el.block({
+        //         message: html,
+        //         baseZ: 999999,
+        //         centerY: centerY,
+        //         css: {
+        //             top: '10%',
+        //             border: '0',
+        //             padding: '0',
+        //             backgroundColor: 'none'
+        //         },
+        //         overlayCSS: {
+        //             backgroundColor: 'transparent',
+        //             opacity: 0.05,
+        //             cursor: 'wait'
+        //         }
+        //     });
+        // } else { // page blocking
+        //     $.blockUI({
+        //         message: html,
+        //         baseZ: 999999,
+        //         css: {
+        //             border: '0',
+        //             padding: '0',
+        //             backgroundColor: 'none'
+        //         },
+        //         overlayCSS: {
+        //             backgroundColor: '#555',
+        //             opacity: 0.05,
+        //             cursor: 'wait'
+        //         }
+        //     });
+        // }
     };
 
     $.easyUnblockUI = function (container) {
-        if (container == undefined) {
-            $.unblockUI();
-        }
-        else {
-            $(container).unblock({
-                onUnblock: function () {
-                    $(container).css('position', '');
-                    $(container).css('zoom', '');
-                }
-            });
-        }
+        // if (container == undefined) {
+        //     $.unblockUI();
+        // }
+        // else {
+        //     $(container).unblock({
+        //         onUnblock: function () {
+        //             $(container).css('position', '');
+        //             $(container).css('zoom', '');
+        //         }
+        //     });
+        // }
+        $.unblockUI();
     };
 
     $.showToastr = function(toastrMessage, toastrType, options) {

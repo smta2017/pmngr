@@ -2,10 +2,11 @@
 
 namespace App;
 
+use App\Observers\NewChatObserver;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Zizaco\Entrust\Entrust;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Trebol\Entrust\Entrust;
+use Trebol\Entrust\Traits\EntrustUserTrait;
 
 class UserChat extends Authenticatable
 {
@@ -30,6 +31,12 @@ class UserChat extends Authenticatable
      */
 
     protected $dates = ['created_at', 'updated_at'];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(NewChatObserver::class);
+    }
 
     public function fromUser()
     {

@@ -73,7 +73,7 @@ class NewExpenseAdmin extends Notification implements ShouldQueue
             ->subject( __('email.newExpense.subject').' - '.config('app.name'))
             ->greeting(__('email.hello').' '.ucwords($user->name).'!')
             ->line(__('email.newExpense.subject').':- "'.$this->expense->item_name.'" by "'.ucwords($this->expense->user->name).'".')
-            ->action(__('email.loginDashboard'), $url)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 
@@ -100,13 +100,13 @@ class NewExpenseAdmin extends Notification implements ShouldQueue
         if(count($notifiable->employee) > 0 && (!is_null($notifiable->employee[0]->slack_username) && ($notifiable->employee[0]->slack_username != ''))){
             return (new SlackMessage())
                 ->from(config('app.name'))
-                ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+                ->image($slack->slack_logo_url)
                 ->to('@' . $notifiable->employee[0]->slack_username)
-                ->content('A new expense '.$this->expense->item_name." added. \n<".url('/')."|Login to Dashboard> to review it.");
+                ->content('A new expense '.$this->expense->item_name." added. \n<".route('login')."|Login to Dashboard> to review it.");
         }
         return (new SlackMessage())
             ->from(config('app.name'))
-            ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+            ->image($slack->slack_logo_url)
             ->content('This is a redirected notification. Add slack username for *'.ucwords($notifiable->name).'*');
     }
 

@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class DashboardWidget extends Model
+class DashboardWidget extends BaseModel
 {
     protected $guarded = ['id'];
 

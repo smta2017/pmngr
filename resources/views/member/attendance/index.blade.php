@@ -8,7 +8,12 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_attendance'))
+                <a href="{{ route('member.attendances.create') }}"
+                   class="btn btn-success btn-outline btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
+                                                                                                aria-hidden="true"></i></a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -43,13 +48,7 @@
 
     @if($user->can('add_attendance'))
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <a href="{{ route('member.attendances.create') }}"
-                   class="btn btn-success btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
-                                                                                                aria-hidden="true"></i></a>
-            </div>
-        </div>
+      
             <div class="sttabs tabs-style-line col-md-12">
                 <div class="white-box">
                     <nav>
@@ -69,7 +68,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="white-box p-b-0 bg-inverse text-white">
+            <div class="white-box">
                 <div class="row">
                     <div class="col-md-4">
                         <label class="control-label">@lang('app.selectDateRange')</label>
@@ -96,7 +95,7 @@
 
                         <div class="col-md-3">
                             <div class="form-group m-t-25">
-                                <button type="button" id="apply-filter" class="btn btn-success btn-block">@lang('app.apply')</button>
+                                <button type="button" id="apply-filter" class="btn btn-success btn-sm">@lang('app.apply')</button>
                             </div>
                         </div>
                     @endif
@@ -108,130 +107,31 @@
         </div>
 
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="white-box bg-inverse">
-                        <h3 class="box-title text-white">@lang('modules.attendance.totalWorkingDays')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $totalWorkingDays }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-success">
-                        <h3 class="box-title text-white">@lang('modules.attendance.daysPresent')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="daysPresent" class="counter text-white">{{ $daysPresent }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-danger">
-                        <h3 class="box-title text-white">@lang('app.days') @lang('modules.attendance.late')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="daysLate" class="counter text-white">{{ $daysLate }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-warning">
-                        <h3 class="box-title text-white">@lang('modules.attendance.halfDay')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="halfDays" class="counter text-white">{{ $halfDays }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-info">
-                        <h3 class="box-title text-white">@lang('app.days') @lang('modules.attendance.absent')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="absentDays" class="counter text-white">{{ (($totalWorkingDays - $daysPresent) < 0) ? '0' : ($totalWorkingDays - $daysPresent) }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="white-box bg-primary">
-                        <h3 class="box-title text-white"> @lang('modules.attendance.holidays')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="holidayDays" class="counter text-white">{{ $holidays }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-                @if(!$checkHoliday)
-                    <div class="col-md-6">
-                    <div class="panel panel-default">
-                        <div class="panel-wrapper collapse in">
-                            <div class="panel-body">
-                                @if($todayTotalClockin < $maxAttandenceInDay)
-                                <div class="col-xs-6">
-                                    <h3>@lang('modules.attendance.clock_in')</h3>
-                                </div>
-                                <div class="col-xs-6">
-                                    <h3>@lang('modules.attendance.clock_in') IP</h3>
-                                </div>
-                                <div class="col-xs-6">
-                                    @if(is_null($currenntClockIn))
-                                        {{ \Carbon\Carbon::now()->timezone($global->timezone)->format($global->time_format) }}
-                                    @else
-                                        {{ $currenntClockIn->clock_in_time->timezone($global->timezone)->format($global->time_format) }}
-                                    @endif
-                                </div>
-                                <div class="col-xs-6">
-                                    {{ $currenntClockIn->clock_in_ip ?? request()->ip() }}
-                                </div>
-
-                                @if(!is_null($currenntClockIn) && !is_null($currenntClockIn->clock_out_time))
-                                    <div class="col-xs-6 m-t-20">
-                                        <label for="">@lang('modules.attendance.clock_out')</label>
-                                        <br>{{ $currenntClockIn->clock_out_time->timezone($global->timezone)->format($global->time_format) }}
-                                    </div>
-                                    <div class="col-xs-6 m-t-20">
-                                        <label for="">@lang('modules.attendance.clock_out') IP</label>
-                                        <br>{{ $currenntClockIn->clock_out_ip }}
-                                    </div>
-                                @endif
-
-                                <div class="col-xs-8 m-t-20">
-                                    <label for="">@lang('modules.attendance.working_from')</label>
-                                    @if(is_null($currenntClockIn))
-                                        <input type="text" class="form-control" id="working_from" name="working_from">
-                                    @else
-                                        <br> {{ $currenntClockIn->working_from }}
-                                    @endif
-                                </div>
-
-                                <div class="col-xs-4 m-t-20">
-                                    <label class="m-t-30">&nbsp;</label>
-                                    @if(is_null($currenntClockIn))
-                                        <button class="btn btn-success btn-sm" id="clock-in">@lang('modules.attendance.clock_in')</button>
-                                    @endif
-                                    @if(!is_null($currenntClockIn) && is_null($currenntClockIn->clock_out_time))
-                                        <button class="btn btn-danger btn-sm" id="clock-out">@lang('modules.attendance.clock_out')</button>
-                                    @endif
-                                </div>
-                                @else
-                                <div class="col-xs-12">
-                                    <div class="alert alert-info">@lang('modules.attendance.maxColckIn')</div>
-                                </div>
-                                @endif
-                            </div>
+            <div class="row dashboard-stats">
+                <div class="col-md-12 m-b-30">
+                    <div class="white-box">
+                        <div class="col-md-2 text-center">
+                            <h4><span class="text-dark" id="totalWorkingDays">{{ $totalWorkingDays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.totalWorkingDays')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l text-center">
+                            <h4><span class="text-success" id="daysPresent">{{ $daysPresent }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.daysPresent')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l text-center">
+                            <h4><span class="text-danger" id="daysLate">{{ $daysLate }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.days') @lang('modules.attendance.late')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l text-center">
+                            <h4><span class="text-warning" id="halfDays">{{ $halfDays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.halfDay')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l text-center">
+                            <h4><span class="text-info" id="absentDays">{{ (($totalWorkingDays - $daysPresent) < 0) ? '0' : ($totalWorkingDays - $daysPresent) }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.days') @lang('modules.attendance.absent')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l text-center">
+                            <h4><span class="text-primary" id="holidayDays">{{ $holidays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.holidays')</span></h4>
                         </div>
                     </div>
                 </div>
-                @endif
 
             </div>
-
         </div>
 
         <div class="col-md-12">
@@ -334,14 +234,7 @@
 
     function showTable() {
 
-        $('body').block({
-            message: '<p style="margin:0;padding:8px;font-size:24px;">Just a moment...</p>'
-            , css: {
-                color: '#fff'
-                , border: '1px solid #fb9678'
-                , backgroundColor: '#fb9678'
-            }
-        });
+       
 
         var userId = $('#user_id').val();
         if (typeof userId === 'undefined') {

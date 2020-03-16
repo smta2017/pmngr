@@ -319,14 +319,18 @@ class ManageClientsController extends AdminBaseController
 
         return DataTables::of($users)
             ->addColumn('action', function ($row) {
-                return '<a href="' . route('admin.clients.edit', [$row->id]) . '" class="btn btn-info btn-circle"
-                      data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 
-                      <a href="' . route('admin.clients.projects', [$row->user_id]) . '" class="btn btn-success btn-circle"
-                      data-toggle="tooltip" data-original-title="View Client Details"><i class="fa fa-search" aria-hidden="true"></i></a>
+                $action = '<div class="btn-group dropdown m-r-10">
+                <button aria-expanded="false" data-toggle="dropdown" class="btn dropdown-toggle waves-effect waves-light" type="button"><i class="ti-more"></i></button>
+                <ul role="menu" class="dropdown-menu pull-right">
+                  <li><a href="' . route('admin.clients.edit', [$row->id]) . '"><i class="fa fa-pencil" aria-hidden="true"></i> ' . trans('app.edit') . '</a></li>
+                  <li><a href="' . route('admin.clients.projects', [$row->user_id]) . '"><i class="fa fa-search" aria-hidden="true"></i> ' . __('app.view') . '</a></li>
+                  <li><a href="javascript:;"  data-user-id="' . $row->user_id . '"  class="sa-params"><i class="fa fa-times" aria-hidden="true"></i> ' . trans('app.delete') . '</a></li>';
 
-                      <a href="javascript:;" class="btn btn-danger btn-circle sa-params"
-                      data-toggle="tooltip" data-user-id="' . $row->user_id . '" data-original-title="Delete"><i class="fa fa-times" aria-hidden="true"></i></a>';
+                $action .= '</ul> </div>';
+
+                return $action;
+
             })
             ->editColumn(
                 'name',

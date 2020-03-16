@@ -2,12 +2,19 @@
 
 namespace App;
 
+use App\Observers\IssueObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class Issue extends Model
+class Issue extends BaseModel
 {
     use Notifiable;
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(IssueObserver::class);
+    }
 
     public function project() {
         return $this->belongsTo(Project::class, 'project_id');

@@ -31,7 +31,7 @@
                             @if($total_clock_in < $maxAttandenceInDay)
                                 {!! Form::open(['id'=>'attendance-container','class'=>'ajax-form','method'=>'POST']) !!}
                                 {{ csrf_field() }}
-                                <input type="hidden" name="attendance_date" value="{{ $date }}">
+                                <input type="hidden" name="attendance_date" value="{{ Carbon\Carbon::createFromFormat('Y-m-d', $date)->format($global->date_format) }}">
                                 <input type="hidden" name="user_id" value="{{ $userid }}">
                                 @if($type == 'edit')
                                     <input type="hidden" name="_method" value="PUT">

@@ -57,7 +57,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="panel panel-default">
-                                        <div class="panel-heading">@lang('modules.projects.members')</div>
                                         <div class="panel-wrapper collapse in">
                                             <div class="panel-body">
                                                 <table class="table">
@@ -71,9 +70,8 @@
                                                     @forelse($project->members as $member)
                                                         <tr>
                                                             <td>
-                                                                {!!  ($member->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$member->user->image).'"
-                                                        alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                        alt="user" class="img-circle" width="40">' !!}
+                                                                {!!  '<img src="'.$member->user->image_url.'"
+                                                            alt="user" class="img-circle" width="40" height="40">' !!}
                                                                 {{ ucwords($member->user->name) }}
                                                             </td>
                                                             <td>

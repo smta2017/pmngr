@@ -9,6 +9,9 @@
         <!-- /.page title -->
         <!-- .breadcrumb -->
         <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+            <a href="{{ route('admin.attendances.create') }}"
+            class="btn btn-success btn-sm btn-outline pull-right">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
+                                                                                            aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active"><a href="{{ route('admin.attendances.index') }}">{{ __($pageTitle) }}</a></li>
@@ -35,14 +38,6 @@
 
     <div class="row">
 
-        <div class="col-sm-6">
-            <div class="form-group">
-                <a href="{{ route('admin.attendances.create') }}"
-                   class="btn btn-success btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
-                                                                                                aria-hidden="true"></i></a>
-            </div>
-        </div>
-
         <div class="sttabs tabs-style-line col-md-12">
             <div class="white-box">
                 <nav>
@@ -68,43 +63,23 @@
                             <input type="text" class="form-control" name="attendance_date" id="attendance_date" value="{{ \Carbon\Carbon::today()->timezone($global->timezone)->format($global->date_format) }}">
                         </div>
                     </div>
-
-                    <div class="col-md-12 m-t-20 m-b-20">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="white-box bg-info">
-                                    <h3 class="box-title text-white">@lang('modules.dashboard.totalEmployees')</h3>
-                                    <ul class="list-inline two-part">
-                                        <li><i class="icon-clock text-white"></i></li>
-                                        <li class="text-right"><span id="totalEmployees" class="counter text-white">0</span></li>
-                                    </ul>
-                                </div>
+                </div>
+                <div class="row dashboard-stats">
+                    <div class="col-md-12 m-b-30">
+                        <div class="white-box">
+                            <div class="col-sm-4 text-center">
+                                <h4><span class="text-info" id="totalEmployees">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.dashboard.totalEmployees')</span></h4>
                             </div>
-
-                            <div id="presentBox" class="col-md-4">
-                                <div class="white-box bg-success">
-                                    <h3 class="box-title text-white">@lang('modules.attendance.present')</h3>
-                                    <ul class="list-inline two-part">
-                                        <li><i class="icon-clock text-white"></i></li>
-                                        <li class="text-right"><span id="employeesPresent" class="counter text-white">0</span></li>
-                                    </ul>
-                                </div>
-                            </div >
-
-                            <div  id="absentBox"  class="col-md-4">
-                                <div class="white-box bg-danger">
-                                    <h3 class="box-title text-white">@lang('modules.attendance.absent')</h3>
-                                    <ul class="list-inline two-part">
-                                        <li><i class="icon-clock text-white"></i></li>
-                                        <li class="text-right"><span id="employeesAbsent" class="counter text-white">0</span></li>
-                                    </ul>
-                                </div>
+                            <div class="col-sm-4 b-l text-center">
+                                <h4><span class="text-success" id="employeesPresent">0</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.present')</span></h4>
                             </div>
-
+                            <div class="col-sm-4 b-l text-center">
+                                <h4><span class="text-danger" id="employeesAbsent">0</span> <span class="font-12 text-muted m-l-5"> @lang('app.days') @lang('modules.attendance.absent')</span></h4>
+                            </div>
+                            
                         </div>
-
                     </div>
-
+                
                 </div>
                 <div class="row" id="tableBox">
                     <table  id="attendance-table">

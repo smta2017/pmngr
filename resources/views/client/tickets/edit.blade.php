@@ -8,7 +8,22 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <span id="ticket-status" class="m-r-5">
+                <label class="label
+                    @if($ticket->status == 'open')
+                        label-danger
+                @elseif($ticket->status == 'pending')
+                        label-warning
+                @elseif($ticket->status == 'resolved')
+                        label-info
+                @elseif($ticket->status == 'closed')
+                        label-success
+                @endif
+                        ">{{ $ticket->status }}</label>
+            </span>
+            <span class="text-info text-uppercase font-bold">@lang('modules.tickets.ticket') # {{ $ticket->id }}</span>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('client.dashboard.index') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('client.tickets.index') }}">{{ __($pageTitle) }}</a></li>
@@ -29,33 +44,16 @@
     <div class="form-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading text-right">@lang('modules.tickets.ticket') # {{ $ticket->id }}
-
-                        <span id="ticket-status">
-                            <label class="label
-                             @if($ticket->status == 'open')
-                                    label-danger
-                            @elseif($ticket->status == 'pending')
-                                    label-warning
-                            @elseif($ticket->status == 'resolved')
-                                    label-info
-                            @elseif($ticket->status == 'closed')
-                                    label-success
-                            @endif
-                                    ">{{ $ticket->status }}</label>
-                        </span>
-                    </div>
+                <div class="white-box">
 
                     <div class="panel-wrapper collapse in">
-                        <div class="panel-body b-b">
 
                             <div class="row">
 
                                 <div class="col-md-12">
-                                    <h4 class="text-capitalize">{{ $ticket->subject }}</h4>
+                                    <h4 class="text-capitalize text-info">{{ $ticket->subject }}</h4>
 
-                                    <div class="font-12">{{ $ticket->created_at->format($global->date_format.' '.$global->time_format) }} &bull; {{ ucwords($ticket->requester->name). ' <'.$ticket->requester->email.'>' }}</div>
+                                    <div class="font-12">{{ $ticket->created_at->timezone($global->timezone)->format($global->date_format .' '.$global->time_format) }} </div>
                                 </div>
 
                                 {!! Form::hidden('status', $ticket->status, ['id' => 'status']) !!}
@@ -63,56 +61,91 @@
                             </div>
                             <!--/row-->
 
-                        </div>
 
                         <div id="ticket-messages">
 
                             @forelse($ticket->reply as $reply)
-                                <div class="panel-body b-b">
+                            <div class="panel-body @if($reply->user->id == $user->id) bg-owner-reply @else bg-other-reply @endif">
 
-                                    <div class="row">
+                                <div class="row m-b-5">
 
-                                        <div class="col-xs-2 col-md-1">
-                                            {!!  ($reply->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$reply->user->image).'"
-                                                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                                alt="user" class="img-circle" width="40">' !!}
-                                        </div>
-                                        <div class="col-xs-10 col-md-11">
-                                            <h4 class="m-t-0"><a
-                                                
-                                                        class="text-inverse">{{ ucwords($reply->user->name) }} <span
-                                                            class="text-muted font-12">{{ $reply->created_at->format($global->date_format.' '.$global->time_format) }}</span></a>
-                                            </h4>
-
-                                            <div class="font-light">
-                                                {!! ucfirst(nl2br($reply->message)) !!}
-                                            </div>
-                                        </div>
-
-
+                                    <div class="col-xs-2 col-md-1">
+                                        {!!  '<img src="'.$reply->user->image_url.'" alt="user" class="img-circle" width="40" height="40">' !!}
                                     </div>
-                                    <!--/row-->
+                                    <div class="col-xs-8 col-md-10">
+                                        <h4 class="m-t-0 font-bold"><a
+
+                                                    class="text-inverse">{{ ucwords($reply->user->name) }} <span
+                                                        class="text-muted font-12">{{ $reply->created_at->timezone($global->timezone)->format($global->date_format.' '.$global->time_format) }}</span></a>
+                                        </h4>
+
+                                        <div class="font-light">
+                                            {!! ucfirst(nl2br($reply->message)) !!}
+                                        </div>
+                                    </div>
+
 
                                 </div>
-                            @empty
-                                <div class="panel-body b-b">
+                                <!--/row-->
 
-                                    <div class="row">
+                                @if(sizeof($reply->files) > 0)
+                                    <div class="row" id="list">
+                                        <ul class="list-group" id="files-list">
+                                            @forelse($reply->files as $file)
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            {{ $file->filename }}
+                                                        </div>
+                                                        <div class="col-md-3">
 
-                                        <div class="col-md-12">
-                                            @lang('messages.noMessage')
-                                        </div>
+                                                                <a target="_blank" href="{{ $file->file_url }}"
+                                                                    data-toggle="tooltip" data-original-title="View"
+                                                                    class="btn btn-info btn-sm btn-outline"><i
+                                                                            class="fa fa-search"></i></a>
 
+
+
+
+                                                            <span class="clearfix m-l-10">{{ $file->created_at->diffForHumans() }}</span>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @empty
+                                                <li class="list-group-item">
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            @lang('messages.noFileUploaded')
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            @endforelse
+
+                                        </ul>
                                     </div>
                                     <!--/row-->
+                                @endif
+
+                            </div>
+                        @empty
+                            <div class="panel-body b-b">
+
+                                <div class="row">
+
+                                    <div class="col-md-12">
+                                        @lang('messages.noMessage')
+                                    </div>
 
                                 </div>
-                            @endforelse
+                                <!--/row-->
+
+                            </div>
+                        @endforelse
                         </div>
 
                         @if($ticket->status != 'closed')
 
-                        <div class="panel-body" style="box-shadow: 0 2px 26px -6px rgb(156, 156, 156)">
+                        <div class="panel-body">
 
                             <div class="row">
 
@@ -136,7 +169,7 @@
 
                     </div>
 
-                    <div class="panel-footer text-right">
+                    <div class="text-right">
                         @if($ticket->status != 'closed')
                         <div class="btn-group dropup">
                             <button class="btn btn-danger m-r-10" id="close-ticket" type="button"><i class="fa fa-ban"></i> @lang('modules.tickets.closeTicket') </button>

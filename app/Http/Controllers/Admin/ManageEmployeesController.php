@@ -6,14 +6,12 @@ use App\Designation;
 use App\EmployeeDetails;
 use App\EmployeeDocs;
 use App\EmployeeSkill;
+use App\Helper\Files;
 use App\Helper\Reply;
 use App\Http\Requests\Admin\Employee\StoreRequest;
 use App\Http\Requests\Admin\Employee\UpdateRequest;
-use App\Http\Requests\Admin\User\StoreUser;
-use App\Http\Requests\Admin\User\UpdateEmployee;
 use App\Leave;
 use App\LeaveType;
-use App\Notifications\NewUser;
 use App\Project;
 use App\ProjectMember;
 use App\ProjectTimeLog;
@@ -21,18 +19,17 @@ use App\Role;
 use App\RoleUser;
 use App\Skill;
 use App\Task;
+use App\TaskboardColumn;
 use App\Team;
 use App\UniversalSearch;
 use App\User;
 use App\UserActivity;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Intervention\Image\Facades\Image;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
-use App\TaskboardColumn;
 
 class ManageEmployeesController extends AdminBaseController
 {
@@ -115,73 +112,67 @@ class ManageEmployeesController extends AdminBaseController
         if (!is_null($company->employees) && $company->package->max_employees < $company->employees->count()) {
             return Reply::error(__('messages.downGradePackageForAddEmployees', ['employeeCount' => company()->employees->count(), 'maxEmployees' => $company->package->max_employees]));
         }
+        DB::beginTransaction();
+        try {
+            $user = new User();
+            $user->name = $request->input('name');
+            $user->email = $request->input('email');
+            $user->password = Hash::make($request->input('password'));
+            $user->mobile = $request->input('mobile');
+            $user->gender = $request->input('gender');
+            $user->login = $request->login;
 
-        $user = new User();
-        $user->name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->password = Hash::make($request->input('password'));
-        $user->mobile = $request->input('mobile');
-        $user->gender = $request->input('gender');
-        $user->login = $request->login;
-
-        if ($request->hasFile('image')) {
-
-            $image = $request->image->hashName();
-            $user->image = $image;
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/' . $image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
-        }
-
-        $user->save();
-
-        $tags = json_decode($request->tags);
-        if (!empty($tags)) {
-            foreach ($tags as $tag) {
-                // check or store skills
-                $skillData = Skill::firstOrCreate(['name' => strtolower($tag->value)]);
-
-                // Store user skills
-                $skill = new EmployeeSkill();
-                $skill->user_id = $user->id;
-                $skill->skill_id = $skillData->id;
-                $skill->save();
+            if ($request->hasFile('image')) {
+                $user->image = Files::upload($request->image, 'avatar', 300);
             }
-        }
 
-        if ($user->id) {
-            $employee = new EmployeeDetails();
-            $employee->user_id = $user->id;
-            $employee->employee_id = $request->employee_id;
-            $employee->address = $request->address;
-            $employee->hourly_rate = $request->hourly_rate;
-            $employee->slack_username = $request->slack_username;
-            $employee->joining_date = Carbon::createFromFormat($this->global->date_format, $request->joining_date)->format('Y-m-d');
-            if ($request->last_date != '') {
-                $employee->last_date = Carbon::createFromFormat($this->global->date_format, $request->last_date)->format('Y-m-d');
+            $user->save();
+
+            $tags = json_decode($request->tags);
+            if (!empty($tags)) {
+                foreach ($tags as $tag) {
+                    // check or store skills
+                    $skillData = Skill::firstOrCreate(['name' => strtolower($tag->value)]);
+
+                    // Store user skills
+                    $skill = new EmployeeSkill();
+                    $skill->user_id = $user->id;
+                    $skill->skill_id = $skillData->id;
+                    $skill->save();
+                }
             }
-            $employee->department_id = $request->department;
-            $employee->designation_id = $request->designation;
-            $employee->save();
+
+            if ($user->id) {
+                $employee = new EmployeeDetails();
+                $employee->user_id = $user->id;
+                $employee->employee_id = $request->employee_id;
+                $employee->address = $request->address;
+                $employee->hourly_rate = $request->hourly_rate;
+                $employee->slack_username = $request->slack_username;
+                $employee->joining_date = Carbon::createFromFormat($this->global->date_format, $request->joining_date)->format('Y-m-d');
+                if ($request->last_date != '') {
+                    $employee->last_date = Carbon::createFromFormat($this->global->date_format, $request->last_date)->format('Y-m-d');
+                }
+                $employee->department_id = $request->department;
+                $employee->designation_id = $request->designation;
+                $employee->save();
+            }
+
+            // To add custom fields data
+            if ($request->get('custom_fields_data')) {
+                $employee->updateCustomFieldData($request->get('custom_fields_data'));
+            }
+
+
+            $role = Role::where('name', 'employee')->first();
+            $user->attachRole($role->id);
+            DB::commit();
+
+        } catch (\Exception $e) {
+            // Rollback Transaction
+            DB::rollback();
+            return Reply::error('Some error occured when inserting the data. Please try again or contact support');
         }
-
-        // To add custom fields data
-        if ($request->get('custom_fields_data')) {
-            $employee->updateCustomFieldData($request->get('custom_fields_data'));
-        }
-
-
-        $role = Role::where('name', 'employee')->first();
-        $user->attachRole($role->id);
-
-        // Notify User
-        $user->notify(new NewUser($request->input('password')));
-
         $this->logSearchEntry($user->id, $user->name, 'admin.employees.show', 'employee');
 
         return Reply::redirect(route('admin.employees.index'), __('messages.employeeAdded'));
@@ -226,6 +217,7 @@ class ManageEmployeesController extends AdminBaseController
             ->where('project_members.user_id', '=', $id)
             ->get();
         $this->leaves = Leave::byUser($id);
+        $this->leavesCount = Leave::byUserCount($id);
 
         $this->leaveTypes = LeaveType::byUser($id);
         $this->allowedLeaves = LeaveType::sum('no_of_leaves');
@@ -273,17 +265,7 @@ class ManageEmployeesController extends AdminBaseController
         $user->login = $request->login;
 
         if ($request->hasFile('image')) {
-            File::delete('user-uploads/avatar/' . $user->image);
-
-            $user->image = $request->image->hashName();
-            $request->image->store('user-uploads/avatar');
-
-            // resize the image to a width of 300 and constrain aspect ratio (auto height)
-            $img = Image::make('user-uploads/avatar/' . $user->image);
-            $img->resize(300, null, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $img->save();
+            $user->image = Files::upload($request->image, 'avatar',300);
         }
 
         $user->save();
@@ -476,12 +458,10 @@ class ManageEmployeesController extends AdminBaseController
             )
             ->editColumn('name', function ($row) use ($roles) {
 
-                $image = ($row->image) ? '<img src="' . asset('user-uploads/avatar/' . $row->image) . '"
-                                                                alt="user" class="img-circle" width="30"> ' : '<img src="' . asset('default-profile-2.png') . '"
-                                                                alt="user" class="img-circle" width="30"> ';
-                
+                $image = '<img src="' . $row->image_url . '" alt="user" class="img-circle" width="30" height="30"> ';
+
                 $designation = ($row->designation_name) ? ucwords($row->designation_name) : ' ';
-                
+
               return  '<div class="row"><div class="col-sm-3 col-xs-4">'.$image.'</div><div class="col-sm-9 col-xs-8"><a href="' . route('admin.employees.show', $row->id) . '">'.ucwords($row->name).'</a><br><span class="text-muted font-12">'.$designation.'</span></div></div>';
 
             })
@@ -740,9 +720,7 @@ class ManageEmployeesController extends AdminBaseController
                     }
                 )
                 ->editColumn('name', function ($row) {
-                    $image = ($row->image) ? '<img src="' . asset('user-uploads/avatar/' . $row->image) . '"
-                                                            alt="user" class="img-circle" width="30"> ' : '<img src="' . asset('default-profile-2.png') . '"
-                                                            alt="user" class="img-circle" width="30"> ';
+                    $image = '<img src="' . $row->image_url . '" alt="user" class="img-circle" width="30" height="30"> ';
                     return '<a href="' . route('admin.employees.show', $row->id) . '">' . $image . ' ' . ucwords($row->name) . '</a>';
                 })
                 ->rawColumns(['name', 'action', 'role', 'status'])

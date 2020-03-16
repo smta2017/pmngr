@@ -3,12 +3,17 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-4 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-xs-12 text-right">
+            @if(!$roles->isEmpty())
+                <a href="javascript:;" id="addRole"
+                    class="btn btn-success btn-sm btn-outline  waves-effect waves-light"><i
+                         class="fa fa-gear"></i> @lang("modules.roles.addRole")</a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -31,17 +36,15 @@
 
 @section('content')
 
+@include('sections.admin_setting_menu')
+
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <h3 class="box-title">{{ __($pageTitle) }}</h3>
                 <div class="row">
-                    <div class="col-md-12">
-                        <a href="javascript:;" id="addRole" class="btn btn-success btn-outline  waves-effect waves-light pull-right"><i class="fa fa-gear"></i> @lang("modules.roles.addRole")</a>
 
-                    </div>
 
-                    @foreach($roles as $role)
+                    @forelse($roles as $role)
                         <div class="col-md-12 b-all m-t-10">
                             <div class="row">
                                 <div class="col-md-4 text-center p-10 bg-inverse ">
@@ -112,7 +115,28 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+
+
+                        @empty
+
+                            <div class="text-center">
+                                <div class="empty-space" style="height: 200px;">
+                                    <div class="empty-space-inner">
+                                        <div class="icon" style="font-size:30px"><i
+                                                    class="ti-lock"></i>
+                                        </div>
+                                        <div class="title m-b-15">@lang('messages.defaultRolesCantDelete')
+                                        </div>
+                                        <div class="subtitle">
+                                            <a href="javascript:;" id="addRole"
+                                               class="btn btn-success btn-sm btn-outline  waves-effect waves-light"><i
+                                                        class="fa fa-gear"></i> @lang("modules.roles.addRole")</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        @endforelse
 
                 </div>
             </div>

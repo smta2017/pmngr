@@ -6,7 +6,7 @@ use App\Observers\AcceptEstimateObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class AcceptEstimate extends Model
+class AcceptEstimate extends BaseModel
 {
     protected static function boot()
     {

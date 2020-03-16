@@ -4,7 +4,8 @@
             <div class="panel-heading">
 
                 <div class="col-md-1 col-xs-2">
-                    {!!  ($row->image) ? '<img src="'.asset('user-uploads/avatar/'.$row->image).'" alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'" alt="user" class="img-circle" width="40">' !!}
+                    <img src="{{ $row->image_url }}" alt="user" class="img-circle" width="40" height="40">
+
                 </div>
                 <div class="col-md-8 col-xs-6">
                     {{ ucwords($row->name) }} <br>

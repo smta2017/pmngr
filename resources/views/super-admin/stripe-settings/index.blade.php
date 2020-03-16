@@ -3,12 +3,12 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="{{ route('super-admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -50,7 +50,7 @@
                                                         <hr class="m-t-0 m-b-20">
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>@lang('modules.paymentSetting.paypalClientId')</label>
                                                             <input type="text" name="paypal_client_id" id="paypal_client_id"
@@ -58,30 +58,31 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>@lang('modules.paymentSetting.paypalSecret')</label>
-                                                            <input type="text" name="paypal_secret" id="paypal_secret"
-                                                                   class="form-control" value="{{ $credentials->paypal_secret }}">
+                                                            <input type="password" name="paypal_secret"
+                                                                   id="paypal_secret"
+                                                                   class="form-control"
+                                                                   value="{{ $credentials->paypal_secret }}">
+                                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                         </div>
+                                                    </div>
+
+
+                                                    <!--/span-->
+                                                    <div class="col-md-6">
 
                                                         <div class="form-group">
-                                                            <h5>Select environment</h5>
+                                                            <label>Select environment</label>
                                                             <select class="form-control" name="paypal_mode" id="paypal_mode" data-style="form-control">
                                                                 <option value="sandbox" @if($credentials->paypal_mode == 'sandbox') selected @endif>Sandbox</option>
                                                                 <option value="live" @if($credentials->paypal_mode == 'live') selected @endif>Live</option>
                                                             </select>
                                                         </div>
-
-                                                        <div class="form-group">
-                                                            <label for="mail_from_name">@lang('app.webhook')</label>
-                                                            <p class="text-bold">{{ route('verify-billing-ipn') }}</p>
-                                                            <p class="text-info">(@lang('messages.addPaypalWebhookUrl'))</p>
-                                                        </div>
                                                     </div>
-                                                    <!--/span-->
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="control-label" >@lang('modules.payments.paypalStatus')</label>
                                                             <div class="switchery-demo">
@@ -97,13 +98,20 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="mail_from_name">@lang('app.webhook')</label>
+                                                            <p class="text-bold">{{ route('verify-billing-ipn') }}</p>
+                                                            <p class="text-info">(@lang('messages.addPaypalWebhookUrl')
+                                                                )</p>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-md-12 m-t-20">
                                                         <h3 class="box-title text-warning">@lang('modules.paymentSetting.stripe')</h3>
                                                         <hr class="m-t-0 m-b-20">
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>@lang('modules.paymentSetting.stripeClientId')</label>
                                                             <input type="text" name="api_key" id="stripe_client_id"
@@ -111,22 +119,25 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>@lang('modules.paymentSetting.stripeSecret')</label>
-                                                            <input type="text" name="api_secret" id="stripe_secret"
+                                                            <input type="password" name="api_secret" id="stripe_secret"
                                                                    class="form-control" value="{{ $credentials->api_secret }}">
+                                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>@lang('modules.paymentSetting.stripeWebhookSecret')</label>
-                                                            <input type="text" name="webhook_key" id="stripe_webhook_secret"
+                                                            <input type="password" name="webhook_key" id="stripe_webhook_secret"
                                                                    class="form-control" value="{{ $credentials->webhook_key }}">
                                                             <input type="hidden" name="bothUncheck" id="bothUncheck" >
                                                             <input type="hidden" name="type" id="type" >
                                                             <input type="hidden" name="_method" id="method" >
+
+                                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                         </div>
 
                                                         <div class="form-group">
@@ -159,7 +170,7 @@
                                                         <hr class="m-t-0 m-b-20">
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="">Razorpay Key</label>
                                                             <input type="text" name="razorpay_key" id="razorpay_key"
@@ -167,19 +178,21 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Razorpay Secret Key</label>
-                                                            <input type="text" name="razorpay_secret" id="razorpay_secret"
+                                                            <input type="password" name="razorpay_secret" id="razorpay_secret"
                                                                    class="form-control" value="{{ $credentials->razorpay_secret }}">
+                                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>Razorpay Webhook Secret Key</label>
-                                                            <input type="text" name="razorpay_webhook_secret" id="razorpay_webhook_secret"
+                                                            <input type="password" name="razorpay_webhook_secret" id="razorpay_webhook_secret"
                                                                    class="form-control" value="{{ $credentials->razorpay_webhook_secret }}">
+                                                            <span class="fa fa-fw fa-eye field-icon toggle-password"></span>
                                                         </div>
                                                     </div>
 
@@ -202,7 +215,7 @@
                                                 <button type="submit" id="save-form" class="btn btn-success"><i class="fa fa-check"></i>
                                                     @lang('app.save')
                                                 </button>
-                                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                                             </div>
                                             {!! Form::close() !!}
                                         </div>

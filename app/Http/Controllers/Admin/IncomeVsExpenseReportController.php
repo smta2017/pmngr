@@ -17,7 +17,7 @@ class IncomeVsExpenseReportController extends AdminBaseController
         $this->pageTitle = 'app.menu.incomeVsExpenseReport';
         $this->pageIcon = 'ti-pie-chart';
         $this->middleware(function ($request, $next) {
-            if ($this->company->status == 'license_expired') {
+            if (!in_array('reports', $this->user->modules)) {
                 abort(403);
             }
             return $next($request);

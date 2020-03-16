@@ -5,7 +5,7 @@
                 <span class="btn btn-circle btn-success"><i class="ti-layout-list-thumb"></i></span>
             </div>
             <div class="mail-contnet">
-                <span class="mail-desc m-0">{{ ucfirst($notification->data['heading']) }} - @lang('email.taskComplete.subject')!</span> <span class="time">{{ \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $notification->data['completed_on'])->diffForHumans() }}</span>
+                <span class="mail-desc m-0">{{ ucfirst($notification->data['heading']) }} - @lang('email.taskComplete.subject')!</span> <span class="time">{{ \Carbon\Carbon::parse($notification->data['completed_on'])->diffForHumans() }}</span>
             </div>
         </a>
     </div>

@@ -3,12 +3,12 @@
 @section('page-title')
     <div class="row bg-title">
         <!-- .page title -->
-        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+        <div class="col-lg-6 col-md-6 col-sm-4 col-xs-12">
             <h4 class="page-title"><i class="{{ $pageIcon }}"></i> {{ __($pageTitle) }}</h4>
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-6 col-sm-8 col-md-6 col-xs-12">
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('admin.settings.index') }}">@lang('app.menu.settings')</a></li>
@@ -47,14 +47,16 @@
                                 <div class="col-md-12">
                                     <div class="white-box">
                                         <h3 class="box-title m-b-0">@lang('modules.offlinePayment.title')</h3>
+                                        @if(!$offlineMethods->isEmpty())
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <a href="javascript:;" id="addMethod" class="btn btn-outline btn-success btn-sm">@lang('modules.offlinePayment.addMethod') <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                                    <a href="javascript:;" id="addMethod" class="btn btn-outline btn-success btn-sm addMethod">@lang('modules.offlinePayment.addMethod') <i class="fa fa-plus" aria-hidden="true"></i></a>
                                                 </div>
                                             </div>
 
                                         </div>
+                                        @endif
 
                                         <div class="table-responsive">
                                             <table class="table">
@@ -84,11 +86,23 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    <tr>
-                                                        <td>
-                                                            @lang('messages.noMethodsAdded')
-                                                        </td>
-                                                    </tr>
+                                                    <td colspan="5" class="text-center">
+                                                        <div class="empty-space" style="height: 200px;">
+                                                            <div class="empty-space-inner">
+                                                                <div class="icon" style="font-size:30px"><i
+                                                                            class="icon-layers"></i>
+                                                                </div>
+                                                                <div class="title m-b-15">
+                                                                    @lang('messages.noMethodsAdded')
+                                                                </div>
+                                                                <div class="subtitle">
+                                                                    <a href="javascript:;" id="addMethod" class="btn btn-outline btn-success btn-sm addMethod">@lang('modules.offlinePayment.addMethod') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
                                                 @endforelse
                                                 </tbody>
                                             </table>
@@ -202,7 +216,7 @@
         $('#modelHeading').html("{{  __('app.edit')." ".__('modules.offlinePayment.title') }}");
         $.ajaxModal('#leadStatusModal', url);
     })
-    $('#addMethod').click(function () {
+    $('.addMethod').click(function () {
         var url = '{{ route("admin.offline-payment-setting.create")}}';
         $('#modelHeading').html("{{  __('app.edit')." ".__('modules.offlinePayment.title') }}");
         $.ajaxModal('#leadStatusModal', url);

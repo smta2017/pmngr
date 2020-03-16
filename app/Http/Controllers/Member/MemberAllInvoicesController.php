@@ -302,13 +302,6 @@ class MemberAllInvoicesController extends MemberBaseController
         $invoice->note = $request->note;
         $invoice->save();
 
-        if (($invoice->project && $invoice->project->client_id != null) || $invoice->client_id != null) {
-            $clientId = ($invoice->project && $invoice->project->client_id != null) ? $invoice->project->client_id : $invoice->client_id;
-
-            // Notify client
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($clientId);
-            $notifyUser->notify(new NewInvoice($invoice));
-        }
         if ($request->proposal_id) {
             $proposal = Proposal::findOrFail($request->proposal_id);
             $proposal->invoice_convert = 1;
@@ -420,15 +413,6 @@ class MemberAllInvoicesController extends MemberBaseController
         $invoice->billing_cycle = $request->recurring_payment == 'yes' ? $request->billing_cycle : null;
         $invoice->note = $request->note;
         $invoice->save();
-
-        if (($invoice->project && $invoice->project->client_id != null) || $invoice->client_id != null) {
-            $clientId = ($invoice->project && $invoice->project->client_id != null) ? $invoice->project->client_id : $invoice->client_id;
-
-            // Notify client
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($clientId);
-            $notifyUser->notify(new NewInvoice($invoice));
-        }
-
 
         // delete and create new
         InvoiceItems::where('invoice_id', $invoice->id)->delete();

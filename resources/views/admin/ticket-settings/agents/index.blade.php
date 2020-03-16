@@ -109,9 +109,7 @@
                                                     <tr>
                                                         <td>
                                                             <a href="javascript:void(0)">
-                                                                {!!  ($agent->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$agent->user->image).'"
-                                                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                                alt="user" class="img-circle" width="40">' !!}
+                                                                {!!  '<img src="'.$agent->user->image_url.'" alt="user" class="img-circle" width="40" height="40">' !!}
 
                                                                 {{ ucwords($agent->user->name) }}
                                                             </a>
@@ -140,14 +138,18 @@
                                                         </td>
                                                     </tr>
                                                 @empty
-                                                    <tr>
-                                                        <td>
-                                                            @lang('messages.noAgentAdded')
-                                                        </td>
-                                                        <td></td>
-                                                        <td></td>
-                                                        <td></td>
-                                                    </tr>
+                                                    <td colspan="4" class="text-center">
+                                                        <div class="empty-space" style="height: 200px;">
+                                                            <div class="empty-space-inner">
+                                                                <div class="icon" style="font-size:30px"><i
+                                                                            class="icon-layers"></i>
+                                                                </div>
+                                                                <div class="title m-b-15"> @lang('messages.noAgentAdded')
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+
                                                 @endforelse
                                                 </tbody>
                                             </table>
@@ -197,9 +199,6 @@
 
 @push('footer-script')
 <script src="{{ asset('plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
-<script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
-<script src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
 
 <script src="{{ asset('plugins/bower_components/custom-select/custom-select.min.js') }}"></script>
 <script src="{{ asset('plugins/bower_components/bootstrap-select/bootstrap-select.min.js') }}"></script>
@@ -208,16 +207,7 @@
 
 <script type="text/javascript">
 
-    $('#agents-table').dataTable({
-        responsive: true,
-        "columnDefs": [
-            { responsivePriority: 1, targets: 0 },
-            { responsivePriority: 2, targets: 1 }
-        ],
-        searching: false,
-        paging: false,
-        info: false
-    });
+
 
     $(".select2").select2({
         formatNoMatches: function () {

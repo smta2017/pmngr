@@ -11,9 +11,8 @@
                 </div>
                 <div class="col-md-2 text-right">
                     <span class="@if($task->due_date->isPast()) text-danger @else text-success @endif m-r-10">{{ $task->due_date->format($global->date_format) }}</span>
-                    {!! ($task->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('user-uploads/avatar/' . $task->user->image) . '"
-                            alt="user" class="img-circle" height="35"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('default-profile-2.png') . '"
-                            alt="user" class="img-circle" height="35"> ' !!}
+                    {!! '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . $task->user->image_url . '"
+                        alt="user" class="img-circle" height="35"> ' !!}
                 </div>
             </div>
         </li>
@@ -30,8 +29,7 @@
             </div>
             <div class="col-md-2 text-right">
                 <span class="@if($task->due_date->isPast()) text-danger @else text-success @endif m-r-10">{{ $task->due_date->format('d M') }}</span>
-                {!! ($task->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('user-uploads/avatar/' . $task->user->image) . '"
-                        alt="user" class="img-circle" height="35"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . asset('default-profile-2.png') . '"
+                {!! '<img data-toggle="tooltip" data-original-title="' . ucwords($task->user->name) . '" src="' . $task->user->image_url . '"
                         alt="user" class="img-circle" height="35"> ' !!}
             </div>
         </div>

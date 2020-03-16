@@ -38,7 +38,9 @@
 @endpush
 
 @section('content')
-    <div class="row dashboard-stats">
+
+<div class="white-box">
+    <div class="row dashboard-stats front-dashboard">
         @if($global->system_update == 1)
             @php($updateVersionInfo = \Froiden\Envato\Functions\EnvatoUpdate::updateVersionInfo())
             @if(isset($updateVersionInfo['lastVersion']))
@@ -53,66 +55,89 @@
             @include('super-admin.dashboard.get_started')
         @endif
 
-            
         <div class="col-md-3 col-sm-6">
             <div class="white-box">
-            <div class="col-in row">
-                <h3 class="box-title">@lang('modules.dashboard.totalCompanies')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-success"></i></li>
-                    <li class="text-right"><span class="counter">{{ $totalCompanies }}</span></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-            <div class="col-in row">
-                <h3 class="box-title">@lang('modules.dashboard.activeCompanies')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-success"></i></li>
-                    <li class="text-right"><span class="counter">{{ $activeCompanies }}</span></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-            <div class="col-in row">
-                <h3 class="box-title">@lang('modules.dashboard.licenseExpired')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-success"></i></li>
-                    <li class="text-right"><span class="counter">{{ $expiredCompanies }}</span></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-        <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-            <div class="col-in row">
-                <h3 class="box-title">@lang('modules.dashboard.inactiveCompanies')</h3>
-                <ul class="list-inline two-part">
-                    <li><i class="icon-layers text-success"></i></li>
-                    <li class="text-right"><span class="counter">{{ $inactiveCompanies }}</span></li>
-                </ul>
-            </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-
-        <div class="col-md-3 col-sm-6">
-            <div class="white-box">
-                <div class="col-in row">
-                    <h3 class="box-title">@lang('app.total') @lang('app.menu.packages')</h3>
-                    <ul class="list-inline two-part">
-                        <li><i class="icon-layers text-success"></i></li>
-                        <li class="text-right"><span class="counter">{{ $totalPackages }}</span></li>
-                    </ul>
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div>
+                            <span class="bg-info-gradient"><i class="icon-layers"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="widget-title"> @lang('modules.dashboard.totalCompanies')</span><br>
+                        <span class="counter">{{ $totalCompanies }}</span>
+                    </div>
                 </div>
             </div>
         </div>
+       
+        <div class="col-md-3 col-sm-6">
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div>
+                            <span class="bg-success-gradient"><i class="icon-layers"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="widget-title"> @lang('modules.dashboard.activeCompanies')</span><br>
+                        <span class="counter">{{ $activeCompanies }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div>
+                            <span class="bg-danger-gradient"><i class="icon-layers"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="widget-title"> @lang('modules.dashboard.licenseExpired')</span><br>
+                        <span class="counter">{{ $expiredCompanies }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div>
+                            <span class="bg-warning-gradient"><i class="icon-layers"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="widget-title"> @lang('modules.dashboard.inactiveCompanies')</span><br>
+                        <span class="counter">{{ $inactiveCompanies }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6">
+            <div class="white-box">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <div>
+                            <span class="bg-inverse-gradient"><i class="icon-layers"></i></span>
+                        </div>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <span class="widget-title"> @lang('app.total') @lang('app.menu.packages')</span><br>
+                        <span class="counter">{{ $totalPackages }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
@@ -229,7 +254,43 @@
             </div>
         </div>
     </div>
+</div>
 
+
+    <div class="modal fade bs-modal-md in" id="reviewModal" tabindex="-1" role="dialog" aria-labelledby="reviewModal"
+         aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Do you like worksuite? Help us Grow :)</h4>
+
+                </div>
+                <div class="modal-body">
+                    <div class="note note-info font-14 m-l-5">
+
+                        We hope you love it. If you do, would you mind taking 10 seconds to leave me a short review on codecanyon?
+                        <br>
+                        This helps us to continue providing great products, and helps potential buyers to make confident decisions.
+                        <hr>
+                        Thank you in advance for your review and for being a preferred customer.
+
+                        <hr>
+
+                        <p class="text-center">
+                            <a href="{{\Froiden\Envato\Functions\EnvatoUpdate::reviewUrl()}}"> <img src="{{asset('img/review-worksuite.png')}}" alt=""></a>
+                            <button type="button" class="btn btn-link" data-dismiss="modal" onclick="hideReviewModal('closed_permanently_button_pressed')">Hide Pop up permanently</button>
+                            <button type="button" class="btn btn-link" data-dismiss="modal" onclick="hideReviewModal('already_reviewed_button_pressed')">Already Reviewed</button>
+                        </p>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="{{\Froiden\Envato\Functions\EnvatoUpdate::reviewUrl()}}" target="_blank" type="button" class="btn btn-success">Give Review</a>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -282,5 +343,22 @@
         time: 1200
     });
 
+</script>
+<script>
+    @if(\Froiden\Envato\Functions\EnvatoUpdate::showReview())
+    $(document).ready(function () {
+        $('#reviewModal').modal('show');
+    })
+    function hideReviewModal(type) {
+        var url = "{{ route('hide-review-modal',':type') }}";
+        url = url.replace(':type', type);
+
+        $.easyAjax({
+            url: url,
+            type: "GET",
+            container: "#reviewModal",
+        });
+    }
+    @endif
 </script>
 @endpush

@@ -1,18 +1,13 @@
 <?php
 namespace App\Http\Controllers\Client;
 
+use App\Helper\Files;
 use App\Helper\Reply;
-use App\ModuleSetting;
-use App\Notifications\FileUpload;
 use App\Project;
 use App\ProjectFile;
-use App\User;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ClientFilesController extends ClientBaseController
 {
@@ -138,67 +133,14 @@ class ClientFilesController extends ClientBaseController
             $file = new ProjectFile();
             $file->user_id = $this->user->id;
             $file->project_id = $request->project_id;
-            switch($storage) {
-                case 'local':
-                    $request->file->storeAs('user-uploads/project-files/'.$request->project_id, $request->file->hashName());
-                    break;
-                case 's3':
-                    Storage::disk('s3')->putFileAs('project-files/'.$request->project_id, $request->file, $request->file->getClientOriginalName(), 'public');
-                    break;
-                case 'google':
-                    $dir = '/';
-                    $recursive = false;
-                    $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                    $dir = $contents->where('type', '=', 'dir')
-                        ->where('filename', '=', 'project-files')
-                        ->first();
 
-                    if(!$dir) {
-                        Storage::cloud()->makeDirectory('project-files');
-                    }
-
-                    $directory = $dir['path'];
-                    $recursive = false;
-                    $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                    $directory = $contents->where('type', '=', 'dir')
-                        ->where('filename', '=', $request->project_id)
-                        ->first();
-
-                    if ( ! $directory) {
-                        Storage::cloud()->makeDirectory($dir['path'].'/'.$request->project_id);
-                        $contents = collect(Storage::cloud()->listContents($directory, $recursive));
-                        $directory = $contents->where('type', '=', 'dir')
-                            ->where('filename', '=', $request->project_id)
-                            ->first();
-                    }
-
-                    Storage::cloud()->putFileAs($directory['basename'], $request->file, $request->file->getClientOriginalName());
-
-                    $file->google_url = Storage::cloud()->url($directory['path'].'/'.$request->file->getClientOriginalName());
-
-                    break;
-                case 'dropbox':
-                    Storage::disk('dropbox')->putFileAs('project-files/'.$request->project_id.'/', $request->file, $request->file->getClientOriginalName());
-                    $dropbox = new Client(['headers' => ['Authorization' => "Bearer ".config('filesystems.disks.dropbox.token'), "Content-Type" => "application/json"]]);
-                    $res = $dropbox->request('POST', 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings',
-                        [\GuzzleHttp\RequestOptions::JSON => ["path" => '/project-files/'.$request->project_id.'/'.$request->file->getClientOriginalName()]]
-                    );
-                    $dropboxResult = $res->getBody();
-                    $dropboxResult = json_decode($dropboxResult, true);
-                    $file->dropbox_link = $dropboxResult['url'];
-                    break;
-            }
+            $filename = Files::uploadLocalOrS3($request->file,'project-files/'.$request->project_id);
 
             $file->filename = $request->file->getClientOriginalName();
-            $file->hashname = $request->file->hashName();
+            $file->hashname = $filename;
             $file->size = $request->file->getSize();
             $file->save();
             $this->logProjectActivity($request->project_id, __('messages.newFileUploadedToTheProject'));
-
-            foreach ($this->project->members as $member) {
-                $notifyUser = User::find($member->user->id);
-                $notifyUser->notify(new FileUpload($file));
-            }
         }
 
         $this->project = Project::findOrFail($request->project_id);
@@ -267,14 +209,9 @@ class ClientFilesController extends ClientBaseController
                 File::delete('user-uploads/project-files/'.$file->project_id.'/'.$file->hashName);
                 break;
             case 's3':
-                Storage::disk('s3')->delete('project-files/'.$file->project_id.'/'.$file->filename);
+                Storage::disk('s3')->delete('project-files/'.$file->project_id.'/'.$file->hashname);
                 break;
-            case 'google':
-                Storage::disk('google')->delete('project-files/'.$file->project_id.'/'.$file->filename);
-                break;
-            case 'dropbox':
-                Storage::disk('dropbox')->delete('project-files/'.$file->project_id.'/'.$file->filename);
-                break;
+
         }
         ProjectFile::destroy($id);
         $this->project = Project::findOrFail($file->project_id);
@@ -288,61 +225,8 @@ class ClientFilesController extends ClientBaseController
     }
 
     public function download($id) {
-        $storage = config('filesystems.default');
         $file = ProjectFile::findOrFail($id);
-        switch($storage) {
-            case 'local':
-                return response()->download('user-uploads/project-files/'.$file->project_id.'/'.$file->hashname, $file->filename);
-                break;
-            case 's3':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $fs = Storage::getDriver();
-                $stream = $fs->readStream('project-files/'.$file->project_id.'/'.$file->filename);
-                return Response::stream(function() use($stream) {
-                    fpassthru($stream);
-                }, 200, [
-                    "Content-Type" => $ext,
-                    "Content-Length" => $file->size,
-                    "Content-disposition" => "attachment; filename=\"" .basename($file->filename) . "\"",
-                ]);
-                break;
-            case 'google':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $dir = '/';
-                $recursive = false; // Get subdirectories also?
-                $contents = collect(Storage::cloud()->listContents($dir, $recursive));
-                $directory = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', 'project-files')
-                    ->first();
-
-                $direct = $directory['path'];
-                $recursive = false;
-                $contents = collect(Storage::cloud()->listContents($direct, $recursive));
-                $directo = $contents->where('type', '=', 'dir')
-                    ->where('filename', '=', $file->project_id)
-                    ->first();
-
-                $readStream = Storage::cloud()->getDriver()->readStream($directo['path']);
-                return response()->stream(function () use ($readStream) {
-                    fpassthru($readStream);
-                }, 200, [
-                    'Content-Type' => $ext,
-                    'Content-disposition' => 'attachment; filename="'.$file->filename.'"',
-                ]);
-                break;
-            case 'dropbox':
-                $ext = pathinfo($file->filename, PATHINFO_EXTENSION);
-                $fs = Storage::getDriver();
-                $stream = $fs->readStream('project-files/'.$file->project_id.'/'.$file->filename);
-                return Response::stream(function() use($stream) {
-                    fpassthru($stream);
-                }, 200, [
-                    "Content-Type" => $ext,
-                    "Content-Length" => $file->size,
-                    "Content-disposition" => "attachment; filename=\"" .basename($file->filename) . "\"",
-                ]);
-                break;
-        }
+        return download_local_s3($file, 'project-files/' . $file->project_id . '/' . $file->hashname);
     }
 
     /**

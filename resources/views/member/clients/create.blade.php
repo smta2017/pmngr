@@ -89,7 +89,7 @@
                                 </div>
                                 <div class="row">
 
-        
+
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>@lang('modules.client.mobile')</label>
@@ -212,7 +212,7 @@
                             </div>
                             <div class="form-actions">
                                 <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                                <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                             </div>
                         {!! Form::close() !!}
                     </div>

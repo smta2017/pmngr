@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\SuperAdmin;
 
 use App\Feature;
+use App\FrontDetail;
+use App\Helper\Files;
 use App\Helper\Reply;
+use App\Http\Requests\SuperAdmin\Feature\UpdateTitleRequest;
 use App\Http\Requests\SuperAdmin\FeatureSetting\StoreRequest;
 use App\Http\Requests\SuperAdmin\FeatureSetting\UpdateRequest;
-use App\Http\Requests\SuperAdmin\FrontSetting\UpdateFrontSettings;
+use App\Http\Requests\SuperAdmin\FrontSetting\UpdateContactSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -28,8 +31,9 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
      */
     public function index(Request $request)
     {
-        $this->type = $request->type;
-        $this->features = Feature::where('type', $this->type)->get();
+        $this->type        = $request->type;
+        $this->features    = Feature::where('type', $this->type)->get();
+        $this->frontDetail = FrontDetail::first();
 
         return view('super-admin.feature-settings.index', $this->data);
     }
@@ -41,32 +45,29 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
      */
     public function create(Request $request)
     {
-        $this->type = $request->type;
+        $this->type     = $request->type;
         $this->features = Feature::all();
 
         return view('super-admin.feature-settings.create', $this->data);
     }
 
     /**
-     * @param UpdateFrontSettings $request
-     * @param $id
+     * @param StoreRequest $request
      * @return array
      */
     public function store(StoreRequest $request)
     {
         $feature = new Feature();
-        $type =  $request->type;
-        $feature->title = $request->title;
-        $feature->type = $request->type;
+        $type                 =  $request->type;
+        $feature->title       = $request->title;
+        $feature->type        = $request->type;
         $feature->description = $request->description;
+
         if($request->has('icon')){
             $feature->icon = $request->icon;
         }
-        else{
-            if ($request->hasFile('image')) {
-                $feature->image = $request->image->hashName();
-                $request->image->store('front-uploads/feature');
-            }
+        if ($request->hasFile('image')) {
+            $feature->image = Files::upload($request->image, 'front/feature');
         }
 
         $feature->save();
@@ -84,13 +85,12 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
     {
         $this->feature = Feature::findOrFail($id);
         $this->type = $request->type;
-//        $this->type = 'image';
 
         return view('super-admin.feature-settings.edit', $this->data);
     }
 
     /**
-     * @param UpdateFrontSettings $request
+     * @param UpdateRequest $request
      * @param $id
      * @return array
      */
@@ -98,20 +98,17 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
     {
         $feature = Feature::findOrFail($id);
 
-        $oldImage = $feature->image;
-
         $feature->title = $request->title;
+
         $feature->type = $request->type;
         $feature->description = $request->description;
         if($request->has('icon')){
             $feature->icon = $request->icon;
         }
-        else{
-            if ($request->hasFile('image')) {
-                $feature->image = $request->image->hashName();
-                $request->image->store('front-uploads/feature');
-                if($oldImage){ File::delete('front-uploads/feature/'.$oldImage); }
-            }
+
+        if ($request->hasFile('image')) {
+            Files::deleteFile($feature->image, 'front/feature');
+            $feature->image = Files::upload($request->image, 'front/feature');
         }
 
         $type =  $request->type;
@@ -121,9 +118,8 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
 
     }
 
-
     /**
-     * @param UpdateFrontSettings $request
+     * @param Request $request
      * @param $id
      * @return array
      */
@@ -132,6 +128,41 @@ class SuperAdminFeatureSettingController extends SuperAdminBaseController
         $type =  $request->type;
         Feature::destroy($id);
         return Reply::redirect(route('super-admin.feature-settings.index').'?type='.$type, 'messages.feature.deletedSuccess');
+
+    }
+
+    /**
+     * @param UpdateTitleRequest $request
+     * @return array
+     */
+    public function updateTitles(UpdateTitleRequest $request)
+    {
+        $feature = FrontDetail::first();
+
+        if($request->type == 'task')    {
+            $feature->task_management_title  = $request->title;
+            $feature->task_management_detail = $request->detail;
+        }
+        elseif($request->type == 'bills'){
+            $feature->manage_bills_title  = $request->title;
+            $feature->manage_bills_detail = $request->detail;
+        }
+        elseif($request->type == 'image'){
+            $feature->feature_title       = $request->title;
+            $feature->feature_description = $request->detail;
+        }
+        elseif($request->type == 'team'){
+            $feature->teamates_title  = $request->title;
+            $feature->teamates_detail = $request->detail;
+        }
+        elseif($request->type == 'apps'){
+            $feature->favourite_apps_title  = $request->title;
+            $feature->favourite_apps_detail = $request->detail;
+        }
+
+         $feature->save();
+
+        return Reply::success('messages.feature.addedSuccess');
 
     }
 }

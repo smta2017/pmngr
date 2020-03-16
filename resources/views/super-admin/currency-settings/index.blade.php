@@ -8,7 +8,13 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($global->currency_converter_key)
+                <a href="{{ route('super-admin.currency.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.currencySettings.addNewCurrency') <i class="fa fa-plus" aria-hidden="true"></i></a>
+                <a href="javascript:;" id="update-exchange-rates" class="btn btn-outline btn-info btn-sm">@lang('app.update') @lang('modules.currencySettings.exchangeRate') <i class="fa fa-refresh" aria-hidden="true"></i></a>
+                <a href="javascript:;" id="addCurrencyExchangeKey" class="btn btn-outline btn-warning btn-sm">@lang('app.update') @lang('modules.accountSettings.currencyConverterKey') <i class="fa fa-upload" aria-hidden="true"></i></a>
+            @endif
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('super-admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -32,25 +38,36 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="white-box">
-                                        <h3 class="box-title m-b-0">@lang('modules.currencySettings.currencies')</h3>
+
 
                                         <div class="row">
-                                            <div class="col-sm-12">
-                                                <div class="form-group">
-                                                    @if($global->currency_converter_key)
-                                                        <a href="{{ route('super-admin.currency.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.currencySettings.addNewCurrency') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                                                        <a href="javascript:;" id="update-exchange-rates" class="btn btn-outline btn-info btn-sm">@lang('app.update') @lang('modules.currencySettings.exchangeRate') <i class="fa fa-refresh" aria-hidden="true"></i></a>
-                                                    @endif
-                                                    <a href="javascript:;" id="addCurrencyExchangeKey" class="btn btn-outline btn-warning btn-sm">@lang('app.update') @lang('modules.accountSettings.currencyConverterKey') <i class="fa fa-upload" aria-hidden="true"></i></a>
-                                                </div>
-                                            </div>
+                                            @if(!$global->currency_converter_key)
 
-                                            <div class="col-sm-12">
-                                                <div class="alert alert-info"><i class="fa fa-info-circle"></i> @lang('messages.exchangeRateNote')</div>
-                                                @if(!$global->currency_converter_key)
-                                                    <div class="alert alert-info"><i class="fa fa-info-circle"></i> @lang('messages.addCurrencyNote')</div>
-                                                @endif
-                                            </div>
+                                                <div class="text-center">
+                                                    <div class="empty-space" style="height: 200px;">
+                                                        <div class="empty-space-inner">
+                                                            <div class="icon" style="font-size:30px"><i
+                                                                        class="icon-settings"></i>
+                                                            </div>
+                                                            <div class="title m-b-15">
+                                                                @lang('messages.addCurrencyNote')
+                                                            </div>
+                                                            <div class="subtitle">
+                                                                <a href="javascript:;" id="addCurrencyExchangeKey"
+                                                                   class="btn btn-outline btn-warning btn-sm">@lang('app.add') @lang('modules.accountSettings.currencyConverterKey')
+                                                                    <i class="fa fa-key" aria-hidden="true"></i></a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <h3 class="box-title m-b-0">@lang('modules.currencySettings.currencies')</h3>
+                                                <div class="col-sm-12">
+                                                    <div class="alert alert-info"><i
+                                                                class="fa fa-info-circle"></i> @lang('messages.exchangeRateNote')
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
 
                                         <div class="table-responsive">

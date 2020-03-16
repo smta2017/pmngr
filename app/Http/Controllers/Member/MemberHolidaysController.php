@@ -128,7 +128,7 @@ class MemberHolidaysController extends MemberBaseController
         foreach ($holiday as $index => $value) {
             if ($index){
                 $add = Holiday::firstOrCreate([
-                'date' => Carbon::createFromFormat('d/m/Y', $index)->format('Y-m-d'),
+                'date' => Carbon::createFromFormat($this->global->date_format, $index)->format('Y-m-d'),
                 'occassion' => $value,
                 ]);
             }
@@ -176,7 +176,7 @@ class MemberHolidaysController extends MemberBaseController
         }
 
         $holiday = Holiday::findOrFail($id);
-        $data = Input::all();
+        $data = request()->all();
         $holiday->update($data);
 
         return Redirect::route('member.holidays.index');

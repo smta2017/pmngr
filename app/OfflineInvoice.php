@@ -6,7 +6,7 @@ use App\Observers\OfflineInvoiceObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class OfflineInvoice extends Model
+class OfflineInvoice extends BaseModel
 {
 
     protected $dates = [

@@ -102,11 +102,11 @@ class NewTicket extends Notification implements ShouldQueue
                 ->image(asset('storage/slack-logo/'.$slack->slack_logo))
 //                ->to('@abhinav')
                 ->to('@'.$notifiable->employee[0]->slack_username)
-                ->content('*New Ticket* - '.ucfirst($this->ticket->subject).". \n<".url('/')."|Login to Dashboard> for more details.");
+                ->content('*New Ticket* - '.ucfirst($this->ticket->subject).". \n<".route('login')."|Login to Dashboard> for more details.");
         }
         return (new SlackMessage())
             ->from(config('app.name'))
-            ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+            ->image($slack->slack_logo_url)
             ->content('This is a redirected notification. Add slack username for *'.ucwords($notifiable->name).'*');
     }
 

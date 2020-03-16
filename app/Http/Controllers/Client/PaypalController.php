@@ -356,7 +356,7 @@ class PaypalController extends Controller
         /** The payer_id is added to the request query parameters **/
         /** when the user is redirected from paypal back to your site **/
         $execution = new PaymentExecution();
-        $execution->setPayerId(Input::get('PayerID'));
+        $execution->setPayerId(request()->get('PayerID'));
 
         try {
             /**Execute the payment **/

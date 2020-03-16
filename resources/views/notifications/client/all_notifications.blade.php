@@ -8,7 +8,9 @@
         <div class="panel-body">
             <div class="col-md-12">
                 @foreach ($user->unreadNotifications as $notification)
-                    @include('notifications.client.detail_'.snake_case(class_basename($notification->type)))
+                    @if(view()->exists('notifications.client.'.\Illuminate\Support\Str::snake(class_basename($notification->type))))
+                        @include('notifications.client.detail_'.snake_case(class_basename($notification->type)))
+                    @endif
                 @endforeach
             </div>
 

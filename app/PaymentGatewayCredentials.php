@@ -6,7 +6,7 @@ use App\Observers\PaymentGatewayCredentialObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentGatewayCredentials extends Model
+class PaymentGatewayCredentials extends BaseModel
 {
     protected static function boot()
     {

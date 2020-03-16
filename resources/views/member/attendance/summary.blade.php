@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('member.attendances.create') }}"
+                   class="btn btn-success btn-outline btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
+                                                                                                aria-hidden="true"></i></a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ $pageTitle }}</li>
@@ -28,13 +31,7 @@
 
 @section('content')
     <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group">
-                <a href="{{ route('member.attendances.create') }}"
-                   class="btn btn-success btn-sm">@lang('modules.attendance.markAttendance') <i class="fa fa-plus"
-                                                                                                aria-hidden="true"></i></a>
-            </div>
-        </div>
+  
 
         <div class="sttabs tabs-style-line col-md-12">
             <div class="white-box">
@@ -54,7 +51,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="white-box p-b-0 bg-inverse text-white">
+            <div class="white-box">
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
@@ -177,14 +174,6 @@
         var year = $('#year').val();
         var month = $('#month').val();
 
-        $('body').block({
-            message: '<p style="margin:0;padding:8px;font-size:24px;">Just a moment...</p>'
-            , css: {
-                color: '#fff'
-                , border: '1px solid #fb9678'
-                , backgroundColor: '#fb9678'
-            }
-        });
 
         var userId = $('#user_id').val();
         var department = $('#department').val();

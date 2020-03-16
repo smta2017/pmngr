@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class TicketReply extends Model
+class TicketReply extends BaseModel
 {
     use SoftDeletes;
 

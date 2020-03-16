@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PaypalInvoice extends Model
+class PaypalInvoice extends BaseModel
 {
     protected $table = 'paypal_invoices';
     protected $dates = ['paid_on', 'next_pay_date'];
@@ -17,6 +17,6 @@ class PaypalInvoice extends Model
         return $this->belongsTo(Package::class, 'package_id');
     }
     public function currency() {
-        return $this->belongsTo(Currency::class, 'currency_id');
+        return $this->belongsTo(GlobalCurrency::class, 'currency_id')->withTrashed();
     }
 }

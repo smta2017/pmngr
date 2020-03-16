@@ -63,7 +63,7 @@ class LeaveStatusReject extends Notification implements ShouldQueue
             ->line(__('app.date').': '.$this->leave->leave_date->format('d M, Y'))
             ->line(__('app.status').': '.ucwords($this->leave->status))
             ->line(__('app.reason').': '.ucwords($this->leave->reject_reason))
-            ->action(__('email.loginDashboard'), $url)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 

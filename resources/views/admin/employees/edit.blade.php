@@ -1,4 +1,4 @@
-@extends('layouts.app') 
+@extends('layouts.app')
 @section('page-title')
 <div class="row bg-title">
     <!-- .page title -->
@@ -23,63 +23,55 @@
 <link rel="stylesheet" href="{{ asset('plugins/bower_components/bootstrap-select/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/bower_components/bootstrap-select/bootstrap-select.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/bower_components/custom-select/custom-select.css') }}">
-@endpush 
+@endpush
 @section('content')
 
 <div class="row">
     <div class="col-md-12">
 
         <div class="panel panel-inverse">
-            <div class="panel-heading"> @lang('modules.employees.updateTitle')</div>
+            <div class="panel-heading"> @lang('modules.employees.updateTitle')
+                [ {{ $userDetail->name }} ]
+                @php($class = ($userDetail->status == 'active') ? 'label-custom' : 'label-danger')
+                <span class="label {{$class}}">{{ucfirst($userDetail->status)}}</span>
+            </div>
             <div class="panel-wrapper collapse in" aria-expanded="true">
                 <div class="panel-body">
                     {!! Form::open(['id'=>'updateEmployee','class'=>'ajax-form','method'=>'PUT']) !!}
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-4 ">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>@lang('modules.employees.employeeId')</label>
+                                    <label class="required">@lang('modules.employees.employeeId')</label>
                                     <input type="text" name="employee_id" id="employee_id" class="form-control"
                                            value="{{ $employeeDetail->employee_id }}" autocomplete="nope">
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>@lang('modules.employees.employeeName')</label>
+                                    <label class="required">@lang('modules.employees.employeeName')</label>
                                     <input type="text" name="name" id="name" class="form-control" value="{{ $userDetail->name }}" autocomplete="nope">
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>@lang('modules.employees.employeeEmail')</label>
+                                    <label class="required">@lang('modules.employees.employeeEmail')</label>
                                     <input type="email" name="email" id="email" class="form-control" value="{{ $userDetail->email }}" autocomplete="nope">
                                     <span class="help-block">Employee will login using this email.</span>
                                 </div>
                             </div>
-                            <!--/span-->
-                        </div>
-                        <div class="row">
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>@lang('modules.employees.employeePassword')</label>
+                                    <label class="required">@lang('modules.employees.employeePassword')</label>
                                     <input type="password" style="display: none">
                                     <input type="password" name="password" id="password" class="form-control" autocomplete="nope">
                                     <span class="help-block"> @lang('modules.employees.updatePasswordNote')</span>
                                 </div>
                             </div>
                             <!--/span-->
-
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>@lang('app.mobile')</label>
-                                    <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ $userDetail->mobile }}" autocomplete="nope">
-                                </div>
-                            </div>
-                            <!--/span-->
                         </div>
-                        <!--/row-->
 
                         <div class="row">
 
@@ -97,7 +89,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label>@lang('modules.employees.joiningDate')</label>
+                                    <label class="required">@lang('modules.employees.joiningDate')</label>
                                     <input type="text" name="joining_date" id="joining_date" @if($employeeDetail) value="{{ $employeeDetail->joining_date->format($global->date_format) }}"
                                         @endif class="form-control">
                                 </div>
@@ -150,7 +142,7 @@
                         <div class="row">
                             <div class="col-md-6 ">
                                 <div class="form-group">
-                                    <label>@lang('app.designation') <a href="javascript:;" id="designation-setting" ><i class="ti-settings text-info"></i></a></label>
+                                    <label class="required">@lang('app.designation') <a href="javascript:;" id="designation-setting" ><i class="ti-settings text-info"></i></a></label>
                                     <select name="designation" id="designation" class="form-control">
                                         @forelse($designations as $designation)
                                             <option @if(isset($employeeDetail->designation_id) && $employeeDetail->designation_id == $designation->id) selected @endif value="{{ $designation->id }}">{{ $designation->name }}</option>
@@ -162,7 +154,7 @@
                             </div>
                             <div class="col-md-6 ">
                                 <div class="form-group">
-                                    <label>@lang('app.department') <a href="javascript:;" id="department-setting" ><i class="ti-settings text-info"></i></a></label>
+                                    <label class="required">@lang('app.department') <a href="javascript:;" id="department-setting" ><i class="ti-settings text-info"></i></a></label>
                                     <select name="department" id="department" class="form-control">
                                         <option value="">--</option>
                                         @foreach($teams as $team)
@@ -173,7 +165,16 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
+                            <!--/span-->
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label>@lang('app.mobile')</label>
+                                    <input type="tel" name="mobile" id="mobile" class="form-control" value="{{ $userDetail->mobile }}" autocomplete="nope">
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>@lang('modules.employees.hourlyRate')</label>
                                     <input type="text" name="hourly_rate" id="hourly_rate" class="form-control" value="{{ $employeeDetail->hourly_rate ?? '' }}">
@@ -181,7 +182,7 @@
                             </div>
                             <!--/span-->
 
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>@lang('app.status')</label>
                                     <select name="status" id="status" class="form-control">
@@ -193,19 +194,18 @@
                                 </div>
                             </div>
 
-                        </div>
-                        <!--/row-->
-                        <div class="row">
-                            <div class="col-md-6 ">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label>@lang('app.login')</label>
                                     <select name="login" id="login" class="form-control">
-                                            <option @if($userDetail->login == 'enable') selected @endif value="enable">@lang('app.enable')</option>
-                                            <option @if($userDetail->login == 'disable') selected @endif value="disable">@lang('app.disable')</option>
-                                        </select>
+                                        <option @if($userDetail->login == 'enable') selected @endif value="enable">@lang('app.enable')</option>
+                                        <option @if($userDetail->login == 'disable') selected @endif value="disable">@lang('app.disable')</option>
+                                    </select>
                                 </div>
                             </div>
+
                         </div>
+
 
                         <div class="row">
                             <div class="col-md-6">
@@ -213,9 +213,7 @@
                                 <div class="form-group">
                                     <div class="fileinput fileinput-new" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                            @if(is_null($userDetail->image))
-                                            <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.profile.uploadPicture')) }}" alt="" />                                            @else
-                                            <img src="{{ asset('user-uploads/avatar/'.$userDetail->image) }}" alt="" /> @endif
+                                            <img src="{{ $userDetail->image_url }}" alt="" />
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
                                         <div>

@@ -153,16 +153,6 @@ class MemberLeaveDashboardController extends MemberBaseController
         $leave->status = $request->status;
         $leave->save();
 
-        if($oldStatus != $request->status){
-            //      Send notification to user
-            $notifyUser = User::withoutGlobalScope('active')->findOrFail($leave->user_id);
-            if($request->status == 'approved') {
-                $notifyUser->notify(new LeaveStatusApprove($leave));
-            } else {
-                $notifyUser->notify(new LeaveStatusReject($leave));
-            }
-        }
-
         return Reply::redirect(route('member.leaves-dashboard.index'), __('messages.leaveAssignSuccess'));
     }
 
@@ -190,10 +180,6 @@ class MemberLeaveDashboardController extends MemberBaseController
         $leave = Leave::findOrFail($request->leaveId);
         $leave->status = $request->action;
         $leave->save();
-
-        //      Send notification to user
-        $notifyUser = User::withoutGlobalScope('active')->findOrFail($leave->user_id);
-        $notifyUser->notify(new LeaveStatusUpdate($leave));
 
         return Reply::success(__('messages.leaveStatusUpdate'));
     }

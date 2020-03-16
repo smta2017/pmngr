@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\FooterMenu;
 use App\FrontDetail;
+use App\FrontMenu;
 use App\GlobalSetting;
 use App\Http\Controllers\Controller;
 use App\LanguageSetting;
@@ -53,6 +54,10 @@ class FrontBaseController extends Controller
     {
         parent::__construct();
 
+        try{
+            rename(public_path("front-uploads"), public_path("user-uploads/front"));
+        }catch (\Exception $e){}
+
         $this->setting = GlobalSetting::first();
         $this->languages = LanguageSetting::where('status', 'enabled')->get();
         $this->global = $this->setting;
@@ -61,20 +66,21 @@ class FrontBaseController extends Controller
             $this->locale = Crypt::decrypt(Cookie::get('language'), false);
             App::setLocale($this->locale);
         } else {
-            $this->locale = 'ar';
-            App::setLocale('ar');
+            $this->locale = 'en';
+            App::setLocale('en');
         }
 
         Carbon::setLocale($this->locale);
 
         $this->footerSettings = FooterMenu::whereNotNull('slug')->get();
 
+        $this->frontMenu = FrontMenu::first();
+
+        $this->frontDetail    = FrontDetail::first();
+
         setlocale(LC_TIME, $this->locale . '_' . strtoupper($this->locale));
 
-        $this->detail = FrontDetail::first();
-
-
-
+        $this->detail = $this->frontDetail;
     }
 
 }

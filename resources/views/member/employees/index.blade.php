@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            @if($user->can('add_employees'))
+                <a href="{{ route('member.employees.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.employees.addNewEmployee') <i class="fa fa-plus" aria-hidden="true"></i></a>
+            @endif
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -38,60 +41,48 @@
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            @if($user->can('add_employees'))
-                                <a href="{{ route('member.employees.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.employees.addNewEmployee') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            @endif
-                            @if($user->can('view_employees'))
-                                <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                            @endif
-                        </div>
-                    </div>
-                </div>
+                
                 @if($user->can('view_employees'))
-                    <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
-                    <form action="" id="filter-form">
+                @section('filter-section')
+                    <div class="row"  id="ticket-filters">
+                    
+                        <form action="" id="filter-form">
 
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label">@lang('modules.employees.title')</label>
-                                <select class="form-control select2" name="employee" id="employee" data-style="form-control">
-                                    <option value="all">@lang('modules.client.all')</option>
-                                    @forelse($employees as $employee)
-                                        <option value="{{$employee->id}}">{{ ucfirst($employee->name) }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">@lang('modules.employees.title')</label>
+                                    <select class="form-control select2" name="employee" id="employee" data-style="form-control">
+                                        <option value="all">@lang('modules.client.all')</option>
+                                        @forelse($employees as $employee)
+                                            <option value="{{$employee->id}}">{{ ucfirst($employee->name) }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label">@lang('app.skills')</label>
-                                <select class="select2 m-b-10 select2-multiple " multiple="multiple"
-                                        data-placeholder="Choose Skills" name="skill[]" id="skill" data-style="form-control">
-                                    <option value="all">@lang('modules.client.all')</option>
-                                    @forelse($skills as $skill)
-                                        <option value="{{$skill->id}}">{{ ucfirst($skill->name) }}</option>
-                                    @empty
-                                    @endforelse
-                                </select>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">@lang('app.skills')</label>
+                                    <select class="select2 m-b-10 select2-multiple " multiple="multiple"
+                                            data-placeholder="Choose Skills" name="skill[]" id="skill" data-style="form-control">
+                                        <option value="all">@lang('modules.client.all')</option>
+                                        @forelse($skills as $skill)
+                                            <option value="{{$skill->id}}">{{ ucfirst($skill->name) }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label class="control-label col-xs-12">&nbsp;</label>
-                                <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
-                                <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-xs-12">&nbsp;</label>
+                                    <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
+                                    <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
-                </div>
+                        </form>
+                    </div>
+                @endsection
                 @endif
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="users-table">

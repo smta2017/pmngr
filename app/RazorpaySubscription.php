@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RazorpaySubscription extends Model
+class RazorpaySubscription extends BaseModel
 {
     protected $dates = ['created_at'];
 

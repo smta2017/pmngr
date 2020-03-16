@@ -6,7 +6,7 @@ use App\Observers\ProjectCategoryObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ProjectCategory extends Model
+class ProjectCategory extends BaseModel
 {
     protected $table = 'project_category';
 

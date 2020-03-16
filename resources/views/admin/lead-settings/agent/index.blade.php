@@ -33,85 +33,88 @@
 
                     @include('sections.lead_setting_menu')
 
-                    <div class="tab-content">
-                        <div id="vhome3" class="tab-pane active">
+                    <div class="row">
 
-                            <div class="row">
+                        <div class="col-md-12">
+                            <div class="white-box">
+                                <h3>@lang('app.addNew') @lang('modules.lead.leadAgent')</h3>
 
-                                <div class="col-md-12">
-                                    <div class="white-box">
-                                        <h3>@lang('app.addNew') @lang('modules.lead.leadAgent')</h3>
+                                {!! Form::open(['id'=>'createTypes','class'=>'ajax-form','method'=>'POST']) !!}
 
-                                        {!! Form::open(['id'=>'createTypes','class'=>'ajax-form','method'=>'POST']) !!}
+                                <div class="form-body">
 
-                                        <div class="form-body">
+                                    <div class="form-group" id="user_id">
+                                        <label for="">@lang('modules.tickets.chooseAgents')</label>
+                                        <select class="select2 m-b-10 select2-multiple " multiple="multiple"
+                                                data-placeholder="@lang('modules.tickets.chooseAgents')" name="user_id[]">
+                                            @foreach($employees as $emp)
+                                                <option value="{{ $emp->id }}">{{ ucwords($emp->name). ' ['.$emp->email.']' }} @if($emp->id == $user->id)
+                                                        (YOU) @endif</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                            <div class="form-group" id="user_id">
-                                                <label for="">@lang('modules.tickets.chooseAgents')</label>
-                                                <select class="select2 m-b-10 select2-multiple " multiple="multiple"
-                                                        data-placeholder="@lang('modules.tickets.chooseAgents')" name="user_id[]">
-                                                    @foreach($employees as $emp)
-                                                        <option value="{{ $emp->id }}">{{ ucwords($emp->name). ' ['.$emp->email.']' }} @if($emp->id == $user->id)
-                                                                (YOU) @endif</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="form-actions">
-                                                <button type="submit" id="save-type" class="btn btn-success"><i
-                                                            class="fa fa-check"></i> @lang('app.save')
-                                                </button>
-                                            </div>
-                                        </div>
-
-                                        {!! Form::close() !!}
-
+                                    <div class="form-actions">
+                                        <button type="submit" id="save-type" class="btn btn-success"><i
+                                                    class="fa fa-check"></i> @lang('app.save')
+                                        </button>
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
-                                    <div class="white-box">
-                                        <h3>@lang('modules.lead.leadAgent')</h3>
-
-
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>@lang('app.name')</th>
-                                                    <th>@lang('app.action')</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @forelse($leadAgents as $key=>$agents)
-                                                    <tr id="leadAgent_{{ $agents->id }}">
-                                                        <td width="10%">{{ ($key+1) }}</td>
-                                                        <td width="60%">{{ ucwords($agents->user->name) }}</td>
-                                                        <td width="30%">
-                                                            <a href="javascript:;" data-type-id="{{ $agents->id }}"
-                                                               class="btn btn-sm btn-danger btn-rounded btn-outline delete-type"><i
-                                                                        class="fa fa-times"></i> @lang('app.remove')</a>
-                                                        </td>
-                                                    </tr>
-                                                @empty
-                                                    <tr>
-                                                        <td>
-                                                            @lang('messages.noLeadAgentAdded')
-                                                        </td>
-                                                    </tr>
-                                                @endforelse
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+                                {!! Form::close() !!}
 
                             </div>
-
-                            <div class="clearfix"></div>
                         </div>
+
+                        <div class="col-md-12">
+                            <div class="white-box">
+                                <h3>@lang('modules.lead.leadAgent')</h3>
+
+
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>@lang('app.name')</th>
+                                            <th>@lang('app.action')</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        @forelse($leadAgents as $key=>$agents)
+                                            <tr id="leadAgent_{{ $agents->id }}">
+                                                <td width="10%">{{ ($key+1) }}</td>
+                                                <td width="60%">{{ ucwords($agents->user->name) }}</td>
+                                                <td width="30%">
+                                                    <a href="javascript:;" data-type-id="{{ $agents->id }}"
+                                                        class="btn btn-sm btn-danger btn-rounded btn-outline delete-type"><i
+                                                                class="fa fa-times"></i> @lang('app.remove')</a>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <td colspan="3" class="text-center">
+                                                <div class="empty-space" style="height: 200px;">
+                                                    <div class="empty-space-inner">
+                                                        <div class="icon" style="font-size:30px"><i
+                                                                    class="icon-layers"></i>
+                                                        </div>
+                                                        <div class="title m-b-15"> @lang('messages.noLeadAgentAdded')
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+
+                                        @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
+
                 </div>
 
             </div>

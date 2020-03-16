@@ -27,12 +27,7 @@
 
             <div class="col-xs-6">
                 <label class="font-12" for="">@lang('modules.tasks.assignTo')</label><br>
-                @if($task->user->image)
-                    <img src="{{ asset('user-uploads/avatar/'.$task->user->image) }}" class="img-circle" width="25" alt="">
-                @else
-                    <img src="{{ asset('default-profile-2.png') }}" class="img-circle" width="25" alt="">
-                @endif
-
+                <img src="{{ $task->user->image_url }}" class="img-circle" width="25" height="25" alt="">
                 {{ ucwords($task->user->name) }}
             </div>
             <div class="col-xs-6">

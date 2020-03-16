@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EstimateItem extends Model
+class EstimateItem extends BaseModel
 {
     protected $guarded = ['id'];
 

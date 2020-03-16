@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Holiday
  * @package App\Models
  */
-class EmployeeDocs extends Model
+class EmployeeDocs extends BaseModel
 {
     // Don't forget to fill this array
     protected $fillable = [];

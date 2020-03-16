@@ -8,25 +8,27 @@
         </thead>
         <tbody>
         <tr>
-            <td>App Version <span
-                        class="pull-right">{{ $updateVersionInfo['appVersion'] }}</span></td>
+            <td>App Version </td>
+            <td>{{ $updateVersionInfo['appVersion'] }}</td>
         </tr>
         <tr>
-            <td>Laravel Version <span
-                        class="pull-right">{{ $updateVersionInfo['laravelVersion'] }}</span></td>
+            <td>Laravel Version</td>
+            <td>{{ $updateVersionInfo['laravelVersion'] }}</td>
         </tr>
         <td>PHP Version
-            @if (version_compare(PHP_VERSION, '7.1.0') > 0)
-                <span class="pull-right">{{ phpversion() }} <i class="fa fa fa-check-circle text-success"></i></span>
+
+        <td>
+            @if (version_compare(PHP_VERSION, '7.2.5') >= 0)
+                {{ phpversion() }} <i class="fa fa fa-check-circle text-success"></i>
             @else
-                <span class="pull-right">{{ phpversion() }} <i  data-toggle="tooltip" data-original-title="@lang('messages.phpUpdateRequired')" class="fa fa fa-warning text-danger"></i></span>
+                {{ phpversion() }} <i  data-toggle="tooltip" data-original-title="@lang('messages.phpUpdateRequired')" class="fa fa fa-warning text-danger"></i>
             @endif
+        </td>
         </td>
         @if(!is_null($envatoUpdateCompanySetting->purchase_code))
             <tr>
-                <td>Envato Purchase code <span
-                            class="pull-right">{{$envatoUpdateCompanySetting->purchase_code}}</span>
-                </td>
+                <td>Envato Purchase code </td>
+                <td>{{$envatoUpdateCompanySetting->purchase_code}}</td>
             </tr>
         @endif
         </tbody>

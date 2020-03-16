@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 
-class LeadSource extends Model
+class LeadSource extends BaseModel
 {
     protected $table = 'lead_sources';
 

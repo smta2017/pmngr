@@ -41,14 +41,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="company_name">@lang('modules.accountSettings.companyName')</label>
+                                        <label for="company_name" class="required">@lang('modules.accountSettings.companyName')</label>
                                         <input type="text" class="form-control" id="company_name" name="company_name"
                                                value="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="company_email">@lang('modules.accountSettings.companyEmail')</label>
+                                        <label for="company_email" class="required">@lang('modules.accountSettings.companyEmail')</label>
                                         <input type="email" class="form-control" id="company_email" name="company_email"
                                                value="">
                                     </div>
@@ -58,7 +58,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="company_phone">@lang('modules.accountSettings.companyPhone')</label>
+                                        <label for="company_phone" class="required">@lang('modules.accountSettings.companyPhone')</label>
                                         <input type="tel" class="form-control" id="company_phone" name="company_phone"
                                                value="">
                                     </div>
@@ -80,13 +80,12 @@
                                         <div class="col-md-12">
                                             <div class="fileinput fileinput-new" data-provides="fileinput">
                                                 <div class="fileinput-new thumbnail"
-                                                     style="width: 200px; height: 150px;">
+                                                     style="width: 250px; height: 80px;">
 
-                                                    <img src="https://via.placeholder.com/200x150.png?text={{ str_replace(' ', '+', __('modules.accountSettings.uploadLogo')) }}"
-                                                         alt=""/>
+                                                    <img src="{{ $global->logo_url }}" alt=""/>
                                                 </div>
                                                 <div class="fileinput-preview fileinput-exists thumbnail"
-                                                     style="max-width: 200px; max-height: 150px;"></div>
+                                                     style="width: 250px; height: 80px;"></div>
                                                 <div>
                                 <span class="btn btn-info btn-file">
                                     <span class="fileinput-new"> @lang('app.selectImage') </span>
@@ -102,25 +101,16 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>@lang('app.status')</label>
-                                        <select name="status" id="status" class="form-control">
-                                            <option value="">-</option>
-                                            <option value="active">@lang('app.active')</option>
-                                            <option value="inactive">@lang('app.inactive')</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="address">@lang('modules.accountSettings.companyAddress')</label>
+                                        <label for="address" class="required">@lang('modules.accountSettings.companyAddress')</label>
                                         <textarea class="form-control" id="address" rows="5"
                                                   name="address"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                            </div>
+
+
+                            <div class="row">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="address">@lang('modules.accountSettings.defaultCurrency')</label>
                                         <select name="currency_id" id="currency_id" class="form-control">
@@ -130,9 +120,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="address">@lang('modules.accountSettings.defaultTimezone')</label>
                                         <select name="timezone" id="timezone" class="form-control select2">
@@ -142,7 +130,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label for="address">@lang('modules.accountSettings.changeLanguage')</label>
                                         <select name="locale" id="locale" class="form-control select2">
@@ -154,6 +142,15 @@
                                         </select>
                                     </div>
                                 </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>@lang('app.status')</label>
+                                        <select name="status" id="status" class="form-control">
+                                            <option value="active">@lang('app.active')</option>
+                                            <option value="inactive">@lang('app.inactive')</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
                             <h3 class="box-title">@lang('modules.company.accountSetup')</h3>
@@ -162,14 +159,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">@lang('modules.employees.employeeEmail')</label>
+                                        <label for="email" class="required">@lang('app.email')</label>
                                         <input type="email" class="form-control" id="email" name="email"
                                                value="">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="email">@lang('modules.employees.employeePassword')</label>
+                                        <label for="email" class="required">@lang('modules.employees.employeePassword')</label>
                                         <input type="password" class="form-control" id="password" name="password"
                                                value="">
                                     </div>
@@ -179,7 +176,7 @@
                         </div>
                         <div class="form-actions">
                             <button type="submit" id="save-form" class="btn btn-success"> <i class="fa fa-check"></i> @lang('app.save')</button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
-class Leave extends Model
+class Leave extends BaseModel
 {
     protected $dates = ['leave_date'];
     protected $appends = ['date'];
@@ -49,18 +49,35 @@ class Leave extends Model
         $user = User::withoutGlobalScope('active')->findOrFail($userId);
 
         if ($setting->leaves_start_from == 'joining_date') {
-            return Leave::where('user_id', $userId)
+            $fullDay = Leave::where('user_id', $userId)
                 ->where('leave_date', '<=', $user->employee[0]->joining_date->format((Carbon::now()->year + 1) . '-m-d'))
                 ->where('status', 'approved')
-                ->where('status', 'approved')
+                ->where('duration', '<>', 'half day')
                 ->count();
+
+            $halfDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', $user->employee[0]->joining_date->format((Carbon::now()->year + 1) . '-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', 'half day')
+                ->count();
+
+            return ($fullDay + ($halfDay/2));
         } else {
-            return Leave::where('user_id', $userId)
+            $fullDay = Leave::where('user_id', $userId)
                 ->where('leave_date', '<=', Carbon::today()->endOfYear()->format('Y-m-d'))
                 ->where('status', 'approved')
+                ->where('duration', '<>', 'half day')
                 ->count();
+
+            $halfDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', Carbon::today()->endOfYear()->format('Y-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', 'half day')
+                ->count();
+
+            return ($fullDay + ($halfDay/2));
         }
-        
+
     }
 
     public static function byUser($userId)
@@ -79,6 +96,43 @@ class Leave extends Model
                 ->where('leave_date', '<=', Carbon::today()->endOfYear()->format('Y-m-d'))
                 ->where('status', 'approved')
                 ->get();
+        }
+    }
+
+    public static function byUserCount($userId)
+    {
+        $setting = Setting::first();
+        $user = User::withoutGlobalScope('active')->findOrFail($userId);
+
+        if ($setting->leaves_start_from == 'joining_date') {
+            $fullDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', $user->employee[0]->joining_date->format((Carbon::now()->year + 1) . '-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', '<>', 'half day')
+                ->get();
+
+            $halfDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', $user->employee[0]->joining_date->format((Carbon::now()->year + 1) . '-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', 'half day')
+                ->get();
+
+            return (count($fullDay) + (count($halfDay)/2));
+
+        } else {
+            $fullDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', Carbon::today()->endOfYear()->format('Y-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', '<>', 'half day')
+                ->get();
+
+            $halfDay = Leave::where('user_id', $userId)
+                ->where('leave_date', '<=', $user->employee[0]->joining_date->format((Carbon::now()->year + 1) . '-m-d'))
+                ->where('status', 'approved')
+                ->where('duration', 'half day')
+                ->get();
+
+            return (count($fullDay) + (count($halfDay)/2));
         }
     }
 }

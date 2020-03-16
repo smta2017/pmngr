@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class GdprSetting extends Model
+class GdprSetting extends BaseModel
 {
     protected $guarded = ['id'];
 

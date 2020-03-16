@@ -1,11 +1,11 @@
 @foreach($boardColumns as $key=>$column)
-    <div class="panel col-md-3 board-column p-0" data-column-id="{{ $column->id }}" >
-        <div class="panel-heading p-t-5 p-b-5" style="background-color: {{ $column->label_color }}" >
+    <div class="panel col-xs-3 board-column p-0" data-column-id="{{ $column->id }}" >
+        <div class="panel-heading p-t-5 p-b-5" >
             <div class="panel-title">
-                <h6 class="text-white">{{ ucwords($column->column_name) }}
+                <h6 style="color: {{ $column->label_color }}">{{ ucwords($column->column_name) }}
 
-                    <div style="position: relative;" class=" pull-right">
-                        <a href="javascript:;"  data-toggle="dropdown"  class="dropdown-toggle "><i class="ti-settings text-white font-normal"></i></a>
+                    <div style="position: relative;" class="dropdown pull-right">
+                        <a href="javascript:;"  data-toggle="dropdown"  class="dropdown-toggle "><i class="ti-settings font-normal"></i></a>
                         <ul role="menu" class="dropdown-menu">
                             <li><a href="javascript:;" data-column-id="{{ $column->id }}" class="add-task">@lang('modules.tasks.newTask')</a></li>
                             <li><a href="javascript:;" data-column-id="{{ $column->id }}" class="edit-column" >@lang('app.edit')</a>
@@ -19,18 +19,16 @@
                 </h6>
             </div>
         </div>
-        <div class="panel-body" id="taskBox_{{ $column->id }}">
+        <div class="panel-body" id="taskBox_{{ $column->id }}" style="height: 70vh; overflow-y: auto">
             <div class="row">
                 <div class="col-xs-12" style="height: 400px !important;">
                     @foreach($column->tasks as $task)
-                        <div class="panel panel-default lobipanel view-task" data-task-id="{{ $task->id }}" id="sectionTask{{ $task->id }}" data-sortable="true">
+                        <div class="panel panel-default lobipanel view-task" data-task-id="{{ $task->id }}" data-sortable="true">
                             <div class="panel-body">
                                 <div class="p-10 font-12">{{ ucfirst($task->heading) }}</div>
-                              
+
                                 <div class="b-t p-t-10 p-b-10 p-10">
-                                    {!!  ($task->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$task->user->image).'" 
-                                                            alt="user" class="img-circle" width="30">' : '<img src="'.asset('default-profile-2.png').'" 
-                                                            alt="user" class="img-circle" width="30">' !!}
+                                    <img src="{{ $task->user->image_url }}" alt="user" width="30" height="30" class="img-circle">
                                     <span>{{ ucwords($task->user->name) }}</span>
                                 </div>
                                 <div class="bg-grey p-10">
@@ -57,12 +55,11 @@
 @endforeach
 <script>
     $(function () {
-        @foreach($boardColumns as $key=>$column)
-        $('#taskBox_{{ $column->id }}').slimScroll({
-            height: '450px'
-        });
-        @endforeach
-
+        // @foreach($boardColumns as $key=>$column)
+        // $('#taskBox_{{ $column->id }}').slimScroll({
+        //     height: '70vh'
+        // });
+        // @endforeach
 
         $('.lobipanel').on('dragged.lobiPanel', function () {
             var $parent = $(this).parent(),
@@ -92,6 +89,14 @@
                 selector: '[data-toggle="tooltip"]'
             });
 
+            $('.board-column').each(function () {
+                let lobipanelItems = $(this).find('.view-task').length;
+                // console.log(lobipanelItems);
+                if (lobipanelItems == 1) {
+                    $(this).find('.lobipanel:first').addClass('m-b-0');
+                }
+            })
+
         }).lobiPanel({
             sortable: true,
             reload: false,
@@ -103,24 +108,39 @@
 
         });
 
+        var isDragging = 0;
+        $('.lobipanel-parent-sortable').on('sortactivate', function(){
+            // console.log("activate event handle");
+            $('.board-column > .panel-body').css('overflow-y', 'unset');
+            isDragging = 1;
+        });
+        $('.lobipanel-parent-sortable').on('sortstop', function(e){
+            // console.log("stop event handle");
+            $('.board-column > .panel-body').css('overflow-y', 'auto');
+            isDragging = 0;
+        });
+
+
 
         $('.view-task').click(function () {
-            $(".right-sidebar").slideDown(50).addClass("shw-rside");
+            if (isDragging == 0) {
+                $(".right-sidebar").slideDown(50).addClass("shw-rside");
 
-            var id = $(this).data('task-id');
-            console.log([id, 'hello', this.id]);
-            var url = "{{ route('admin.all-tasks.show',':id') }}";
-            url = url.replace(':id', id);
+                var id = $(this).data('task-id');
+                var url = "{{ route('admin.all-tasks.show',':id') }}";
+                url = url.replace(':id', id);
 
-            $.easyAjax({
-                type: 'GET',
-                url: url,
-                success: function (response) {
-                    if (response.status == "success") {
-                        $('#right-sidebar-content').html(response.view);
+                $.easyAjax({
+                    type: 'GET',
+                    url: url,
+                    success: function (response) {
+                        if (response.status == "success") {
+                            $('#right-sidebar-content').html(response.view);
+                        }
                     }
-                }
-            });
+                });
+
+            }
         })
 
 
@@ -133,7 +153,6 @@
             $('#modelHeading').html('Add Task');
             $.ajaxModal('#eventDetailModal', url);
         })
-
 
         $('.delete-column').click(function () {
             var id = $(this).data('column-id');

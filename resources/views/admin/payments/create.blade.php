@@ -33,26 +33,27 @@
 
         <div class="col-md-12">
 
-            <div class="panel ">
+            <div class="panel panel-inverse">
                 <div class="panel-heading"> @lang('modules.payments.addPayment')</div>
                 <div class="panel-wrapper collapse in" aria-expanded="true">
                     <div class="panel-body">
                         {!! Form::open(['id'=>'createPayment','class'=>'ajax-form','method'=>'POST']) !!}
                         <div class="form-body">
                             <div class="row">
-
-                                <div class="col-md-12 ">
-                                    <div class="form-group">
-                                        <label>@lang('app.selectProject')</label>
-                                        <select class="select2 form-control" data-placeholder="@lang('app.selectProject') (@lang('app.optional'))" name="project_id">
-                                            <option value=""></option>
-                                            @foreach($projects as $project)
-                                                <option
-                                                        value="{{ $project->id }}">{{ $project->project_name }}</option>
-                                            @endforeach
-                                        </select>
+                                @if(in_array('projects', $modules))
+                                    <div class="col-md-12 ">
+                                        <div class="form-group">
+                                            <label>@lang('app.selectProject')</label>
+                                            <select class="select2 form-control" data-placeholder="@lang('app.selectProject') (@lang('app.optional'))" name="project_id">
+                                                <option value=""></option>
+                                                @foreach($projects as $project)
+                                                    <option
+                                                            value="{{ $project->id }}">{{ $project->project_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
 
                                 <div class="col-md-12">
                                     <div class="form-group">
@@ -115,7 +116,7 @@
                             <button type="submit" id="save-form-2" class="btn btn-success"><i class="fa fa-check"></i>
                                 @lang('app.save')
                             </button>
-                            <button type="reset" class="btn btn-default">@lang('app.reset')</button>
+
                         </div>
                         {!! Form::close() !!}
                     </div>

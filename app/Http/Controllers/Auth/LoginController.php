@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\GlobalSetting;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Front\FrontBaseController;
 use App\User;
 use Carbon\Carbon;
 use Froiden\Envato\Traits\AppBoot;
@@ -12,7 +13,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
-class LoginController extends Controller
+class LoginController extends FrontBaseController
 {
     /*
     |--------------------------------------------------------------------------
@@ -48,11 +49,16 @@ class LoginController extends Controller
     public function showLoginForm()
     {
         if (!$this->isLegal()) {
-            // return redirect('verify-purchase');
+            return redirect('verify-purchase');
         }
 
-        $setting = GlobalSetting::first();
-        return view('auth.login', compact('setting'));
+        $this->pageTitle = 'Login Page';
+        if($this->setting->front_design == 1){
+            return view('saas.login', $this->data);
+        }
+
+
+        return view('auth.login', $this->data);
     }
 
     protected function validateLogin(\Illuminate\Http\Request $request)

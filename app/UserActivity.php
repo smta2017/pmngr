@@ -6,7 +6,7 @@ use App\Observers\UserActivityObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class UserActivity extends Model
+class UserActivity extends BaseModel
 {
     protected static function boot()
     {

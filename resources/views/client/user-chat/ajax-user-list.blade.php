@@ -5,7 +5,7 @@
            class="@if(isset($userID) && $userID == $userList->id) active @endif"
            onclick="getChatData('{{$userList->id}}', '{{$userList->name}}')">
 
-            <img src="@if(is_null($userList->image)) {{asset('default-profile-2.png')}} @else {{ asset('user-uploads/avatar/'.$userList->image)}} @endif" alt="user-img" class="img-circle">
+            <img src="{{ $userList->image_url }}" alt="user-img" class="img-circle">
             <span @if($userList->message_seen == 'no' && $userList->user_one != $user->id) class="font-bold" @endif>{{$userList->name}}
                 <small class="text-simple">@if($userList->last_message){{  \Carbon\Carbon::parse($userList->last_message)->diffForHumans()}} @endif
                     @if(\App\User::isAdmin($userList->id))

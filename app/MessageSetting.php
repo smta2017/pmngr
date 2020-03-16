@@ -6,7 +6,7 @@ use App\Observers\MessageSettingObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageSetting extends Model
+class MessageSetting extends BaseModel
 {
     protected static function boot()
     {

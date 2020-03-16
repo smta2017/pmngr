@@ -8,7 +8,10 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('member.leaves.create') }}" class="btn btn-sm btn-success btn-outline waves-effect waves-light">
+                <i class="ti-plus"></i> @lang('modules.leaves.applyLeave')
+            </a>
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -69,7 +72,7 @@
                     </div>
 
                     <div class="col-md-3 col-md-offset-1 text-center"><span class="donut" data-peity='{ "fill": ["red", "#eeeeee"],    "innerRadius": 40, "radius": 60 }'>{{ count($leaves) }}/{{ $allowedLeaves }}</span><br>
-                        <div class="btn btn-inverse btn-rounded">@lang('modules.leaves.leavesTaken') : {{ count($leaves) }}/{{ $allowedLeaves }}</div>
+                        <div class="btn btn-inverse btn-rounded">@lang('modules.leaves.leavesTaken') : {{ $leavesCount }}/{{ $allowedLeaves }}</div>
                     </div>
                 </div>
             </div>
@@ -104,15 +107,7 @@
                 <div class="row">
                     <h3 class="box-title col-md-3">@lang('app.menu.leaves')</h3>
 
-                    <div class="col-md-9 text-right">
-                        <div class="form-group">
-                            <a href="{{ route('member.leaves.create') }}" class="btn btn-sm btn-success waves-effect waves-light">
-                                <i class="ti-plus"></i> @lang('modules.leaves.applyLeave')
-                            </a>
-
-                        </div>
-
-                    </div>
+                    
 
                 </div>
 

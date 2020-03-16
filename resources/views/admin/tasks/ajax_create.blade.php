@@ -192,11 +192,13 @@
         autoclose: true,
         todayHighlight: true,
         weekStart:'{{ $global->week_start }}',
+        format: '{{ $global->date_picker_format }}',
     }).on('changeDate', function (selected) {
         $('#due_date2').datepicker({
             autoclose: true,
             todayHighlight: true,
             weekStart:'{{ $global->week_start }}',
+            format: '{{ $global->date_picker_format }}',
         });
         var minDate = new Date(selected.date.valueOf());
         $('#due_date2').datepicker("update", minDate);

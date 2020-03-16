@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="{{ route('admin.payments.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.payments.addPayment') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -34,36 +36,22 @@
     <div class="row">
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <a href="{{ route('admin.payments.create') }}" class="btn btn-outline btn-success btn-sm">@lang('modules.payments.addPayment') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                            <a href="javascript:;" id="toggle-filter" class="btn btn-outline btn-danger btn-sm toggle-filter"><i
-                                        class="fa fa-sliders"></i> @lang('app.filterResults')</a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 text-right hidden-xs">
-                        <div class="form-group">
-                            <a href="javascript:;" onclick="exportData()" class="btn btn-info btn-sm"><i class="ti-export" aria-hidden="true"></i> @lang('app.exportExcel')</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row b-b b-t" style="display: none; background: #fbfbfb;" id="ticket-filters">
-                    <div class="col-md-12">
-                        <h4>@lang('app.filterBy') <a href="javascript:;" class="pull-right toggle-filter"><i class="fa fa-times-circle-o"></i></a></h4>
-                    </div>
+
+                @section('filter-section')
+                <div class="row" id="ticket-filters">
+
                     <form action="" id="filter-form">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <h5 >@lang('app.selectDateRange')</h5>
                             <div class="input-daterange input-group" id="date-range">
-                                <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
+                                <input type="text" class="form-control" autocomplete="off" id="start-date" placeholder="@lang('app.startDate')"
                                        value=""/>
                                 <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
-                                <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
+                                <input type="text" class="form-control" autocomplete="off" id="end-date" placeholder="@lang('app.endDate')"
                                        value=""/>
                             </div>
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-12">
                             <h5 >@lang('app.status')</h5>
                             <div class="form-group">
                                 {{--<label class="control-label">@lang('app.status')</label>--}}
@@ -74,7 +62,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-12">
                             <h5 >@lang('app.project')</h5>
                             <div class="form-group">
                                 <select class="form-control select2" name="project" id="project" data-style="form-control">
@@ -86,8 +74,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group m-t-10">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 <label class="control-label col-xs-12">&nbsp;</label>
                                 <button type="button" id="apply-filters" class="btn btn-success col-md-6"><i class="fa fa-check"></i> @lang('app.apply')</button>
                                 <button type="button" id="reset-filters" class="btn btn-inverse col-md-5 col-md-offset-1"><i class="fa fa-refresh"></i> @lang('app.reset')</button>
@@ -95,43 +83,45 @@
                         </div>
                     </form>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 pull-right">
-                        {!! Form::open(['id'=>'importExcel','class'=>'ajax-form','method'=>'POST']) !!}
-                        <div class="form-group">
-                            <div class="col-md-12 text-right">
-                                <div class="checkbox checkbox-info">
-                                    <input id="calculate-task-progress" name="currency_character" value="true"
-                                           type="checkbox">
-                                    <label for="calculate-task-progress">@lang('modules.payments.firstCharacter')</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                    <div class="form-control" data-trigger="fileinput">
-                                        <i class="glyphicon glyphicon-file fileinput-exists"></i>
-                                        <span class="fileinput-filename"></span>
-                                    </div>
-                                    <span class="input-group-addon btn btn-default btn-file">
-                                        <span class="fileinput-new"><i class="fa fa-file-excel-o text-success"></i> @lang('modules.payments.import')</span>
-                                            <span class="fileinput-exists">@lang('app.change')</span>
-                                            <input type="file" name="import_file" id="import_file">
-                                            </span>
-                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">@lang('app.remove')</a>
-                                    <a href="javascript:;" id="import-excel" class="input-group-addon btn btn-success fileinput-exists text-white" data-dismiss="fileinput">@lang('app.submit')</a>
-                                </div>
+                @endsection
 
-                                <a href="{{ route('admin.payments.downloadSample') }}" class="btn btn-success"><i class="fa fa-download"></i> @lang('app.sampleFile')</a>
+{{--                <div class="row">--}}
+{{--                    <div class="col-md-6 pull-right">--}}
+{{--                        {!! Form::open(['id'=>'importExcel','class'=>'ajax-form','method'=>'POST']) !!}--}}
+{{--                        <div class="form-group">--}}
+{{--                            <div class="col-md-12 text-right">--}}
+{{--                                <div class="checkbox checkbox-info">--}}
+{{--                                    <input id="calculate-task-progress" name="currency_character" value="true"--}}
+{{--                                           type="checkbox">--}}
+{{--                                    <label for="calculate-task-progress">@lang('modules.payments.firstCharacter')</label>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
+{{--                        <div class="form-group">--}}
+{{--                            <div class="col-md-12">--}}
+{{--                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">--}}
+{{--                                    <div class="form-control" data-trigger="fileinput">--}}
+{{--                                        <i class="glyphicon glyphicon-file fileinput-exists"></i>--}}
+{{--                                        <span class="fileinput-filename"></span>--}}
+{{--                                    </div>--}}
+{{--                                    <span class="input-group-addon btn btn-default btn-file">--}}
+{{--                                        <span class="fileinput-new"><i class="fa fa-file-excel-o text-success"></i> @lang('modules.payments.import')</span>--}}
+{{--                                            <span class="fileinput-exists">@lang('app.change')</span>--}}
+{{--                                            <input type="file" name="import_file" id="import_file">--}}
+{{--                                            </span>--}}
+{{--                                    <a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">@lang('app.remove')</a>--}}
+{{--                                    <a href="javascript:;" id="import-excel" class="input-group-addon btn btn-success fileinput-exists text-white" data-dismiss="fileinput">@lang('app.submit')</a>--}}
+{{--                                </div>--}}
 
-                            </div>
-                        </div>
+{{--                                <a href="{{ route('admin.payments.downloadSample') }}" class="btn btn-success"><i class="fa fa-download"></i> @lang('app.sampleFile')</a>--}}
 
-                        {!! Form::close() !!}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
-                    </div>
-                </div>
+{{--                        {!! Form::close() !!}--}}
+
+{{--                    </div>--}}
+{{--                </div>--}}
                 <div class="table-responsive">
                     <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="invoice-table">
                         <thead>

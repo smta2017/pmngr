@@ -7,7 +7,7 @@
 <div class="modal-body">
     <div class="box-body">
 
-        @if(isset($type) && $type == 'icon')
+        @if(isset($type) && $type != 'image' && $type != 'apps')
             <div class="form-group">
                 <label class="col-sm-2 control-label">@lang('app.icon')</label>
                 <div class="btn-group col-sm-10">
@@ -41,14 +41,14 @@
             </div>
         </div>
 
-        @if(isset($type) && $type == 'image')
+        @if(isset($type) && $type == 'image' || $type == 'apps')
             <div class="form-group">
                 <label class="col-sm-2 control-label" for="exampleInputPassword1">@lang('app.image') (400x352)</label>
                 <div class="col-sm-10">
                     <div class="fileinput fileinput-new" data-provides="fileinput">
                         <div class="fileinput-new thumbnail"
                              style="width: 200px; height: 150px;">
-                                <img src="{{asset('front/img/demo/slack/tools.png')}}"
+                                <img src="{{asset('front/img/tools.png')}}"
                                      alt=""/>
                         </div>
                         <div class="fileinput-preview fileinput-exists thumbnail"

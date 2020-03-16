@@ -61,14 +61,21 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="white-box p-b-0 bg-inverse text-white">
+            <div class="white-box p-b-0">
                 <div class="row">
                     <div class="col-md-4">
                         <label class="control-label">@lang('app.selectDateRange')</label>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <input class="form-control input-daterange-datepicker" type="text" name="daterange"
                                    value="{{ $startDate->format('m/d/Y').' - '.$endDate->format('m/d/Y') }}"/>
+                        </div> --}}
+                        <div class="input-daterange input-group" id="date-range">
+                            <input type="text" class="form-control" id="start-date" placeholder="@lang('app.startDate')"
+                                   value="{{ $startDate->format($global->date_format) }}"/>
+                            <span class="input-group-addon bg-info b-0 text-white">@lang('app.to')</span>
+                            <input type="text" class="form-control" id="end-date" placeholder="@lang('app.endDate')"
+                                   value="{{ $endDate->format($global->date_format) }}"/>
                         </div>
                     </div>
 
@@ -84,7 +91,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <div class="form-group m-t-25">
+                        <div class="form-group m-t-20">
                             <button type="button" id="apply-filter" class="btn btn-success btn-block">@lang('app.apply')</button>
                         </div>
                     </div>
@@ -95,66 +102,30 @@
         </div>
 
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="white-box bg-inverse">
-                        <h3 class="box-title text-white">@lang('modules.attendance.totalWorkingDays')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="totalWorkingDays" class="counter text-white">{{ $totalWorkingDays }}</span></li>
-                        </ul>
+            <div class="row dashboard-stats">
+                <div class="col-md-12 m-b-30">
+                    <div class="white-box">
+                        <div class="col-md-2  col-sm-4 text-center">
+                            <h4><span class="text-dark" id="totalWorkingDays">{{ $totalWorkingDays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.totalWorkingDays')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l  col-sm-4 text-center">
+                            <h4><span class="text-success" id="daysPresent">{{ $daysPresent }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.daysPresent')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l  col-sm-4 text-center">
+                            <h4><span class="text-danger" id="daysLate">{{ $daysLate }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.days') @lang('modules.attendance.late')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l  col-sm-4 text-center">
+                            <h4><span class="text-warning" id="halfDays">{{ $halfDays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.halfDay')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l  col-sm-4 text-center">
+                            <h4><span class="text-info" id="absentDays">{{ (($totalWorkingDays - $daysPresent) < 0) ? '0' : ($totalWorkingDays - $daysPresent) }}</span> <span class="font-12 text-muted m-l-5"> @lang('app.days') @lang('modules.attendance.absent')</span></h4>
+                        </div>
+                        <div class="col-md-2 b-l  col-sm-4 text-center">
+                            <h4><span class="text-primary" id="holidayDays">{{ $holidays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.holidays')</span></h4>
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-success">
-                        <h3 class="box-title text-white">@lang('modules.attendance.daysPresent')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="daysPresent" class="counter text-white">{{ $daysPresent }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-danger">
-                        <h3 class="box-title text-white">@lang('app.days') @lang('modules.attendance.late')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="daysLate" class="counter text-white">{{ $daysLate }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-warning">
-                        <h3 class="box-title text-white">@lang('modules.attendance.halfDay')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="halfDays" class="counter text-white">{{ $halfDays }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
-                    <div class="white-box bg-info">
-                        <h3 class="box-title text-white">@lang('app.days') @lang('modules.attendance.absent')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="absentDays" class="counter text-white">{{ (($totalWorkingDays - $daysPresent) < 0) ? '0' : ($totalWorkingDays - $daysPresent) }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="white-box bg-primary">
-                        <h3 class="box-title text-white"> @lang('modules.attendance.holidays')</h3>
-                        <ul class="list-inline two-part">
-                            <li><i class="icon-clock text-white"></i></li>
-                            <li class="text-right"><span id="holidayDays" class="counter text-white">{{ $holidays }}</span></li>
-                        </ul>
-                    </div>
-                </div>
-
+            
             </div>
 
         </div>
@@ -237,10 +208,17 @@
         }
     })
 
-    $('.input-daterange-datepicker').on('apply.daterangepicker', function (ev, picker) {
-        startDate = picker.startDate.format('YYYY-MM-DD');
-        endDate = picker.endDate.format('YYYY-MM-DD');
-        showTable();
+    // $('.input-daterange-datepicker').on('apply.daterangepicker', function (ev, picker) {
+    //     startDate = picker.startDate.format('YYYY-MM-DD');
+    //     endDate = picker.endDate.format('YYYY-MM-DD');
+    //     showTable();
+    // });
+
+    jQuery('#date-range').datepicker({
+        toggleActive: true,
+        format: '{{ $global->date_picker_format }}',
+        language: '{{ $global->locale }}',
+        autoclose: true
     });
 
     $('#apply-filter').click(function () {
@@ -257,14 +235,8 @@
 
     function showTable() {
 
-        $('body').block({
-            message: '<p style="margin:0;padding:8px;font-size:24px;">Just a moment...</p>'
-            , css: {
-                color: '#fff'
-                , border: '1px solid #fb9678'
-                , backgroundColor: '#fb9678'
-            }
-        });
+        var startDate = $('#start-date').val();
+        var endDate = $('#end-date').val();
 
         var userId = $('#user_id').val();
         if (userId == "") {

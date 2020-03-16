@@ -91,7 +91,10 @@ class MemberAllCreditNotesController extends MemberBaseController
                 return $action;
             })
             ->editColumn('project_name', function ($row) {
-                return '<a href="' . route('member.projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
+                if($row->project_id){
+                    return '<a href="' . route('member.projects.show', $row->project_id) . '">' . ucfirst($row->project->project_name) . '</a>';
+                }
+                return '--';
             })
             ->editColumn('cn_number', function ($row) {
                 return '<a href="' . route('member.all-credit-notes.show', $row->id) . '">' . ucfirst($row->cn_number) . '</a>';

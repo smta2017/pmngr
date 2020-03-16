@@ -26,98 +26,100 @@
 @section('content')
 
     <div class="row">
-        <div class="col-md-12">
-            <div class="white-box">
-                <h3 class="box-title m-b-0">@lang('app.add') @lang('app.menu.contract')</h3>
+        <div class="panel panel-inverse">
+            <div class="panel panel-inverse">
+                <div class="panel-heading"> @lang('app.add') @lang('app.menu.contract')</div>
 
-                <p class="text-muted m-b-30 font-13"></p>
+            <p class="text-muted m-b-30 font-13"></p>
 
-
-                {!! Form::open(['id'=>'createContract','class'=>'ajax-form','method'=>'POST']) !!}
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="company_name">@lang('app.client')</label>
-                                <div>
-                                    <select class="select2 form-control" data-placeholder="@lang('app.client')" name="client" id="clientID">
-                                        @foreach($clients as $client)
-                                            <option
-                                                    value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
+            <div class="panel-wrapper collapse in" aria-expanded="true">
+                <div class="panel-body">
+            {!! Form::open(['id'=>'createContract','class'=>'ajax-form','method'=>'POST']) !!}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="company_name">@lang('app.client')</label>
+                            <div>
+                                <select class="select2 form-control" data-placeholder="@lang('app.client')" name="client" id="clientID">
+                                    @foreach($clients as $client)
+                                        <option
+                                                value="{{ $client->id }}">{{ ucwords($client->name) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="subject">@lang('app.subject')</label>
-                                <input type="text" class="form-control" id="subject" name="subject">
-                            </div>
+
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="subject">@lang('app.amount') ({{ $global->currency->currency_symbol }})</label>
-                                <input type="number" class="form-control" id="amount" name="amount">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="subject">@lang('app.subject')</label>
+                            <input type="text" class="form-control" id="subject" name="subject">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="subject">@lang('app.amount') ({{ $global->currency->currency_symbol }})</label>
+                            <input type="number" class="form-control" id="amount" name="amount">
+                        </div>
+
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label">@lang('modules.contracts.contractType')
+                                <a href="javascript:;"
+                                    id="createContractType"
+                                    class="btn btn-sm btn-outline btn-success">
+                                    <i class="fa fa-plus"></i> @lang('modules.contracts.addContractType')
+                                </a>
+                            </label>
+                            <div>
+                                <select class="select2 form-control" data-placeholder="@lang('app.client')" id="contractType" name="contract_type">
+                                    @foreach($contractType as $type)
+                                        <option
+                                                value="{{ $type->id }}">{{ ucwords($type->name) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
 
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">@lang('modules.contracts.contractType')
-                                    <a href="javascript:;"
-                                       id="createContractType"
-                                       class="btn btn-sm btn-outline btn-success">
-                                        <i class="fa fa-plus"></i> @lang('modules.contracts.addContractType')
-                                    </a>
-                                </label>
-                                <div>
-                                    <select class="select2 form-control" data-placeholder="@lang('app.client')" id="contractType" name="contract_type">
-                                        @foreach($contractType as $type)
-                                            <option
-                                                    value="{{ $type->id }}">{{ ucwords($type->name) }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>@lang('modules.timeLogs.startDate')</label>
+                            <input id="start_date" name="start_date" type="text"
+                                    class="form-control"
+                                    value="{{ \Carbon\Carbon::today()->format($global->date_format) }}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@lang('modules.timeLogs.startDate')</label>
-                                <input id="start_date" name="start_date" type="text"
-                                       class="form-control"
-                                       value="{{ \Carbon\Carbon::today()->format($global->date_format) }}">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>@lang('modules.timeLogs.endDate')</label>
-                                <input id="end_date" name="end_date" type="text"
-                                       class="form-control"
-                                       value="{{ \Carbon\Carbon::today()->format($global->date_format) }}">
-                            </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>@lang('modules.timeLogs.endDate')</label>
+                            <input id="end_date" name="end_date" type="text"
+                                    class="form-control"
+                                    value="{{ \Carbon\Carbon::today()->format($global->date_format) }}">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>@lang('modules.contracts.notes')</label>
-                                <textarea class="form-control" id="description" name="description" rows="4"></textarea>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>@lang('modules.contracts.notes')</label>
+                            <textarea class="form-control" id="description" name="description" rows="4"></textarea>
                         </div>
                     </div>
-                        <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
-                            @lang('app.save')
-                        </button>
-                        <button type="reset" class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
-                    </div>
-                {!! Form::close() !!}
+                </div>
+                    <button type="submit" id="save-form" class="btn btn-success waves-effect waves-light m-r-10">
+                        @lang('app.save')
+                    </button>
+                    <button type="reset" class="btn btn-inverse waves-effect waves-light">@lang('app.reset')</button>
+                </div>
+            {!! Form::close() !!}
             </div>
+        </div>
         </div>
     </div>
     <!-- .row -->

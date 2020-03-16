@@ -6,8 +6,8 @@
             <a href="javascript:;" id="hide-edit-task-panel" class="close " data-dismiss="modal"><i class="ti-close"></i></a>
         </div>
     </div>
-
-    @if($task->project->isProjectAdmin || $user->can('edit_projects'))
+{{--    {{ dd($task) }}--}}
+    @if(!is_null($task->project) && $task->project->isProjectAdmin || $user->can('edit_projects'))
         <div class="panel-wrapper collapse in">
             <div class="panel-body">
                 {!! Form::open(['id'=>'updateTask','class'=>'ajax-form','method'=>'PUT']) !!}
@@ -259,6 +259,8 @@
             data: $('#updateTask').serialize(),
             success: function (data) {
                 $('#task-list-panel ul.list-group').html(data.html);
+                $('#edit-task-panel').switchClass("show", "hide", 300, "easeInOutQuad");
+                showTable();
             }
         })
     }

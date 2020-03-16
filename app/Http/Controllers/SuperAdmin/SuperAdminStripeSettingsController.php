@@ -61,7 +61,7 @@ class SuperAdminStripeSettingsController extends SuperAdminBaseController
         $stripe->razorpay_key = $request->razorpay_key;
         $stripe->razorpay_secret = $request->razorpay_secret;
         $stripe->razorpay_webhook_secret = $request->razorpay_webhook_secret;
-        ($request->razorpay_status) ? $stripe->razorpay_status = 'active' : $stripe->razorpay_status = 'inactive';
+        ($request->razorpay_status) ? $stripe->razorpay_status = 'active' : $stripe->razorpay_status = 'deactive';
 
         $stripe->save();
 

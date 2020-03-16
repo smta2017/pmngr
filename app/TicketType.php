@@ -6,7 +6,7 @@ use App\Observers\TicketTypeObserver;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TicketType extends Model
+class TicketType extends BaseModel
 {
     protected static function boot()
     {

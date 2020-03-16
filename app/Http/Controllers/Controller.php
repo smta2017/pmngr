@@ -46,6 +46,7 @@ class Controller extends BaseController
 
     public function checkMigrateStatus()
     {
+
         $status = Artisan::call('migrate:check');
 
         if ($status && !request()->ajax()) {

@@ -6,7 +6,7 @@ use App\Observers\DesignationObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class Designation extends Model
+class Designation extends BaseModel
 {
     protected $fillable = ['name', 'company_id'];
 

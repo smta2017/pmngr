@@ -19,9 +19,9 @@ trait StripeSettings{
         $apiSecret = ($settings->api_secret)? $settings->api_secret : env('STRIPE_SECRET');
         $webhookKey= ($settings->webhook_key)? $settings->webhook_key : env('STRIPE_WEBHOOK_SECRET');
 
-        Config::set('services.stripe.key', $key);
-        Config::set('services.stripe.secret', $apiSecret);
-        Config::set('services.stripe.webhook_secret', $webhookKey);
+        Config::set('cashier.key', $key);
+        Config::set('cashier.secret', $apiSecret);
+        Config::set('cashier.webhook.secret', $webhookKey);
     }
 }
 

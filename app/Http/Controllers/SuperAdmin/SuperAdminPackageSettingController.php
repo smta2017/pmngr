@@ -5,7 +5,7 @@ namespace App\Http\Controllers\SuperAdmin;
 use App\Company;
 use App\GlobalSetting;
 use App\Helper\Reply;
-use App\Http\Requests\SuperAdmin\FrontSetting\UpdateFrontSettings;
+use App\Http\Requests\SuperAdmin\FrontSetting\UpdateContactSettings;
 use App\Module;
 use App\ModuleSetting;
 use App\Package;
@@ -40,7 +40,7 @@ class SuperAdminPackageSettingController extends SuperAdminBaseController
     }
 
     /**
-     * @param UpdateFrontSettings $request
+     * @param UpdateContactSettings $request
      * @param $id
      * @return array
      */

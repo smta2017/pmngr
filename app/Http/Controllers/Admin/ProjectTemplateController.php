@@ -192,9 +192,8 @@ class ProjectTemplateController extends AdminBaseController
 
                 if (count($row->members) > 0) {
                     foreach ($row->members as $member) {
-                        $members .= ($member->user->image) ? '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('user-uploads/avatar/' . $member->user->image) . '"
-                        alt="user" class="img-circle" width="30"> ' : '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . asset('default-profile-2.png') . '"
-                        alt="user" class="img-circle" width="30"> ';
+                        $members .= '<img data-toggle="tooltip" data-original-title="' . ucwords($member->user->name) . '" src="' . $member->user->image_url . '"
+                        alt="user" class="img-circle" width="30" height="30"> ';
                     }
                 }
                 else{

@@ -41,7 +41,7 @@ class ClientEstimateController extends ClientBaseController
 
         return DataTables::of($invoices)
             ->addColumn('action', function ($row) {
-                return '<a href="' . route("front.estimate.show", md5($row->id)) . '" class="btn btn-info btn-circle" target="_blank"><i class="fa fa-eye"></i></a> <a href="' . route("client.estimates.download", $row->id) . '" data-toggle="tooltip" data-original-title="Download" class="btn btn-inverse btn-circle"><i class="fa fa-download"></i></a>';
+                return '<a href="' . route("front.estimate.show", md5($row->id)) . '" class="btn btn-info btn-outline" target="_blank"><i class="fa fa-eye"></i></a> <a href="' . route("client.estimates.download", $row->id) . '" data-toggle="tooltip" data-original-title="Download" class="btn btn-inverse btn-outline"><i class="fa fa-download"></i></a>';
             })
             ->editColumn('status', function ($row) {
                 if ($row->status == 'waiting') {

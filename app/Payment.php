@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class Payment extends Model
+class Payment extends BaseModel
 {
     protected $dates = ['paid_on'];
 

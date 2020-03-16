@@ -6,7 +6,7 @@
                 @if(is_null($user->image))
                     <div><img src="{{ asset('default-profile-3.png') }}" alt="user-img" class="img-circle"></div>
                 @else
-                    <div><img src="{{ asset('user-uploads/avatar/'.$user->image) }}" alt="user-img" class="img-circle"></div>
+                    <div><img src="{{ asset_url('avatar/'.$user->image) }}" alt="user-img" class="img-circle"></div>
                 @endif
                 <a href="#" class="dropdown-toggle u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ ucwords($user->name) }} <span class="caret"></span></a>
                 <ul class="dropdown-menu animated flipInY">

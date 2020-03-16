@@ -69,29 +69,28 @@
                                     </div>
 
                                 </div>
+                                @if(in_array('projects', $modules))
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label class="control-label">@lang('app.project')</label>
 
-                                <div class="col-md-4">
-
-                                    <div class="form-group">
-                                        <label class="control-label">@lang('app.project')</label>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <select class="select2 form-control" data-placeholder="Choose Project"
-                                                        name="project_id">
-                                                    <option value="" >--</option>
-                                                    @foreach($projects as $project)
-                                                        <option
-                                                                @if($creditNote->project_id == $project->id) selected
-                                                                @endif
-                                                                value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
-                                                    @endforeach
-                                                </select>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <select class="select2 form-control" data-placeholder="Choose Project"
+                                                            name="project_id">
+                                                        <option value="" >--</option>
+                                                        @foreach($projects as $project)
+                                                            <option
+                                                                    @if($creditNote->project_id == $project->id) selected
+                                                                    @endif
+                                                                    value="{{ $project->id }}">{{ ucwords($project->project_name) }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-
-                                </div>
+                                @endif
 
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -647,7 +646,7 @@
         });
 
         $('.sub-total').html(decimalupto2(subtotal).toFixed(2));
-        $('.sub-total-field').val(subtotal.toFixed(2));
+        $('.sub-total-field').val(subtotal);
 
 
         var discountType = $('#discount_type').val();

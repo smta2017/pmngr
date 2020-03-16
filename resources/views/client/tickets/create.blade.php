@@ -32,7 +32,7 @@
     <div class="form-body">
         <div class="row">
             <div class="col-md-12">
-                <div class="panel panel-default">
+                <div class="panel panel-inverse">
                     <div class="panel-heading">@lang('modules.tickets.requestTicket')</div>
 
                     <div class="panel-wrapper collapse in">

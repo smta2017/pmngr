@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en"  dir="@lang('app.htmldirection')">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,9 +29,7 @@
 
     <title>{{ $pageTitle }}</title>
     <!-- Bootstrap Core CSS -->
-    <!-- <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet"> -->
-    <link href="/bootstrap/dist/css/@lang('app.bootstrapfile')" rel="stylesheet">
-
+    <link href="{{ asset('bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel='stylesheet prefetch'
           href='https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/0.8.2/css/flag-icon.min.css'>
     <link rel='stylesheet prefetch'
@@ -50,18 +48,14 @@
 @stack('head-script')
 
 <!-- This is a Custom CSS -->
-    <!-- <link href="{{ asset('css/style.css') }}" rel="stylesheet"> -->
-    <link href="/css/@lang('app.cssfile')" rel="stylesheet">
-
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- color CSS you can use different color css from css/colors folder -->
     <!-- We have chosen the skin-blue (default.css) for this starter
        page. However, you can choose any other skin from folder css / colors .
        -->
     <link href="{{ asset('css/colors/default.css') }}" id="theme"  rel="stylesheet">
     <link href="{{ asset('plugins/froiden-helper/helper.css') }}"   rel="stylesheet">
-    <!-- <link href="{{ asset('css/custom.css') }}"   rel="stylesheet"> -->
-    <link href="/css/@lang('app.csscustom')" rel="stylesheet">
-
+    <link href="{{ asset('css/custom.css') }}"   rel="stylesheet">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -88,14 +82,6 @@
             margin: 0 0 0 0 !important;
         }
     </style>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-387908-39"></script>
-    <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-
-    gtag('config', 'UA-387908-39');
-    </script>
 </head>
 <body class="fix-sidebar">
 <!-- Preloader -->

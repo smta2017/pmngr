@@ -8,7 +8,9 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <a href="javascript:void(0);" onclick="showFaqCategoryCreate()" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.faqCategory') <i class="fa fa-plus" aria-hidden="true"></i></a>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('super-admin.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li class="active">{{ __($pageTitle) }}</li>
@@ -29,13 +31,6 @@
 
         <div class="col-md-12">
             <div class="white-box">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <a href="javascript:void(0);" onclick="showFaqCategoryCreate()" class="btn btn-outline btn-success btn-sm">@lang('app.add') @lang('app.faqCategory') <i class="fa fa-plus" aria-hidden="true"></i></a>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="table-responsive">
                 <table class="table table-bordered table-hover toggle-circle default footable-loaded footable" id="faq-category-table">

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StripeInvoice extends Model
+class StripeInvoice extends BaseModel
 {
     protected $table = 'stripe_invoices';
     protected $dates = ['pay_date', 'next_pay_date'];

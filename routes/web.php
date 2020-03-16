@@ -35,9 +35,11 @@ Route::post('public/pay-with-razorpay', array('as' => 'public.pay-with-razorpay'
 Route::group(
     ['namespace' => 'Front', 'as' => 'front.'], function () {
     Route::post('/contact-us', 'HomeController@contactUs')->name('contact-us');
+    Route::get('/contact', 'HomeController@contact')->name('contact');
     Route::resource('/signup', 'RegisterController', ['only' => ['index', 'store']]);
     Route::get('/email-verification/{code}', 'RegisterController@getEmailVerification')->name('get-email-verification');
-    Route::get('api/v1/app', ['uses' => 'HomeController@app'])->name('api.app');
+    Route::get('/feature', ['uses' => 'HomeController@feature'])->name('feature');
+    Route::get('/pricing', ['uses' => 'HomeController@pricing'])->name('pricing');
     Route::get('language/{lang}', ['as' => 'language.lang', 'uses' => 'HomeController@changeLanguage']);
 
 });
@@ -100,6 +102,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('billing/razorpay-download/{invoice}', 'SuperAdminInvoiceController@razorpayInvoiceDownload')->name('razorpay.invoice-download');
         Route::get('billing/offline-download/{invoice}', 'SuperAdminInvoiceController@offlineInvoiceDownload')->name('offline.invoice-download');
 
+        // Storage settings
+
+
         Route::resource('/settings', 'SuperAdminSettingsController', ['only' => ['index', 'update']]);
 
         Route::get('super-admin/data', ['uses' => 'SuperAdminController@data'])->name('super-admin.data');
@@ -109,6 +114,43 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('offline-plan/verify', ['uses' => 'OfflinePlanChangeController@verify'])->name('offline-plan.verify');
         Route::post('offline-plan/reject', ['uses' => 'OfflinePlanChangeController@reject'])->name('offline-plan.reject');
         Route::resource('/offline-plan', 'OfflinePlanChangeController', ['only' => ['index', 'update']]);
+
+        Route::group(
+            ['prefix' => 'front-settings'],
+            function () {
+
+                Route::get('front-theme-settings', ['uses' => 'SuperAdminFrontSettingController@themeSetting'])->name('theme-settings');
+                Route::post('front-theme-update', ['uses' => 'SuperAdminFrontSettingController@themeUpdate'])->name('theme-update');
+                Route::resource('front-settings', 'SuperAdminFrontSettingController', ['only' => ['index', 'update']]);
+
+                Route::post('feature-settings/title-update}', ['uses' => 'SuperAdminFeatureSettingController@updateTitles'])->name('feature-settings.title-update');
+                Route::resource('feature-settings', 'SuperAdminFeatureSettingController');
+
+                Route::post('testimonial-settings/title-update}', ['uses' => 'TestimonialSettingController@updateTitles'])->name('testimonial-settings.title-update');
+                Route::resource('testimonial-settings', 'TestimonialSettingController');
+
+                Route::post('client-settings/title-update}', ['uses' => 'FrontClientSettingController@updateTitles'])->name('client-settings.title-update');
+                Route::resource('client-settings', 'FrontClientSettingController');
+
+                Route::post('faq-settings/title-update}', ['uses' => 'FrontFaqSettingController@updateTitles'])->name('faq-settings.title-update');
+                Route::resource('faq-settings', 'FrontFaqSettingController');
+
+
+                Route::resource('cta-settings', 'CtaSettingController', ['only' => ['index','update']]);
+
+                Route::resource('front-menu-settings', 'FrontMenuSettingController', ['only' => ['index','update']]);
+
+                Route::get('footer-settings/footer-text}', ['uses' => 'SuperAdminFooterSettingController@footerText'])->name('footer-settings.footer-text');
+                Route::post('footer-settings/copyright-text}', ['uses' => 'SuperAdminFooterSettingController@updateText'])->name('footer-settings.copyright-text');
+                Route::resource('footer-settings', 'SuperAdminFooterSettingController');
+
+                Route::post('price-settings-update', ['uses' => 'SuperAdminFrontSettingController@priceUpdate'])->name('price-setting-update');
+                Route::get('price-settings', ['uses' => 'SuperAdminFrontSettingController@price'])->name('price-settings');
+
+                Route::post('contactus-setting-update', ['uses' => 'SuperAdminFrontSettingController@contactUpdate'])->name('contactus-setting-update');
+                Route::get('contact-settings', ['uses' => 'SuperAdminFrontSettingController@contact'])->name('contact-settings');
+                }
+            );
         Route::group(
             ['prefix' => 'settings'],
             function () {
@@ -136,15 +178,17 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('update-settings/manual-update', ['uses' => 'UpdateDatabaseController@manual'])->name('update-settings.manual');
                 Route::resource('update-settings', 'UpdateDatabaseController');
 
+                Route::resource('storage-settings', 'StorageSettingsController');
+
                 // Language Settings
                 Route::post('language-settings/update-data/{id?}', ['uses' => 'SuperAdminLanguageSettingsController@updateData'])->name('language-settings.update-data');
                 Route::resource('language-settings', 'SuperAdminLanguageSettingsController');
 
-                Route::resource('front-settings', 'SuperAdminFrontSettingController', ['only' => ['index', 'update']]);
                 Route::resource('package-settings', 'SuperAdminPackageSettingController', ['only' => ['index', 'update']]);
 
-                Route::resource('feature-settings', 'SuperAdminFeatureSettingController');
-                Route::resource('footer-settings', 'SuperAdminFooterSettingController');
+                // Custom Modules
+                Route::post('custom-modules/verify-purchase', ['uses' => 'CustomModuleController@verifyingModulePurchase'])->name('custom-modules.verify-purchase');
+                Route::resource('custom-modules', 'CustomModuleController');
 
             }
         );
@@ -345,9 +389,6 @@ Route::group(['middleware' => 'auth'], function () {
                         // Message settings
                         Route::resource('message-settings', 'MessageSettingsController');
 
-                        // Storage settings
-                        Route::resource('storage-settings', 'StorageSettingsController');
-
                         // Module settings
                         Route::resource('module-settings', 'ModuleSettingsController');
 
@@ -426,7 +467,7 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('all-time-logs/members/{projectId}', ['uses' => 'ManageAllTimeLogController@membersList'])->name('all-time-logs.members');
                 Route::get('all-time-logs/show-active-timer', ['uses' => 'ManageAllTimeLogController@showActiveTimer'])->name('all-time-logs.show-active-timer');
                 Route::get('all-time-logs/export/{startDate?}/{endDate?}/{projectId?}/{employee?}', ['uses' => 'ManageAllTimeLogController@export'])->name('all-time-logs.export');
-                Route::post('all-time-logs/data/{startDate?}/{endDate?}/{projectId?}/{employee?}', ['uses' => 'ManageAllTimeLogController@data'])->name('all-time-logs.data');
+                Route::post('all-time-logs/data', ['uses' => 'ManageAllTimeLogController@data'])->name('all-time-logs.data');
                 Route::post('all-time-logs/stop-timer/{id}', ['uses' => 'ManageAllTimeLogController@stopTimer'])->name('all-time-logs.stopTimer');
                 Route::resource('all-time-logs', 'ManageAllTimeLogController');
 
@@ -437,7 +478,7 @@ Route::group(['middleware' => 'auth'], function () {
                     function () {
 
                         Route::get('all-tasks/export/{startDate?}/{endDate?}/{projectId?}/{hideCompleted?}', ['uses' => 'ManageAllTasksController@export'])->name('all-tasks.export');
-                        Route::post('all-tasks/data/{startDate?}/{endDate?}/{hideCompleted?}/{projectId?}', ['uses' => 'ManageAllTasksController@data'])->name('all-tasks.data');
+                        Route::post('all-tasks/data', ['uses' => 'ManageAllTasksController@data'])->name('all-tasks.data');
                         Route::get('all-tasks/dependent-tasks/{projectId}/{taskId?}', ['uses' => 'ManageAllTasksController@dependentTaskLists'])->name('all-tasks.dependent-tasks');
                         Route::get('all-tasks/members/{projectId}', ['uses' => 'ManageAllTasksController@membersList'])->name('all-tasks.members');
                         Route::get('all-tasks/ajaxCreate/{columnId}', ['uses' => 'ManageAllTasksController@ajaxCreate'])->name('all-tasks.ajaxCreate');
@@ -556,6 +597,7 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('tickets/data/{startDate?}/{endDate?}/{agentId?}/{status?}/{priority?}/{channelId?}/{typeId?}', ['uses' => 'ManageTicketsController@data'])->name('tickets.data');
                 Route::get('tickets/refresh-count/{startDate?}/{endDate?}/{agentId?}/{status?}/{priority?}/{channelId?}/{typeId?}', ['uses' => 'ManageTicketsController@refreshCount'])->name('tickets.refreshCount');
                 Route::get('tickets/reply-delete/{id?}', ['uses' => 'ManageTicketsController@destroyReply'])->name('tickets.reply-delete');
+                Route::post('tickets/updateOtherData/{id}', ['uses' => 'ManageTicketsController@updateOtherData'])->name('tickets.updateOtherData');
 
                 Route::resource('tickets', 'ManageTicketsController');
 
@@ -745,6 +787,7 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('tasks/sort', ['uses' => 'MemberTasksController@sort'])->name('tasks.sort');
             Route::post('tasks/change-status', ['uses' => 'MemberTasksController@changeStatus'])->name('tasks.changeStatus');
             Route::get('tasks/check-task/{taskID}', ['uses' => 'MemberTasksController@checkTask'])->name('tasks.checkTask');
+            Route::get('tasks/data/{projectid}', ['uses' => 'MemberTasksController@data'])->name('tasks.data');
             Route::resource('tasks', 'MemberTasksController');
 
             Route::get('files/download/{id}', ['uses' => 'MemberProjectFilesController@download'])->name('files.download');

@@ -1,6 +1,4 @@
-<h2>@lang('app.menu.attendanceReport')</h2>
-
-<h4 class="text-info">@lang('modules.attendance.totalWorkingDays'): {{ $totalDays }}</h4>
+<h4 class="dashboard-stats"><span class="text-info" id="totalDays">{{ $totalDays }}</span> <span class="font-12 text-muted m-l-5"> @lang('modules.attendance.totalWorkingDays')</span></h4>
 
 <div class="table-responsive">
     <table class="table">

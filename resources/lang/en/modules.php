@@ -1,7 +1,7 @@
 <?php
 
 return array (
-  'dashboard' => 
+  'dashboard' =>
   array (
     'totalClients' => 'Total Clients',
     'totalEmployees' => 'Total Employees',
@@ -44,10 +44,11 @@ return array (
     'completedTasks' => 'Completed Tasks',
     'clientFeedbacks' => 'Client Feedbacks',
   ),
-  'client' => 
+  'client' =>
   array (
     'createTitle' => 'Add Client Info',
     'companyDetails' => 'Company Details',
+    'clientOtherDetails' => 'Client Other Details',
     'companyName' => 'Company Name',
     'website' => 'Website',
     'address' => 'Address',
@@ -69,8 +70,10 @@ return array (
     'offline' => 'Offline',
     'online' => 'Online',
     'all' => 'All',
+    'sendCredentials' => 'Send Credentials',
+    'sendCredentialsMessage' => 'Do you want to send credentials via E-mail to client ?',
   ),
-  'gdpr' => 
+  'gdpr' =>
   array (
     'gdpr' => 'GDPR',
     'customers' => 'Customers',
@@ -86,12 +89,12 @@ return array (
     'dataRemovalDescription' => 'Briefly describe the purpose of removal of data',
     'removalRequestSuccess' => 'Removal request has been sent to the admin. You will informed once it is approved',
   ),
-  'contacts' => 
+  'contacts' =>
   array (
     'addContact' => 'Add Contact',
     'contactName' => 'Contact Name',
   ),
-  'employees' => 
+  'employees' =>
   array (
     'addNewEmployee' => 'Add New Employee',
     'createTitle' => 'Add Employee Info',
@@ -104,6 +107,7 @@ return array (
     'hourlyRate' => 'Hourly Rate',
     'updateTitle' => 'update Employee Info',
     'updatePasswordNote' => 'Employee will login using this password. (Leave blank to keep current password)',
+    'updateAdminPasswordNote' => 'Admin will login using this password. (Leave blank to keep current password)',
     'tasksDone' => 'Tasks Done',
     'hoursLogged' => 'Hours Logged',
     'activity' => 'Activity',
@@ -119,8 +123,9 @@ return array (
     'title' => 'Select Employee',
     'role' => 'Role',
     'lastDate' => 'Last Date',
+    'employeeId' => 'Employee ID',
   ),
-  'projects' => 
+  'projects' =>
   array (
     'addNewProject' => 'Add New Project',
     'projectName' => 'Project Name',
@@ -176,8 +181,9 @@ return array (
     'remindBefore' => 'Remind before',
     'viewPublicGanttChart' => 'Public Gantt Chart',
     'burndownChart' => 'Burndown Chart',
+    'fileName' => 'File name',
   ),
-  'tasks' => 
+  'tasks' =>
   array (
     'newTask' => 'New Task',
     'lastCreated' => 'Last Created',
@@ -211,7 +217,7 @@ return array (
     'dependentTask' => 'Dependent Task',
     'chooseTask' => 'Choose Task',
   ),
-  'invoices' => 
+  'invoices' =>
   array (
     'addInvoice' => 'Add Invoice',
     'paid' => 'Paid',
@@ -252,8 +258,15 @@ return array (
     'appliedCredits' => 'Applied Credits',
     'amountDue' => 'Amount Due',
     'amountPaid' => 'Amount Paid',
+    'review' => 'Review',
+    'OfflinePaymentRequest' => 'Offline Payment Request',
+    'paymentGateway' => 'Payment Gateway',
+    'transactionID' => 'Transaction ID',
+    'remark' => 'Remark',
+    'paymentDetails' => 'Payment Details',
+    'paidOn' => 'Paid On',
   ),
-  'issues' => 
+  'issues' =>
   array (
     'pending' => 'Pending',
     'addIssue' => 'Add Issue',
@@ -263,7 +276,7 @@ return array (
     'markResolved' => 'Mark Resolved',
     'reportedOn' => 'Reported On',
   ),
-  'timeLogs' => 
+  'timeLogs' =>
   array (
     'whoLogged' => 'Who Logged',
     'startTime' => 'Start Time',
@@ -283,12 +296,12 @@ return array (
     'noProjectFound' => 'No Task Assigned',
     'task' => 'Task',
   ),
-  'taskCalendar' => 
+  'taskCalendar' =>
   array (
     'note' => 'Calendar shows the due tasks on their due dates.',
     'taskDetail' => 'Task Detail',
   ),
-  'notices' => 
+  'notices' =>
   array (
     'addNotice' => 'Add New Notice',
     'notice' => 'Notice',
@@ -298,28 +311,28 @@ return array (
     'toEmployee' => 'To Employees',
     'toClients' => 'To Clients',
   ),
-  'sticky' => 
+  'sticky' =>
   array (
     'addNote' => 'Add Note',
     'lastUpdated' => 'Updated',
     'colors' => 'Color',
   ),
-  'taskReport' => 
+  'taskReport' =>
   array (
-    'taskToComplete' => 'Task To Be Completed',
+    'taskToComplete' => 'Total Tasks',
     'completedTasks' => 'Completed Tasks',
     'pendingTasks' => 'Pending Tasks',
     'chartTitle' => 'Pie Chart',
   ),
-  'leaveReport' => 
+  'leaveReport' =>
   array (
     'leaveReport' => 'Leave Report',
   ),
-  'timeLogReport' => 
+  'timeLogReport' =>
   array (
     'chartTitle' => 'Time Log Bar Chart',
   ),
-  'financeReport' => 
+  'financeReport' =>
   array (
     'showAmountIn' => 'Show amount in ',
     'selectCurrency' => 'Select Currency',
@@ -327,14 +340,14 @@ return array (
     'financeReport' => 'Earnings Bar Chart',
     'noteText' => 'The earnings are calculated with latest exchange rate for different currencies.',
   ),
-  'accountSettings' => 
+  'accountSettings' =>
   array (
     'updateTitle' => 'Update Organization Settings',
     'companyName' => 'Company Name',
     'companyEmail' => 'Company Email',
     'companyPhone' => 'Company Phone',
     'companyWebsite' => 'Company Website',
-    'companyLogo' => 'Company Logo',
+    'companyLogo' => 'Logo',
     'companyAddress' => 'Company Address',
     'defaultTimezone' => 'Default Timezone',
     'defaultCurrency' => 'Default Currency',
@@ -345,13 +358,18 @@ return array (
     'timeFormat' => 'Time Format',
     'google_map_key' => 'Google map key',
     'currencyConverterKey' => 'Currency converter key',
-    'google_recaptcha_key' => 'Google Recpatcha Key',
+    'google_recaptcha_key' => 'Google Recaptcha Key',
     'sendReminder' => 'Send Reminder',
     'sendReminderInfo' => 'Remind project members about due date of projects.',
-    'google_recaptcha_secret' => 'Google Recpatcha Secret',
+    'google_recaptcha_secret' => 'Google Recaptcha Secret',
     'weekStartFrom' => 'Week start from',
+    'updateEnableDisableTest' => 'Enable/Disable app update setting.',
+    'updateEnableDisable' => 'App Update',
+    'emailVerification' => 'Email Verification',
+    'emailVerificationEnableDisable' => 'Enable/Disable newly registered companies email verification.',
+    'frontLogo' => 'Front Logo',
   ),
-  'profile' => 
+  'profile' =>
   array (
     'updateTitle' => 'Update Profile Info',
     'yourName' => 'Your Name',
@@ -363,7 +381,7 @@ return array (
     'profilePicture' => 'Profile Picture',
     'uploadPicture' => 'Upload your picture',
   ),
-  'emailSettings' => 
+  'emailSettings' =>
   array (
     'notificationTitle' => 'Set Email Notification Settings',
     'notificationSubtitle' => 'Select the events for which an email should be sent to user.',
@@ -390,7 +408,7 @@ return array (
     'removeImage' => 'Remove Image',
     'invoiceNotification' => 'Invoice  Notification',
   ),
-  'moduleSettings' => 
+  'moduleSettings' =>
   array (
     'employeeModuleTitle' => 'Modules',
     'clientModuleTitle' => 'Client Module Title',
@@ -399,7 +417,7 @@ return array (
     'moduleSetting' => 'Module Setting',
     'section' => 'section.',
   ),
-  'currencySettings' => 
+  'currencySettings' =>
   array (
     'addNewCurrency' => 'Add New Currency',
     'currencyName' => 'Currency Name',
@@ -413,7 +431,7 @@ return array (
     'usdPrice' => 'Usd Price',
     'usdPriceInfo' => 'Required to calculate earnings.',
   ),
-  'messages' => 
+  'messages' =>
   array (
     'startConversation' => 'Start Conversation',
     'chooseMember' => 'Choose Member',
@@ -428,18 +446,18 @@ return array (
     'members' => 'Project Members',
   ),
   'taskDetail' => 'Task Detail',
-  'projectCategory' => 
+  'projectCategory' =>
   array (
     'addProjectCategory' => 'Add Project Category',
     'categoryName' => 'Category Name',
   ),
-  'themeSettings' => 
+  'themeSettings' =>
   array (
     'adminPanelTheme' => 'Admin Panel Theme',
     'projectAdminPanelTheme' => 'Project Admin Panel Theme',
     'employeePanelTheme' => 'Employee Panel Theme',
     'clientPanelTheme' => 'Client Panel Theme',
-    'headerColor' => 'Header Color (Primary)',
+    'headerColor' => 'Secondary Color',
     'sidebarColor' => 'Sidebar Color',
     'sidebarTextColor' => 'Sidebar Text Color',
     'linkColor' => 'Link Color',
@@ -453,7 +471,7 @@ return array (
     'publicCss' => 'public/css/',
     'customCssPlaceholder' => 'Enter your custom css after this line',
   ),
-  'estimates' => 
+  'estimates' =>
   array (
     'createEstimate' => 'Create Estimate',
     'validTill' => 'Valid Till',
@@ -471,7 +489,7 @@ return array (
     'clear' => 'Clear',
     'signatureAndConfirmation' => 'Signature & Confirmation Of Identity',
   ),
-  'payments' => 
+  'payments' =>
   array (
     'addPayment' => 'Add Payment',
     'paidOn' => 'Paid On',
@@ -494,7 +512,7 @@ return array (
     'paymentLink' => 'Payment Link',
     'razorpayStatus' => 'Razorpay Status',
   ),
-  'expenses' => 
+  'expenses' =>
   array (
     'addExpense' => 'Add Expense',
     'itemName' => 'Item Name',
@@ -502,7 +520,7 @@ return array (
     'purchaseFrom' => 'Purchased From',
     'updateExpense' => 'Update Expense',
   ),
-  'invoiceSettings' => 
+  'invoiceSettings' =>
   array (
     'invoicePrefix' => 'Invoice Prefix',
     'template' => 'Template',
@@ -517,8 +535,9 @@ return array (
     'credit_notePrefix' => 'Credit Note Prefix',
     'credit_noteDigit' => 'Credit Note Digits',
     'credit_noteLookLike' => 'Credit Note Number Sample',
+    'logo' => 'Invoice Logo',
   ),
-  'slackSettings' => 
+  'slackSettings' =>
   array (
     'updateTitle' => 'Update Slack Settings',
     'uploadSlackLogo' => 'Upload Notification Logo',
@@ -528,7 +547,7 @@ return array (
     'slackWebhook' => 'Slack Webhook',
     'slackNotificationLogo' => 'Notification Logo',
   ),
-  'update' => 
+  'update' =>
   array (
     'systemDetails' => 'System Details',
     'updateTitle' => 'Update To New Version',
@@ -542,14 +561,16 @@ return array (
     'updateFiles' => 'Update Files',
     'downloadUpdateFile' => 'Download Update File',
     'install' => 'Install',
+    'downloadUpdateFile' => 'Download Update File',
+    'moduleFile' => 'Module zip file',
   ),
-  'incomeVsExpenseReport' => 
+  'incomeVsExpenseReport' =>
   array (
     'totalIncome' => 'Total Income',
     'totalExpense' => 'Total Expense',
     'chartTitle' => 'Bar Chart',
   ),
-  'tickets' => 
+  'tickets' =>
   array (
     'agents' => 'Agents',
     'chooseAgents' => 'Choose Agents',
@@ -598,7 +619,7 @@ return array (
     'nofilter' => 'No filter',
     'noGroupAssigned' => 'No group assigned',
   ),
-  'attendance' => 
+  'attendance' =>
   array (
     'officeStartTime' => 'Office Start Time',
     'officeEndTime' => 'Office End Time',
@@ -636,12 +657,12 @@ return array (
     'hoursClocked' => 'Hours Clocked',
     'notClockOut' => 'Did not clock out',
   ),
-  'customFields' => 
+  'customFields' =>
   array (
     'label' => 'Label',
     'addField' => 'Add Field',
   ),
-  'events' => 
+  'events' =>
   array (
     'addEvent' => 'Add Event',
     'eventName' => 'Event Name',
@@ -656,7 +677,7 @@ return array (
     'cyclesToolTip' => 'Recurring will be stopped after the number of cycles. Keep it blank for infinity.',
     'viewAttendees' => 'View Attendees',
   ),
-  'payroll' => 
+  'payroll' =>
   array (
     'addPayroll' => 'Add Payroll',
     'amountPaid' => 'Amount Paid',
@@ -664,11 +685,11 @@ return array (
     'projectPayrollReport' => 'Project Payroll Report',
     'totalEarning' => 'Total Earning',
   ),
-  'roles' => 
+  'roles' =>
   array (
     'addRole' => 'Manage Role',
   ),
-  'permission' => 
+  'permission' =>
   array (
     'projectNote' => 'User can view the basic details of projects assigned to him even without any permission.',
     'attendanceNote' => 'User can view his own attendance even without any permission.',
@@ -681,7 +702,7 @@ return array (
     'addMembers' => 'Add Members',
     'roleName' => 'Role Name',
   ),
-  'leaves' => 
+  'leaves' =>
   array (
     'assignLeave' => 'Assign Leave',
     'addLeaveType' => 'Add Leave Type',
@@ -707,7 +728,7 @@ return array (
     'calendarView' => 'Calendar View',
   ),
   'low' => 'Low',
-  'lead' => 
+  'lead' =>
   array (
     'createTitle' => 'Add Lead Info',
     'companyDetails' => 'Company Details',
@@ -750,7 +771,7 @@ return array (
     'file' => 'Files',
     'leadAgent' => 'Lead Agent',
   ),
-  'proposal' => 
+  'proposal' =>
   array (
     'createTitle' => 'Add Proposal Info',
     'updateTitle' => 'Update Proposal Info',
@@ -771,7 +792,7 @@ return array (
     'delete' => 'Delete',
     'download' => 'Download',
   ),
-  'followup' => 
+  'followup' =>
   array (
     'newFollowUp' => 'New Follow Up',
     'updateFollow' => 'Update Follow Up',
@@ -789,7 +810,7 @@ return array (
     'followUpNotFound' => 'No follow up found',
     'followUpNote' => 'Follow up add and edit functionality will work when lead <b>next follow up</b> will <b>YES</b>.',
   ),
-  'holiday' => 
+  'holiday' =>
   array (
     'title' => 'Holiday',
     'addNewHoliday' => 'Add Holiday',
@@ -806,7 +827,7 @@ return array (
     'markHoliday' => 'Mark Holiday',
     'officeHolidayMarkDays' => 'Mark day for Holiday',
   ),
-  'offlinePayment' => 
+  'offlinePayment' =>
   array (
     'title' => 'Offline Payment Method',
     'method' => 'Method',
@@ -815,7 +836,7 @@ return array (
     'active' => 'Active',
     'inActive' => 'Inactive',
   ),
-  'projectTemplate' => 
+  'projectTemplate' =>
   array (
     'addNewTemplate' => 'Add New Template',
     'projectName' => 'Template Name',
@@ -852,7 +873,7 @@ return array (
     'clientTaskNotification' => 'Send task notification to client?',
     'manualTimelog' => 'Allow manual time logs?',
   ),
-  'templateTasks' => 
+  'templateTasks' =>
   array (
     'newTask' => 'New Template Task',
     'lastCreated' => 'Last Created',
@@ -874,27 +895,27 @@ return array (
     'subTask' => 'Sub Template Task',
     'comment' => 'Comment',
   ),
-  'logTimeSetting' => 
+  'logTimeSetting' =>
   array (
     'title' => 'Log Time Setting',
     'project' => 'Project',
     'task' => 'Task',
     'autoStopTimerAfterOfficeTime' => 'Stop timer automatically after office time.',
   ),
-  'taskCategory' => 
+  'taskCategory' =>
   array (
     'addTaskCategory' => 'Add Task Category',
     'categoryName' => 'Category Name',
     'manageTaskCategory' => 'Manage Task Category',
     'taskCategory' => 'Task Category',
   ),
-  'pushSettings' => 
+  'pushSettings' =>
   array (
     'updateTitle' => 'Update Push Notification Settings',
     'oneSignalAppId' => 'One Signal App ID',
     'oneSignalRestApiKey' => 'One Signal Rest API Key',
   ),
-  'stripeSettings' => 
+  'stripeSettings' =>
   array (
     'title' => 'Stripe Settings',
     'apiKey' => 'Api Key',
@@ -902,7 +923,7 @@ return array (
     'webhookKey' => 'Webhook Key Secret',
     'subtitle' => 'Stripe credentials',
   ),
-  'frontCms' => 
+  'frontCms' =>
   array (
     'updateTitle' => 'Update Front Detail',
     'headerTitle' => 'Header Title',
@@ -934,21 +955,22 @@ return array (
     'enterDribbbleLink' => 'Enter Dribbble Link',
     'enterSocialLinks' => 'Please enter social links in',
     'socialLinksNote' => 'Note: Leave input blank to hide it on Home Page.',
+    'primaryColor' => 'Primary Color',
   ),
-  'featureSetting' => 
+  'featureSetting' =>
   array (
     'addFeature' => 'Add Feature',
     'editFeature' => 'Edit Feature',
   ),
-  'feature' => 
+  'feature' =>
   array (
     'setting' => 'Feature Setting',
   ),
-  'frontSettings' => 
+  'frontSettings' =>
   array (
     'title' => 'Frontend CMS',
   ),
-  'module' => 
+  'module' =>
   array (
     'attendance' => 'Attendance',
     'clients' => 'Clients',
@@ -972,8 +994,9 @@ return array (
     'timelogs' => 'Time Logs',
     'creditNotes' => 'Credit Note',
     'contracts' => 'Contracts',
+    'reports' => 'Reports',
   ),
-  'paymentSetting' => 
+  'paymentSetting' =>
   array (
     'paypal' => 'Paypal',
     'stripe' => 'Stripe',
@@ -984,19 +1007,19 @@ return array (
     'stripeWebhookSecret' => 'Stripe Webhook Secret',
     'razorpay' => 'Razorpay',
   ),
-  'packageSetting' => 
+  'packageSetting' =>
   array (
     'noOfDays' => 'Number Of Days',
     'notificationBeforeDays' => 'Notification Before Days',
   ),
-  'package' => 
+  'package' =>
   array (
     'stripeAnnualPlanId' => 'Stripe Annual Plan ID',
     'stripeMonthlyPlanId' => 'Stripe Monthly Plan ID',
     'razorpayAnnualPlanId' => 'Razorpay Annual Plan ID',
     'razorpayMonthlyPlanId' => 'Razorpay Monthly Plan ID',
   ),
-  'credit-notes' => 
+  'credit-notes' =>
   array (
     'currency' => 'Currency',
     'creditNoteDate' => 'Credit Note Date',
@@ -1029,7 +1052,7 @@ return array (
     'closed' => 'Closed',
     'open' => 'Open',
   ),
-  'superadmin' => 
+  'superadmin' =>
   array (
     'details' => 'Details',
     'verified' => 'Verified',
@@ -1039,7 +1062,7 @@ return array (
     'recentSubscriptions' => 'Recent Subscriptions',
     'recentLicenseExpiredCompanies' => 'Recent Licence Expired Companies',
   ),
-  'billing' => 
+  'billing' =>
   array (
     'yourCurrentPlan' => 'Your Current Plan',
     'unsubscribe' => 'Unsubscribe',
@@ -1048,27 +1071,28 @@ return array (
     'previousPaymentDate' => 'Previous Payment Date',
     'choosePlan' => 'Choose Plan',
   ),
-  'company' => 
+  'company' =>
   array (
     'accountSetup' => 'Account Details',
   ),
-  'projectSettings' => 
+  'projectSettings' =>
   array (
     'sendNotificationsTo' => 'Send Reminder To',
   ),
   'hrs' => 'hrs',
   'mins' => 'mins',
-  'footer' => 
+  'footer' =>
   array (
     'setting' => 'Footer Menu Setting',
     'addFooter' => 'Add Footer Menu',
     'editFooter' => 'Edit Footer Menu',
+    'footerCopyrightText' => 'Footer Copyright Text',
   ),
-  'leave' => 
+  'leave' =>
   array (
     'leaveRequest' => 'Leave Request Received',
   ),
-  'contracts' => 
+  'contracts' =>
   array (
     'createContract' => 'Create Contract',
     'createContractType' => 'Create Contract Type',
@@ -1097,7 +1121,7 @@ return array (
     'newAmount' => 'New amount',
     'contractRenewalHistory' => 'Contract Renewal History',
   ),
-  'burndown' => 
+  'burndown' =>
   array (
     'actual' => 'Actual',
     'ideal' => 'Ideal',

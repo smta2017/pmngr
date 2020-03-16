@@ -351,8 +351,8 @@
             <th class="no">#</th>
             <th class="desc">@lang("modules.invoices.item")</th>
             <th class="qty">@lang("modules.invoices.qty")</th>
-            <th class="qty">@lang("modules.invoices.unitPrice")</th>
-            <th class="unit">@lang("modules.invoices.price")</th>
+            <th class="qty">@lang("modules.invoices.unitPrice") ({!! htmlentities($invoice->currency->currency_code)  !!})</th>
+            <th class="unit">@lang("modules.invoices.price") ({!! htmlentities($invoice->currency->currency_code)  !!})</th>
         </tr>
         </thead>
         <tbody>
@@ -367,8 +367,8 @@
                     @endif
                 </td>
                 <td class="qty"><h3>{{ $item->quantity }}</h3></td>
-                <td class="qty"><h3>{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
-                <td class="unit">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$item->amount, 2, '.', '') }}</td>
+                <td class="qty"><h3>{{ number_format((float)$item->unit_price, 2, '.', '') }}</h3></td>
+                <td class="unit">{{ number_format((float)$item->amount, 2, '.', '') }}</td>
             </tr>
             @endif
         @endforeach
@@ -377,7 +377,7 @@
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.invoices.subTotal")</td>
-            <td class="unit">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->sub_total, 2, '.', '') }}</td>
+            <td class="unit">{{ number_format((float)$invoice->sub_total, 2, '.', '') }}</td>
         </tr>
         @if($discount != 0 && $discount != '')
         <tr style="page-break-inside: avoid;" class="discount">
@@ -385,7 +385,7 @@
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.invoices.discount")</td>
-            <td class="unit">-{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$discount, 2, '.', '') }}</td>
+            <td class="unit">-{{ number_format((float)$discount, 2, '.', '') }}</td>
         </tr>
         @endif
         @foreach($taxes as $key=>$tax)
@@ -394,35 +394,34 @@
                 <td class="qty">&nbsp;</td>
                 <td class="qty">&nbsp;</td>
                 <td class="desc">{{ strtoupper($key) }}</td>
-                <td class="unit">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$tax, 2, '.', '') }}</td>
+                <td class="unit">{{ number_format((float)$tax, 2, '.', '') }}</td>
             </tr>
         @endforeach
         </tbody>
         <tfoot>
             <tr dontbreak="true">
                 <td colspan="4">@lang("modules.invoices.total")</td>
-                <td style="text-align: center">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->total, 2, '.', '') }}</td>
+                <td style="text-align: center">{{ number_format((float)$invoice->total, 2, '.', '') }}</td>
             </tr>
             @if ($invoice->credit_notes()->count() > 0)
                 <tr dontbreak="true">
                     <td colspan="4">@lang('modules.invoices.appliedCredits')</td>
-                    <td style="text-align: center">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->appliedCredits(), 2, '.', '') }}</td>
+                    <td style="text-align: center">{{ number_format((float)$invoice->appliedCredits(), 2, '.', '') }}</td>
                 </tr>
             @endif
             <tr dontbreak="true">
                 <td colspan="4">@lang("modules.invoices.total") @lang("modules.invoices.paid")</td>
-                <td style="text-align: center">{!! $invoice->currency->currency_symbol !!} {{ number_format((float)$invoice->getPaidAmount(), 2, '.', '') }}</td>
+                <td style="text-align: center">{{ number_format((float)$invoice->getPaidAmount(), 2, '.', '') }}</td>
             </tr>
             <tr dontbreak="true">
                 <td colspan="4">@lang("modules.invoices.total") @lang("modules.invoices.due")</td>
-                <td style="text-align: center">{!! htmlentities($invoice->currency->currency_symbol)  !!}{{ number_format((float)$invoice->amountDue(), 2, '.', '') }}</td>
+                <td style="text-align: center">{{ number_format((float)$invoice->amountDue(), 2, '.', '') }}</td>
             </tr>
         </tfoot>
     </table>
     <p>&nbsp;</p>
     <hr>
     <p id="notes">
-        @lang("app.note"): Here {!! htmlentities($invoice->currency->currency_symbol)  !!} refers to {!! $invoice->currency->currency_code  !!}<br>
         @if(!is_null($invoice->note))
             {!! nl2br($invoice->note) !!}<br>
         @endif

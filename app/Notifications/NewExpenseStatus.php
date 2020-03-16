@@ -72,7 +72,7 @@ class NewExpenseStatus extends Notification implements ShouldQueue
             ->subject( __('email.expenseStatus.subject').' - '.config('app.name'))
             ->greeting(__('email.hello').' '.ucwords($user->name).'!')
             ->line($this->expense->item_name.' - '.__('email.expenseStatus.text').' '.$this->expense->status.'.')
-            ->action(__('email.loginDashboard'), $url)
+            ->action(__('email.loginDashboard'), route('login'))
             ->line(__('email.thankyouNote'));
     }
 
@@ -99,13 +99,13 @@ class NewExpenseStatus extends Notification implements ShouldQueue
         if(count($notifiable->employee) > 0 && (!is_null($notifiable->employee[0]->slack_username) && ($notifiable->employee[0]->slack_username != ''))){
             return (new SlackMessage())
                 ->from(config('app.name'))
-                ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+                ->image($slack->slack_logo_url)
                 ->to('@' . $notifiable->employee[0]->slack_username)
                 ->content('Your expense "'.$this->expense->item_name.'" status updated to '.$this->expense->status.'.');
         }
         return (new SlackMessage())
             ->from(config('app.name'))
-            ->image(asset('storage/slack-logo/' . $slack->slack_logo))
+            ->image($slack->slack_logo_url)
             ->content('This is a redirected notification. Add slack username for *'.ucwords($notifiable->name).'*');
     }
 

@@ -45,7 +45,7 @@
                                     </p>
 
                                     <div class="row">
-                                        <div class="col-sm-12 col-xs-12 b-t p-t-20">
+                                        <div class="col-sm-6 col-xs-6 b-t p-t-20">
                                             {!! Form::open(['id'=>'editSettings','class'=>'ajax-form form-horizontal','method'=>'PUT']) !!}
 
                                             <div class="form-group">

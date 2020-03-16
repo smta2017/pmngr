@@ -297,8 +297,8 @@
             <th class="no">#</th>
             <th class="desc">@lang("modules.invoices.item")</th>
             <th class="qty">@lang("modules.invoices.qty")</th>
-            <th class="qty">@lang("modules.invoices.unitPrice")</th>
-            <th class="unit">@lang("modules.invoices.price")</th>
+            <th class="qty">@lang("modules.invoices.unitPrice") ({!! htmlentities($proposal->currency->currency_code)  !!})</th>
+            <th class="unit">@lang("modules.invoices.price") ({!! htmlentities($proposal->currency->currency_code)  !!})</th>
         </tr>
         </thead>
         <tbody>
@@ -309,8 +309,8 @@
                 <td class="no">{{ ++$count }}</td>
                 <td class="desc"><h3>{{ ucfirst($item->item_name) }}</h3></td>
                 <td class="qty"><h3>{{ $item->quantity }}</h3></td>
-                <td class="qty"><h3>{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $item->unit_price }}</h3></td>
-                <td class="unit">{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $item->amount }}</td>
+                <td class="qty"><h3>{{ $item->unit_price }}</h3></td>
+                <td class="unit">{{ $item->amount }}</td>
             </tr>
             @endif
         @endforeach
@@ -319,14 +319,14 @@
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.invoices.subTotal")</td>
-            <td class="unit">{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $proposal->sub_total }}</td>
+            <td class="unit">{{ $proposal->sub_total }}</td>
         </tr>
         <tr style="page-break-inside: avoid;" class="discount">
             <td class="no">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="qty">&nbsp;</td>
             <td class="desc">@lang("modules.invoices.discount")</td>
-            <td class="unit">-{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $discount }}</td>
+            <td class="unit">-{{ $discount }}</td>
         </tr>
         @foreach($taxes as $tax)
             <tr style="page-break-inside: avoid;" class="tax">
@@ -334,21 +334,20 @@
                 <td class="qty">&nbsp;</td>
                 <td class="qty">&nbsp;</td>
                 <td class="desc">{{ strtoupper($tax->item_name) }}</td>
-                <td class="unit">{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $tax->amount }}</td>
+                <td class="unit">{{ $tax->amount }}</td>
             </tr>
         @endforeach
         </tbody>
         <tfoot>
         <tr dontbreak="true">
             <td colspan="4">@lang("modules.invoices.total")</td>
-            <td>{!! htmlentities($proposal->currency->currency_symbol)  !!}{{ $proposal->total }}</td>
+            <td>{{ $proposal->total }}</td>
         </tr>
         </tfoot>
     </table>
     <p>&nbsp;</p>
     <hr>
     <p id="notes">
-        @lang("app.note"): Here {!! htmlentities($proposal->currency->currency_symbol)  !!} refers to {!! $proposal->currency->currency_code  !!}
         <br>
         {!! nl2br(ucfirst($proposal->note)) !!}
     </p>

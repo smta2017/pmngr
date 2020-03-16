@@ -8,7 +8,22 @@
         </div>
         <!-- /.page title -->
         <!-- .breadcrumb -->
-        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+        <div class="col-lg-9 col-sm-8 col-md-8 col-xs-12 text-right">
+            <span id="ticket-status" class="m-r-5">
+                <label class="label
+                    @if($ticket->status == 'open')
+                        label-danger
+                @elseif($ticket->status == 'pending')
+                        label-warning
+                @elseif($ticket->status == 'resolved')
+                        label-info
+                @elseif($ticket->status == 'closed')
+                        label-success
+                @endif
+                        ">{{ $ticket->status }}</label>
+            </span>
+            <span class="text-info text-uppercase font-bold">@lang('modules.tickets.ticket') # {{ $ticket->id }}</span>
+
             <ol class="breadcrumb">
                 <li><a href="{{ route('member.dashboard') }}">@lang('app.menu.home')</a></li>
                 <li><a href="{{ route('member.ticket-agent.index') }}">{{ __($pageTitle) }}</a></li>
@@ -32,92 +47,69 @@
     <div class="form-body">
         <div class="row">
             <div class="col-md-8">
-                <div class="panel panel-inverse">
-                    <div class="panel-heading text-right">@lang('modules.tickets.ticket') # {{ $ticket->id }}
+                <div class="white-box">
 
-                        <span id="ticket-status">
-                            <label class="label
-                             @if($ticket->status == 'open')
-                                    label-danger
-                            @elseif($ticket->status == 'pending')
-                                    label-warning
-                            @elseif($ticket->status == 'resolved')
-                                    label-info
-                            @elseif($ticket->status == 'closed')
-                                    label-success
-                            @endif
-                                    ">{{ $ticket->status }}</label>
-                        </span>
-                    </div>
+                        <div class="row">
 
-                    <div class="panel-wrapper collapse in">
-                        <div class="panel-body b-b">
+                            <div class="col-md-12">
+                                <h4 class="text-capitalize text-info">{{ $ticket->subject }}</h4>
 
-                            <div class="row">
-
-                                <div class="col-md-12">
-                                    <h4 class="text-capitalize">{{ $ticket->subject }}</h4>
-
-                                    <div class="font-12">{{ $ticket->created_at->format($global->date_format .' '.$global->time_format) }} &bull; {{ ucwords($ticket->requester->name). ' <'.$ticket->requester->email.'>' }}</div>
-                                </div>
-
-                                {!! Form::hidden('status', $ticket->status, ['id' => 'status']) !!}
-
+                                <div class="font-12">{{ $ticket->created_at->format($global->date_format .' '.$global->time_format) }} &bull; {{ ucwords($ticket->requester->name). ' <'.$ticket->requester->email.'>' }}</div>
                             </div>
-                            <!--/row-->
+
+                            {!! Form::hidden('status', $ticket->status, ['id' => 'status']) !!}
 
                         </div>
+                        <!--/row-->
 
                         <div id="ticket-messages">
 
                             @forelse($ticket->reply as $reply)
-                                <div class="panel-body b-b">
+                            <div class="panel-body @if($reply->user->id == $user->id) bg-owner-reply @else bg-other-reply @endif">
 
-                                    <div class="row">
+                                <div class="row">
 
-                                        <div class="col-xs-2 col-md-1">
-                                            {!!  ($reply->user->image) ? '<img src="'.asset('user-uploads/avatar/'.$reply->user->image).'"
-                                                                alt="user" class="img-circle" width="40">' : '<img src="'.asset('default-profile-2.png').'"
-                                                                alt="user" class="img-circle" width="40">' !!}
-                                        </div>
-                                        <div class="col-xs-10 col-md-11">
-                                            <h4 class="m-t-0"><a
-                                                        @if($reply->user->hasRole('employee'))
-                                                        href="{{ route('member.employees.show', $reply->user_id) }}"
-                                                        @elseif($reply->user->hasRole('client'))
-                                                        href="{{ route('member.clients.show', $reply->user_id) }}"
-                                                        @endif
-                                                        class="text-inverse">{{ ucwords($reply->user->name) }} <span
-                                                            class="text-muted font-12">{{ $reply->created_at->format($global->date_format .' '.$global->time_format) }}</span></a>
-                                            </h4>
-
-                                            <div class="font-light">
-                                                {!! ucfirst(nl2br($reply->message)) !!}
-                                            </div>
-                                        </div>
-
-
+                                    <div class="col-xs-2 col-md-1">
+                                        <img src="{{ $reply->user->image_url }}"  alt="user" class="img-circle" width="40" height="40">
                                     </div>
-                                    <!--/row-->
+                                    <div class="col-xs-10 col-md-11">
+                                        <h5 class="m-t-0 font-bold"><a
+                                                    @if($reply->user->hasRole('employee'))
+                                                    href="{{ route('member.employees.show', $reply->user_id) }}"
+                                                    @elseif($reply->user->hasRole('client'))
+                                                    href="{{ route('member.clients.show', $reply->user_id) }}"
+                                                    @endif
+                                                    class="text-inverse">{{ ucwords($reply->user->name) }} <span
+                                                    class="text-muted font-12 font-normal">{{ $reply->created_at->format($global->date_format .' '.$global->time_format) }}</span></a>
+                                        </h5>
+
+                                        <div class="font-light">
+                                            {!! ucfirst(nl2br($reply->message)) !!}
+                                        </div>
+                                    </div>
+
 
                                 </div>
-                            @empty
-                                <div class="panel-body b-b">
+                                <!--/row-->
 
-                                    <div class="row">
+                            </div>
+                        @empty
+                            <div class="panel-body b-b">
 
-                                        <div class="col-md-12">
-                                            @lang('messages.noMessage')
-                                        </div>
+                                <div class="row">
 
+                                    <div class="col-md-12">
+                                        @lang('messages.noMessage')
                                     </div>
-                                    <!--/row-->
 
                                 </div>
-                            @endforelse
+                                <!--/row-->
+
+                            </div>
+                        @endforelse
                         </div>
 
-                        <div class="panel-body" style="box-shadow: 0 2px 26px -6px rgb(156, 156, 156)">
+                        <div class="panel-body">
 
                             <div class="row">
 
@@ -136,62 +128,61 @@
                             <!--/row-->
 
                         </div>
-
+                        <div class="col-md-12 text-right">
+                            <div class="btn-group dropup m-r-10">
+                                <button aria-expanded="true" data-toggle="dropdown"
+                                        class="btn btn-info btn-outline dropdown-toggle waves-effect waves-light"
+                                        type="button"><i class="fa fa-bolt"></i> @lang('modules.tickets.applyTemplate')
+                                    <span class="caret"></span></button>
+                                <ul role="menu" class="dropdown-menu">
+                                    @forelse($templates as $template)
+                                        <li><a href="javascript:;" data-template-id="{{ $template->id }}"
+                                               class="apply-template">{{ ucfirst($template->reply_heading) }}</a></li>
+                                    @empty
+                                        <li>@lang('messages.noTemplateFound')</li>
+                                    @endforelse
+                                </ul>
+                            </div>
+                            <div class="btn-group dropup">
+                                <button aria-expanded="true" data-toggle="dropdown"
+                                        class="btn btn-success dropdown-toggle waves-effect waves-light"
+                                        type="button">@lang('app.submit') <span class="caret"></span></button>
+                                <ul role="menu" class="dropdown-menu">
+                                    <li>
+                                        <a href="javascript:;" class="submit-ticket" data-status="open">@lang('app.submit')
+                                            as Open
+                                            <span style="width: 15px; height: 15px;"
+                                                  class="btn btn-danger btn-small btn-circle">&nbsp;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" class="submit-ticket"
+                                           data-status="pending">@lang('app.submit') as @lang('app.pending')
+                                            <span style="width: 15px; height: 15px;"
+                                                  class="btn btn-warning btn-small btn-circle">&nbsp;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" class="submit-ticket"
+                                           data-status="resolved">@lang('app.submit') as Resolved
+                                            <span style="width: 15px; height: 15px;"
+                                                  class="btn btn-info btn-small btn-circle">&nbsp;</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:;" class="submit-ticket"
+                                           data-status="closed">@lang('app.submit') as Closed
+                                            <span style="width: 15px; height: 15px;"
+                                                  class="btn btn-success btn-small btn-circle">&nbsp;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
 
                     </div>
 
-                    <div class="panel-footer text-right">
-                        <div class="btn-group dropup m-r-10">
-                            <button aria-expanded="true" data-toggle="dropdown"
-                                    class="btn btn-info btn-outline dropdown-toggle waves-effect waves-light"
-                                    type="button"><i class="fa fa-bolt"></i> @lang('modules.tickets.applyTemplate')
-                                <span class="caret"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                                @forelse($templates as $template)
-                                    <li><a href="javascript:;" data-template-id="{{ $template->id }}"
-                                           class="apply-template">{{ ucfirst($template->reply_heading) }}</a></li>
-                                @empty
-                                    <li>@lang('messages.noTemplateFound')</li>
-                                @endforelse
-                            </ul>
-                        </div>
-                        <div class="btn-group dropup">
-                            <button aria-expanded="true" data-toggle="dropdown"
-                                    class="btn btn-success dropdown-toggle waves-effect waves-light"
-                                    type="button">@lang('app.submit') <span class="caret"></span></button>
-                            <ul role="menu" class="dropdown-menu">
-                                <li>
-                                    <a href="javascript:;" class="submit-ticket" data-status="open">@lang('app.submit')
-                                        as Open
-                                        <span style="width: 15px; height: 15px;"
-                                              class="btn btn-danger btn-small btn-circle">&nbsp;</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" class="submit-ticket"
-                                       data-status="pending">@lang('app.submit') as @lang('app.pending')
-                                        <span style="width: 15px; height: 15px;"
-                                              class="btn btn-warning btn-small btn-circle">&nbsp;</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" class="submit-ticket"
-                                       data-status="resolved">@lang('app.submit') as Resolved
-                                        <span style="width: 15px; height: 15px;"
-                                              class="btn btn-info btn-small btn-circle">&nbsp;</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="javascript:;" class="submit-ticket"
-                                       data-status="closed">@lang('app.submit') as Closed
-                                        <span style="width: 15px; height: 15px;"
-                                              class="btn btn-success btn-small btn-circle">&nbsp;</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+
 
 
             </div>

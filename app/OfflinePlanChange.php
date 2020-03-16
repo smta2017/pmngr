@@ -2,11 +2,19 @@
 
 namespace App;
 
+use App\Observers\OfflinePlanChangeObserver;
 use Illuminate\Database\Eloquent\Model;
 
-class OfflinePlanChange extends Model
+class OfflinePlanChange extends BaseModel
 {
     protected $appends = ['file'];
+
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::observe(OfflinePlanChangeObserver::class);
+    }
 
     public function company()
     {
